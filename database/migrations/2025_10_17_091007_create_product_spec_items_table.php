@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('product_spec_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_spec_group_id')->constrained()->onDelete('cascade');
-            $table->string('key');
-            $table->string('value');
+            $table->string('slug')->unique();
+            $table->string('label');
+            $table->string('input_type')->default('text');
+            $table->json('options')->nullable();
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
         });
     }
-
     /**
-     * Reverse the migrations.
      */
     public function down(): void
     {

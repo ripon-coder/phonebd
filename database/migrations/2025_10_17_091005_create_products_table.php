@@ -17,9 +17,13 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->foreignId('brand_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->text('short_description')->nullable();
-            $table->enum('status', ['official', 'unofficial', 'upcoming', 'discontinued'])->default('official');
+            $table->string('image')->nullable();
+            $table->enum('status', ['official', 'unofficial', 'upcoming', 'discontinued'])->nullable();
             $table->decimal('base_price', 10, 2)->nullable();
+            $table->text('short_description')->nullable();
+            $table->longText('raw_html')->nullable();
+            $table->boolean('is_raw_html')->default(false);
+            $table->boolean('is_featured')->default(false);
             $table->boolean('is_published')->default(false);
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();

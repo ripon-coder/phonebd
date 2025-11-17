@@ -2,25 +2,32 @@
 
 namespace App\Filament\Resources\ProductSpecGroups\Schemas;
 
-use App\Models\Product;
-use Filament\Forms;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
 
 class ProductSpecGroupForm
 {
     public static function configure(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Forms\Components\Select::make('product_id')
-                    ->label('Product')
-                    ->options(Product::all()->pluck('title', 'id'))
-                    ->searchable()
-                    ->required(),
+        return $schema->components([
 
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-            ]);
+            Section::make('Specification Group Details')
+                ->schema([
+
+                    TextInput::make('name')
+                        ->label('Group Name')
+                        ->required()
+                        ->maxLength(255),
+
+                    TextInput::make('sort_order')
+                        ->label('Sort Order')
+                        ->numeric()
+                        ->default(0),
+
+                ])
+                ->columns(2),
+
+        ])->columns(1);
     }
 }

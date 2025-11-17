@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Brands\Schemas;
 
-use Filament\Forms;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 
@@ -10,24 +12,39 @@ class BrandForm
 {
     public static function configure(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
+        return $schema->components([
 
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255)
-                    ->unique(ignoreRecord: true),
+            Section::make('Brand Details')
+                ->schema([
+                    TextInput::make('name')
+                        ->label('Brand Name')
+                        ->required()
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(function ($state, callable $set) {
+                            if ($state) {
+                                $set('slug', Str::slug($state));
+                            }
+                        }),
 
-                Forms\Components\TextInput::make('meta_title')
-                    ->maxLength(255),
+                    TextInput::make('slug')
+                        ->label('Slug')
+                        ->required()
+                        ->unique(table: 'brands', ignoreRecord: true),
+                ])
+                ->columns(2),
 
-                Forms\Components\Textarea::make('meta_description')
-                    ->maxLength(65535),
-            ]);
+            Section::make('SEO Metadata')
+                ->schema([
+                    TextInput::make('meta_title')
+                        ->label('Meta Title'),
+
+                    Textarea::make('meta_description')
+                        ->label('Meta Description')
+                        ->rows(3)
+                        ->maxLength(160)
+                        ->hint('Recommended: 150-160 characters'),
+                ])
+
+        ])->columns(1);
     }
 }

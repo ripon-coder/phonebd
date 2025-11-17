@@ -12,8 +12,8 @@ class ProductSpecGroup extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_id',
         'name',
+        'sort_order',
     ];
 
     public function product(): BelongsTo

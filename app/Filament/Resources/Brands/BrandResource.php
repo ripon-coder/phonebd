@@ -30,6 +30,11 @@ class BrandResource extends Resource
         return BrandsTable::configure($table);
     }
 
+    public static function getFormWidth(): string
+    {
+        return 'full';
+    }
+
     public static function getRelations(): array
     {
         return [

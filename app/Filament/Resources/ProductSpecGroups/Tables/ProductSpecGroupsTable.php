@@ -14,9 +14,9 @@ class ProductSpecGroupsTable
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('product.title')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('sort_order')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

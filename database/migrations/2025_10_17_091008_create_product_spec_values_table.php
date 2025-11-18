@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('product_spec_values', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_spec_group_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_spec_item_id')->constrained()->onDelete('cascade');
             $table->string('value');
             $table->timestamps();

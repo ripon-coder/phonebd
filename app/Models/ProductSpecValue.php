@@ -8,6 +8,7 @@ class ProductSpecValue extends Model
 {
     protected $fillable = [
         'product_id',
+        'product_spec_group_id',
         'product_spec_item_id',
         'value',
     ];

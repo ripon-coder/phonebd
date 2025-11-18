@@ -12,12 +12,28 @@ class ProductSpecItem extends Model
 
     protected $fillable = [
         'product_spec_group_id',
-        'key',
-        'value',
+        'slug',
+        'label',
+        'input_type',
+        'options',
+        'sort_order',
+    ];
+
+    protected $casts = [
+        'options' => 'array',
     ];
 
     public function group(): BelongsTo
     {
         return $this->belongsTo(ProductSpecGroup::class, 'product_spec_group_id');
+    }
+
+    public function values()
+    {
+        return $this->hasMany(ProductSpecValue::class);
+    }
+    public function items()
+    {
+        return $this->hasMany(ProductSpecItem::class);
     }
 }

@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\Brands\Tables;
 
+use Filament\Tables;
+use Filament\Tables\Table;
+use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Tables\Table;
-use Filament\Tables;
+use Filament\Tables\Columns\TextInputColumn;
 
 class BrandsTable
 {
@@ -17,6 +18,10 @@ class BrandsTable
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug'),
+                TextInputColumn::make('sort_order')
+                    ->label('Sort Order')
+                    ->rules(['required', 'max:255', 'integer'])
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

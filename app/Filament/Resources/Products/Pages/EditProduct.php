@@ -16,4 +16,26 @@ class EditProduct extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $specGroups = $data['specValues'] ?? [];
+        dd($specGroups);
+        // $flat = [];
+
+        // foreach ($specGroups as $group) {
+        //     foreach ($group['items'] as $item) {
+        //         $flat[] = [
+        //             'product_spec_item_id' => $item['product_spec_item_id'],
+        //             'value' => $item['value'],
+        //         ];
+        //     }
+        // }
+
+        // $data['specValues'] = $flat;
+
+        // unset($data['specGroups']);
+
+        // return $data;
+    }
 }

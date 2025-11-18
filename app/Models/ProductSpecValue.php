@@ -9,7 +9,15 @@ class ProductSpecValue extends Model
     protected $fillable = [
         'product_id',
         'product_spec_item_id',
-        'key',
         'value',
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+    public function item()
+    {
+        return $this->belongsTo(ProductSpecItem::class, 'product_spec_item_id');
+    }
 }

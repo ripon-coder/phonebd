@@ -16,10 +16,6 @@ class ProductSpecGroup extends Model
         'sort_order',
     ];
 
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
 
     public function items(): HasMany
     {

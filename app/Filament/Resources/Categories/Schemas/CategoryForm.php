@@ -32,8 +32,13 @@ class CategoryForm
                         ->required()
                         ->maxLength(255)
                         ->unique(table: 'categories', ignoreRecord: true),
+
+                    TextInput::make('sort_order')
+                        ->label('Sort Order')
+                        ->numeric()
+                        ->default(0),
                 ])
-                ->columns(2),
+                ->columns(3),
 
             Section::make('SEO Metadata')
                 ->schema([

@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources\ProductSpecItems\Schemas;
 
-use App\Models\ProductSpecGroup;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Str;
 
 class ProductSpecItemForm
@@ -18,10 +18,10 @@ class ProductSpecItemForm
             Section::make('Specification Item Details')
                 ->schema([
 
+                    // PERFECT: Relationship-based select
                     Select::make('product_spec_group_id')
                         ->label('Specification Group')
-                        ->options(ProductSpecGroup::pluck('name', 'id'))
-                        ->searchable()
+                        ->relationship('group', 'name')
                         ->required(),
 
                     TextInput::make('label')
@@ -46,14 +46,23 @@ class ProductSpecItemForm
                             'number' => 'Number',
                             'select' => 'Select',
                             'boolean' => 'Boolean',
+                            'textarea' => 'Textarea',
                         ])
-                        ->required(),
+                        ->required()
+                        ->live(),   // <-- Needed for conditional fields
+
+                    // Conditional field: Only visible when input_type = select
+                    Textarea::make('options')
+                        ->label('Options (comma separated)')
+                        ->visible(fn ($get) => $get('input_type') === 'select')
+                        ->placeholder("Example: AMOLED, Super AMOLED, OLED")
+                        ->columnSpan(2),
 
                     TextInput::make('sort_order')
                         ->numeric()
                         ->default(0)
                         ->label('Sort Order'),
-
+                    
                 ])
                 ->columns(2),
 

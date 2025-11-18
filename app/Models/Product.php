@@ -30,6 +30,11 @@ class Product extends Model
         'meta_image',
     ];
 
+    protected $casts = [
+        'meta_keywords' => 'array',
+    ];
+
+
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
@@ -40,18 +45,13 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function specGroups(): HasMany
+    public function specValues()
     {
-        return $this->hasMany(ProductSpecGroup::class);
+        return $this->hasMany(ProductSpecValue::class, 'product_id');
     }
 
     public function variantPrices(): HasMany
     {
         return $this->hasMany(ProductVariantPrice::class);
-    }
-
-    public function faqs(): HasMany
-    {
-        return $this->hasMany(ProductFaq::class);
     }
 }

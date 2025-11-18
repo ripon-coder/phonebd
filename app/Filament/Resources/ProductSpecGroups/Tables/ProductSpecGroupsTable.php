@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\ProductSpecGroups\Tables;
 
+use Filament\Tables;
+use Filament\Tables\Table;
+use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Tables\Table;
-use Filament\Tables;
+use Filament\Tables\Columns\TextInputColumn;
 
 class ProductSpecGroupsTable
 {
@@ -16,8 +17,10 @@ class ProductSpecGroupsTable
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('sort_order')
-                    ->searchable(),
+                TextInputColumn::make('sort_order')
+                    ->label('Sort Order')
+                    ->rules(['required', 'max:255', 'integer'])
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

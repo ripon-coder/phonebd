@@ -30,8 +30,13 @@ class BrandForm
                         ->label('Slug')
                         ->required()
                         ->unique(table: 'brands', ignoreRecord: true),
+
+                    TextInput::make('sort_order')
+                        ->label('Sort Order')
+                        ->numeric()
+                        ->default(0),
                 ])
-                ->columns(2),
+                ->columns(3),
 
             Section::make('SEO Metadata')
                 ->schema([

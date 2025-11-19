@@ -37,6 +37,9 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->sidebarCollapsibleOnDesktop(true)
+            ->sidebarWidth('18rem')
+            ->collapsibleNavigationGroups(true)
             ->navigationGroups([
                 'Products',
                 'Blog',

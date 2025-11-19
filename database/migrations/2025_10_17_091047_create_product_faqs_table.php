@@ -18,6 +18,9 @@ return new class extends Migration
             $table->text('answer');
             $table->integer('sort_order')->default(0);
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index('question');
         });
     }
 

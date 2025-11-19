@@ -107,6 +107,7 @@ class ProductForm
                  * STEP 2: SPECIFICATIONS
                  */
                 Step::make('Specifications')
+                    ->hidden(fn (callable $get) => $get('is_raw_html'))
                     ->schema([
 
                         Forms\Components\Select::make('spec_group_selector')
@@ -121,7 +122,7 @@ class ProductForm
 
                                 $selectedGroups = is_array($state) ? $state : [$state];
 
-                                $existing = $get('specValues') ?? [];
+                                $existing = $get('specifications') ?? [];
 
                                 foreach ($selectedGroups as $groupId) {
 
@@ -152,8 +153,8 @@ class ProductForm
                                 }
 
                                 // Force refresh
-                                $set('specValues', []);
-                                $set('specValues', array_values($existing));
+                                $set('specifications', []);
+                                $set('specifications', array_values($existing));
 
                                 // Reset dropdown
                                 //$set('spec_group_selector', null);
@@ -165,40 +166,48 @@ class ProductForm
                         // -------------------------
                         // WRAP REPEATER IN GROUP
                         // -------------------------
+                        // -------------------------
+                        // WRAP REPEATER IN GROUP
+                        // -------------------------
                         Group::make()
                             ->schema([
-                                Forms\Components\Repeater::make('specValues')
+                                Forms\Components\Repeater::make('specifications')
                                     ->label('')
                                     ->itemLabel(fn(array $state) => $state['group_name'] ?? '')
+                                    ->collapsible()
+                                    ->cloneable(false)
                                     ->schema([
 
                                         Forms\Components\Hidden::make('group_name'),
 
                                         Forms\Components\Repeater::make('items')
                                             ->label('Specification Items')
+                                            ->hiddenLabel()
                                             ->schema([
 
                                                 Forms\Components\Hidden::make('product_spec_item_id'),
 
-                                                Forms\Components\TextInput::make('_label')
-                                                    ->label('Specification')
-                                                    ->readOnly()
+                                                Forms\Components\Hidden::make('_label')
                                                     ->dehydrated(false),
 
                                                 Forms\Components\TextInput::make('value')
-                                                    ->label('Value')
+                                                    ->label(fn(callable $get) => $get('_label'))
+                                                    ->placeholder('Value')
                                                     ->nullable(),
 
                                             ])
-                                            ->columns(2)
+                                            ->grid(3)
+                                            ->addable(false)
+                                            ->deletable(false)
+                                            ->reorderable(false)
                                             ->dehydrated()   
                                             ->columnSpanFull()
-                                            ->extraAttributes(['class' => 'pt-1 pb-1'])
 
                                     ])
                                     ->defaultItems(0)
                                     ->addable(false)
                                     ->reorderable(true)
+                                    ->dehydrated(true)
                                     ->columnSpan(2),
                             ])
                             ->columnSpan(2),
@@ -209,7 +218,7 @@ class ProductForm
                 /**
                  * STEP 3: PRODUCT VARIANTS
                  */
-                Step::make('Product Variants')
+                Step::make('Product Price')
                     ->schema([
                         Forms\Components\Repeater::make('variantPrices')
                             ->relationship('variantPrices')
@@ -247,27 +256,48 @@ class ProductForm
                  */
                 Step::make('SEO Metadata')
                     ->schema([
-                        Forms\Components\TextInput::make('meta_title')
-                            ->label('Meta Title')
-                            ->maxLength(60)
-                            ->helperText('50–60 characters recommended.'),
+                        Section::make('Search Engine Optimization')
+                            ->description('Manage how this product appears in search engine results.')
+                            ->schema([
+                                Group::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('meta_title')
+                                            ->label('Meta Title')
+                                            ->placeholder('Enter meta title')
+                                            ->maxLength(60)
+                                            ->helperText('Recommended: 50–60 characters')
+                                            ->columnSpanFull(),
 
-                        Forms\Components\Textarea::make('meta_description')
-                            ->label('Meta Description')
-                            ->rows(3)
-                            ->maxLength(160)
-                            ->helperText('150–160 characters recommended.'),
+                                        Forms\Components\Textarea::make('meta_description')
+                                            ->label('Meta Description')
+                                            ->placeholder('Enter meta description')
+                                            ->rows(4)
+                                            ->maxLength(160)
+                                            ->helperText('Recommended: 150–160 characters')
+                                            ->columnSpanFull(),
 
-                        Forms\Components\TagsInput::make('meta_keywords')
-                            ->placeholder('Add keywords...'),
+                                        Forms\Components\TagsInput::make('meta_keywords')
+                                            ->label('Keywords')
+                                            ->placeholder('Add keywords...')
+                                            ->helperText('Press Enter to add a keyword')
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->columnSpan(2),
 
-                        Forms\Components\FileUpload::make('meta_image')
-                            ->label('Social Media Preview Image')
-                            ->image()
-                            ->directory('seo')
-                            ->maxSize(1024),
-                    ])
-                    ->columns(2),
+                                Group::make()
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('meta_image')
+                                            ->label('Social Share Image')
+                                            ->image()
+                                            ->directory('seo')
+                                            ->maxSize(1024)
+                                            ->imageEditor()
+                                            ->helperText('Image for social media previews (OG Image).'),
+                                    ])
+                                    ->columnSpan(1),
+                            ])
+                            ->columns(3),
+                    ]),
 
             ])
                 ->columnSpanFull()

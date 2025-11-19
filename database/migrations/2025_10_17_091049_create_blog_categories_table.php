@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->text('meta_description')->nullable();
+            $table->tinyInteger('sort_order')->default(0);
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index(['name', 'sort_order']);
         });
     }
 

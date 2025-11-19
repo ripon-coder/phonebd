@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->string('currency')->default('BDT');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

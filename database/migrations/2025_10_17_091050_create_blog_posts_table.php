@@ -18,11 +18,14 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('featured_image')->nullable();
             $table->longText('content');
-            $table->boolean('published')->default(false);
+            $table->boolean('is_published')->default(false);
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
-            $table->string('meta_keywords')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index(['title', 'is_published', 'published_at']);
         });
     }
 

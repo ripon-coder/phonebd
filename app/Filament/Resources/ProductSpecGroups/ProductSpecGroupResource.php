@@ -9,6 +9,7 @@ use App\Filament\Resources\ProductSpecGroups\Schemas\ProductSpecGroupForm;
 use App\Filament\Resources\ProductSpecGroups\Tables\ProductSpecGroupsTable;
 use App\Models\ProductSpecGroup;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,11 @@ class ProductSpecGroupResource extends Resource
 {
     protected static ?string $model = ProductSpecGroup::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleGroup;
+
+    protected static UnitEnum|string|null $navigationGroup = 'Products';
+
+    protected static ?int $navigationSort = 5;
 
     public static function form(Schema $schema): Schema
     {

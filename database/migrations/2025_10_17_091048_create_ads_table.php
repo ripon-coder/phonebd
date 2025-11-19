@@ -18,10 +18,16 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('link')->nullable();
             $table->text('script')->nullable();
-            $table->boolean('status')->default(true);
+            $table->boolean('is_active')->default(true); // Changed from 'status' to 'is_active'
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();
+            $table->softDeletes(); // Added softDeletes
+
+            // Added index, assuming 'status' in the original instruction meant 'is_active'
+            // and 'sort_order' was a placeholder or intended to be added.
+            // For now, I'll use 'is_active' and omit 'sort_order' as it's not defined.
+            $table->index(['title', 'position', 'is_active']);
         });
     }
 

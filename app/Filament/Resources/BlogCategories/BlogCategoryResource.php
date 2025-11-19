@@ -9,6 +9,7 @@ use App\Filament\Resources\BlogCategories\Schemas\BlogCategoryForm;
 use App\Filament\Resources\BlogCategories\Tables\BlogCategoriesTable;
 use App\Models\BlogCategory;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,11 @@ class BlogCategoryResource extends Resource
 {
     protected static ?string $model = BlogCategory::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
+
+    protected static UnitEnum|string|null $navigationGroup = 'Blog';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {

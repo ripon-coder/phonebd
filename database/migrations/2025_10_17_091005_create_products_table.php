@@ -30,6 +30,9 @@ return new class extends Migration
             $table->string('meta_keywords')->nullable();
             $table->string('meta_image')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index(['title', 'status', 'is_featured', 'is_published', 'base_price']);
         });
     }
 

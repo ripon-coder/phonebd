@@ -9,6 +9,7 @@ use App\Filament\Resources\Ads\Schemas\AdForm;
 use App\Filament\Resources\Ads\Tables\AdsTable;
 use App\Models\Ad;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,11 @@ class AdResource extends Resource
 {
     protected static ?string $model = Ad::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMegaphone;
+
+    protected static UnitEnum|string|null $navigationGroup = 'Ads';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {

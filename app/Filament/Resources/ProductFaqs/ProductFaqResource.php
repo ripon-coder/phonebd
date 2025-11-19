@@ -9,6 +9,7 @@ use App\Filament\Resources\ProductFaqs\Schemas\ProductFaqForm;
 use App\Filament\Resources\ProductFaqs\Tables\ProductFaqsTable;
 use App\Models\ProductFaq;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,11 @@ class ProductFaqResource extends Resource
 {
     protected static ?string $model = ProductFaq::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQuestionMarkCircle;
+
+    protected static UnitEnum|string|null $navigationGroup = 'Products';
+
+    protected static ?int $navigationSort = 4;
 
     public static function form(Schema $schema): Schema
     {

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_spec_group_id')->constrained()->onDelete('cascade');
             $table->string('slug')->unique();
-            $table->string('name'); // Changed from 'label'
+            $table->string('label');
             $table->string('input_type')->default('text');
             $table->json('options')->nullable();
             $table->integer('sort_order')->default(0);

@@ -11,8 +11,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $categories = Category::orderBy('sort_order')->get();
-        $brands = Brand::orderBy('sort_order')->get();
+        $categories = Category::orderBy('sort_order')->take(11)->get();
+        $brands = Brand::orderBy('sort_order')->take(12)->get();
         $latestPhones = Product::where('is_published', true)->latest()->take(8)->get();
         $upcomingPhones = Product::where('status', 'upcoming')->where('is_published', true)->latest()->take(8)->get();
         

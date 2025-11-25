@@ -9,6 +9,7 @@ use App\Filament\Resources\GeneralSettings\Schemas\GeneralSettingForm;
 use App\Filament\Resources\GeneralSettings\Tables\GeneralSettingsTable;
 use App\Models\GeneralSetting;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,11 @@ class GeneralSettingResource extends Resource
 {
     protected static ?string $model = GeneralSetting::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog;
+
+    protected static ?int $navigationSort = 100;
+
+    protected static UnitEnum|string|null $navigationGroup = 'System';
 
     public static function form(Schema $schema): Schema
     {
@@ -44,5 +49,15 @@ class GeneralSettingResource extends Resource
             'create' => CreateGeneralSetting::route('/create'),
             'edit' => EditGeneralSetting::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return ! GeneralSetting::exists();
+    }
+
+    public static function canDelete($record): bool
+    {
+        return false;
     }
 }

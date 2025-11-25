@@ -131,7 +131,7 @@
     </header>
 
     {{-- Flash / status messages --}}
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+    <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-6 lg:px-8 mt-4">
       @if(session('success'))
         <div class="rounded-md bg-green-50 border border-green-100 px-4 py-2 text-green-800 text-sm">
           {{ session('success') }}
@@ -147,7 +147,7 @@
     {{-- Main content --}}
     <main class="flex-1">
       @yield('hero')
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-6 lg:px-8 py-0">
         @yield('content')
       </div>
     </main>

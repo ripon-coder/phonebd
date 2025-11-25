@@ -3,14 +3,6 @@
     'meta_description' => 'Dummy mobile specs, dummy brand list for testing layout.',
 ])
 
-@section('content')
-
-    @php
-        // ----- Brands (Dynamic from DB now) -----
-
-        // ----- Categories (Dynamic from DB now) -----
-    @endphp
-
 
 @section('content')
 
@@ -90,18 +82,18 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-6">
             @foreach ($latestPhones as $phone)
                 <div
                     class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200">
                     @if ($phone->created_at > now()->subDays(30))
                         <div class="absolute top-3 left-3 z-10">
                             <span
-                                class="bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">New</span>
+                                class="bg-slate-900 text-white text-[8px] md:text-[10px] lg:text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">New</span>
                         </div>
                     @endif
 
-                    <div class="relative aspect-square bg-slate-50/50 p-4 group-hover:bg-slate-50 transition-colors">
+                    <div class="relative aspect-square bg-slate-50/50 p-1 group-hover:bg-slate-50 transition-colors">
                         @if ($phone->image)
                             <img src="{{ asset('storage/' . $phone->image) }}"
                                 class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500">

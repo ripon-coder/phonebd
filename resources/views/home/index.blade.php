@@ -9,7 +9,7 @@
     {{-- Categories --}}
     <div class="mb-10 mt-4">
         <div class="flex items-center justify-between mb-5 px-1">
-            <h2 class="text-lg font-bold text-slate-900 tracking-tight">Browse Categories</h2>
+            <h2 class="text-md lg:text-lg  font-bold text-slate-900 tracking-tight">Browse Categories</h2>
             <a href="#"
                 class="md:hidden text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
@@ -22,7 +22,7 @@
 
         {{-- Mobile: Horizontal Scroll, Desktop: Flex Wrap --}}
         <div
-            class="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory hide-scrollbar">
+            class="flex flex-nowrap md:flex-wrap gap-1 overflow-x-auto md:overflow-visible pb-1 md:pb-0 snap-x snap-mandatory hide-scrollbar">
             @foreach ($categories as $category)
                 <a href="#"
                     class="snap-start shrink-0 px-5 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-medium hover:border-slate-900 hover:text-slate-900 transition-all duration-200 shadow-sm">
@@ -35,7 +35,7 @@
     {{-- Popular Brands --}}
     <div class="mb-12">
         <div class="flex items-center justify-between mb-6 px-1">
-            <h2 class="text-lg font-bold text-slate-900 tracking-tight">Popular Brands</h2>
+            <h2 class="text-md lg:text-lg  font-bold text-slate-900 tracking-tight">Popular Brands</h2>
             <a href="#"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
@@ -46,7 +46,7 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 md:gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
             @foreach ($brands as $brand)
                 <a href="#"
                     class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-xl p-4 hover:border-slate-300 transition-all duration-200">
@@ -71,7 +71,7 @@
     {{-- Latest Phones --}}
     <div class="mb-16">
         <div class="flex items-center justify-between mb-6 px-1">
-            <h2 class="text-lg font-bold text-slate-900 tracking-tight">Just Arrived</h2>
+            <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Just Arrived</h2>
             <a href="#"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
@@ -82,7 +82,7 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
             @foreach ($latestPhones as $phone)
                 <div
                     class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200">
@@ -108,16 +108,11 @@
                     </div>
 
                     <div class="p-4">
-                        <div
-                            class="flex items-center gap-2 text-[10px] font-medium text-slate-500 mb-2 uppercase tracking-wide">
-                            {{-- Using short description as a fallback for specs since we don't have direct RAM/Storage columns yet --}}
-                            <span>{{ Str::limit($phone->short_description, 20) }}</span>
-                        </div>
                         <h3
-                            class="font-bold text-slate-900 text-sm mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                            class="font-bold text-slate-900 text-sm mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {{ $phone->title }}</h3>
                         <div class="flex items-center justify-between">
-                            <span class="text-base font-bold text-slate-900">৳{{ number_format($phone->base_price) }}</span>
+                            <span class="md:text-base lg:text-md text-sm font-bold text-blue-600">৳{{ number_format($phone->base_price) }}</span>
                             <button class="text-slate-400 hover:text-slate-900 transition-colors">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -134,7 +129,7 @@
     {{-- Upcoming Phones --}}
     <div class="mb-20">
         <div class="flex items-center justify-between mb-6 px-1">
-            <h2 class="text-lg font-bold text-slate-900 tracking-tight">Coming Soon</h2>
+            <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Coming Soon</h2>
             <a href="#"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
@@ -145,13 +140,13 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
             @foreach ($upcomingPhones as $phone)
                 <div
                     class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200">
                     <div class="absolute top-3 left-3 z-10">
                         <span
-                            class="bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Upcoming</span>
+                            class="bg-gray-400 text-white text-[8px] md:text-[10px] lg:text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Upcoming</span>
                     </div>
 
                     <div class="relative aspect-square bg-slate-50/50 p-4 group-hover:bg-slate-50 transition-colors">
@@ -169,15 +164,11 @@
                     </div>
 
                     <div class="p-4">
-                        <div
-                            class="flex items-center gap-2 text-[10px] font-medium text-slate-500 mb-2 uppercase tracking-wide">
-                            <span>{{ Str::limit($phone->short_description, 20) }}</span>
-                        </div>
                         <h3
-                            class="font-bold text-slate-900 text-sm mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                            class="font-bold text-slate-900 text-sm mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {{ $phone->title }}</h3>
                         <div class="flex items-center justify-between">
-                            <span class="text-base font-bold text-slate-900">
+                            <span class="md:text-base lg:text-md text-sm font-bold text-blue-500">
                                 @if ($phone->base_price)
                                     ৳{{ number_format($phone->base_price) }}
                                 @else

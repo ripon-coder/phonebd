@@ -53,7 +53,7 @@
                 ];
             @endphp
             @foreach($priceRanges as $range)
-                <a href="#" class="px-2 md:px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-[70%] md:text-sm font-semibold hover:bg-slate-200 hover:text-slate-900 transition-colors text-center flex items-center justify-center">
+                <a href="#" class="px-1 md:px-2 py-1 rounded-sm bg-slate-200 text-slate-700 text-[80%] md:text-sm font-semibold hover:bg-slate-200 hover:text-slate-900 transition-colors text-center flex items-center justify-center">
                     {{ $range }}
                 </a>
             @endforeach
@@ -77,7 +77,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
             @foreach ($latestPhones as $phone)
                 <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
-                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
+                    class="group relative bg-white rounded-sm border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
                     @if ($phone->created_at > now()->subDays(30))
                         <div class="absolute top-3 left-3 z-10">
                             <span
@@ -135,7 +135,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-4">
             @foreach ($brands as $brand)
                 <a href="#"
-                    class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-xl p-4 hover:border-slate-300 transition-all duration-200">
+                    class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-sm p-4 hover:border-slate-300 transition-all duration-200">
                     <div
                         class="w-10 h-10 mb-2 relative grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
                         @if ($brand->image)
@@ -173,7 +173,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
             @foreach ($officialPhones as $phone)
                 <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
-                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
+                    class="group relative bg-white rounded-sm border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
                     <div class="relative aspect-square bg-slate-50/50 p-1 group-hover:bg-slate-50 transition-colors">
                         @if ($phone->image)
                             <img src="{{ asset('storage/' . $phone->image) }}"
@@ -224,7 +224,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
             @foreach ($unofficialPhones as $phone)
                 <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
-                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
+                    class="group relative bg-white rounded-sm border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
                     <div class="relative aspect-square bg-slate-50/50 p-1 group-hover:bg-slate-50 transition-colors">
                         @if ($phone->image)
                             <img src="{{ asset('storage/' . $phone->image) }}"
@@ -275,7 +275,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
             @foreach ($upcomingPhones as $phone)
                 <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
-                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
+                    class="group relative bg-white rounded-sm border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
                     <div class="absolute top-3 left-3 z-10">
                         <span
                             class="bg-gray-400 text-white text-[8px] md:text-[10px] lg:text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Upcoming</span>

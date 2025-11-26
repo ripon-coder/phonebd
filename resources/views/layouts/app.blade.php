@@ -147,7 +147,7 @@
     {{-- Main content --}}
     <main class="flex-1">
       @yield('hero')
-      <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-6 lg:px-8 py-0">
+      <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-6 lg:px-8 pb-5">
         @yield('content')
       </div>
     </main>

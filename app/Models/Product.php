@@ -56,4 +56,28 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariantPrice::class);
     }
+
+    public function faqs(): HasMany
+    {
+        return $this->hasMany(ProductFaq::class);
+    }
+
+    public function getSpecGroupsAttribute()
+    {
+        $specValues = $this->specValues()->with(['productSpecItem', 'productSpecGroup'])->get();
+
+        return $specValues->groupBy(function ($value) {
+            return $value->productSpecGroup ? $value->productSpecGroup->name : 'Other';
+        })->map(function ($values, $groupName) {
+            return (object) [
+                'name' => $groupName,
+                'items' => $values->map(function ($value) {
+                    return (object) [
+                        'key' => $value->productSpecItem ? $value->productSpecItem->label : '',
+                        'value' => $value->value,
+                    ];
+                }),
+            ];
+        });
+    }
 }

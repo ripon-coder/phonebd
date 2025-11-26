@@ -32,6 +32,34 @@
         </div>
     </div>
 
+    {{-- Browse by Price --}}
+    <div class="mb-10">
+        <div class="flex items-center justify-between mb-5 px-1">
+            <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Browse by Price</h2>
+        </div>
+
+        <div class="grid grid-cols-3 md:flex md:flex-wrap gap-2">
+            @php
+                $priceRanges = [
+                    '৳1 - ৳5,000',
+                    '৳5,000 - ৳10,000',
+                    '৳10,000 - ৳15,000',
+                    '৳15,000 - ৳20,000',
+                    '৳20,000 - 30,000',
+                    '৳30,000 - 40,000',
+                    '৳40,000 - 50,000',
+                    '৳50,000 - 60,000',
+                    '৳60,000+',
+                ];
+            @endphp
+            @foreach($priceRanges as $range)
+                <a href="#" class="px-2 md:px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-[70%] md:text-sm font-semibold hover:bg-slate-200 hover:text-slate-900 transition-colors text-center flex items-center justify-center">
+                    {{ $range }}
+                </a>
+            @endforeach
+        </div>
+    </div>
+
     {{-- Latest Phones --}}
     <div class="mb-10">
         <div class="flex items-center justify-between mb-6 px-1">
@@ -48,8 +76,8 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
             @foreach ($latestPhones as $phone)
-                <div
-                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200">
+                <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
+                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
                     @if ($phone->created_at > now()->subDays(30))
                         <div class="absolute top-3 left-3 z-10">
                             <span
@@ -77,15 +105,15 @@
                             {{ $phone->title }}</h3>
                         <div class="flex items-center justify-between">
                             <span class="md:text-base lg:text-md text-sm font-bold text-blue-600">৳{{ number_format($phone->base_price) }}</span>
-                            <button class="text-slate-400 hover:text-red-500 transition-colors">
+                            <div class="text-slate-400 hover:text-red-500 transition-colors cursor-pointer">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
-                            </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
     </div>
@@ -104,7 +132,7 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-4">
             @foreach ($brands as $brand)
                 <a href="#"
                     class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-xl p-4 hover:border-slate-300 transition-all duration-200">
@@ -144,8 +172,8 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
             @foreach ($officialPhones as $phone)
-                <div
-                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200">
+                <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
+                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
                     <div class="relative aspect-square bg-slate-50/50 p-1 group-hover:bg-slate-50 transition-colors">
                         @if ($phone->image)
                             <img src="{{ asset('storage/' . $phone->image) }}"
@@ -166,15 +194,15 @@
                             {{ $phone->title }}</h3>
                         <div class="flex items-center justify-between">
                             <span class="md:text-base lg:text-md text-sm font-bold text-blue-600">৳{{ number_format($phone->base_price) }}</span>
-                            <button class="text-slate-400 hover:text-red-500 transition-colors">
+                            <div class="text-slate-400 hover:text-red-500 transition-colors cursor-pointer">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
-                            </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
     </div>
@@ -195,8 +223,8 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
             @foreach ($unofficialPhones as $phone)
-                <div
-                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200">
+                <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
+                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
                     <div class="relative aspect-square bg-slate-50/50 p-1 group-hover:bg-slate-50 transition-colors">
                         @if ($phone->image)
                             <img src="{{ asset('storage/' . $phone->image) }}"
@@ -217,15 +245,15 @@
                             {{ $phone->title }}</h3>
                         <div class="flex items-center justify-between">
                             <span class="md:text-base lg:text-md text-sm font-bold text-blue-600">৳{{ number_format($phone->base_price) }}</span>
-                            <button class="text-slate-400 hover:text-red-500 transition-colors">
+                            <div class="text-slate-400 hover:text-red-500 transition-colors cursor-pointer">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
-                            </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
     </div>
@@ -246,8 +274,8 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
             @foreach ($upcomingPhones as $phone)
-                <div
-                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200">
+                <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
+                    class="group relative bg-white rounded-xl border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
                     <div class="absolute top-3 left-3 z-10">
                         <span
                             class="bg-gray-400 text-white text-[8px] md:text-[10px] lg:text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Upcoming</span>
@@ -279,15 +307,15 @@
                                     Expected Soon
                                 @endif
                             </span>
-                            <button class="text-slate-400 hover:text-slate-900 transition-colors">
+                            <div class="text-slate-400 hover:text-red-500 transition-colors cursor-pointer">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
-                            </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
     </div>

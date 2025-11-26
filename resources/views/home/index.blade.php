@@ -259,7 +259,7 @@
     </div>
 
     {{-- Upcoming Phones --}}
-    <div class="mb-10">
+    <div class="mb-0">
         <div class="flex items-center justify-between mb-6 px-1">
             <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Coming Soon</h2>
             <a href="#"

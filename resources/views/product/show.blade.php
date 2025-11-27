@@ -165,6 +165,18 @@
                     @endforelse
                 </div>
             </div>
+            
+            {{-- Disclaimer --}}
+            <div class="bg-blue-50 rounded-sm p-5 border border-blue-100 mb-6">
+                <div class="flex gap-3">
+                    <svg class="w-5 h-5 text-blue-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div class="text-xs text-blue-800 leading-relaxed">
+                        <strong>Disclaimer:</strong> The price and specifications shown may be different from the actual product. We cannot guarantee that the information on this page is 100% correct. Please check with the retailer before purchasing.
+                    </div>
+                </div>
+            </div>
 
             {{-- FAQs --}}
             @if($product->faqs->count() > 0)
@@ -210,21 +222,20 @@
                     </div>
                 </div>
             @endif
+
+            {{-- Write a Review --}}
+            @include('components.product.review-form')
+
+            {{-- Reviews List --}}
+            @include('components.product.review-list')
         </div>
 
         {{-- Sidebar (Right Column) --}}
         <div class="lg:col-span-4 space-y-4">
-            {{-- Disclaimer --}}
-            <div class="bg-blue-50 rounded-sm p-5 border border-blue-100">
-                <div class="flex gap-3">
-                    <svg class="w-5 h-5 text-blue-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div class="text-xs text-blue-800 leading-relaxed">
-                        <strong>Disclaimer:</strong> The price and specifications shown may be different from the actual product. We cannot guarantee that the information on this page is 100% correct. Please check with the retailer before purchasing.
-                    </div>
-                </div>
-            </div>
+
+            {{-- Camera Samples --}}
+            @include('components.product.camera-sample')
+
             {{-- Similar Price Products --}}
             @if(isset($similarPriceProducts) && $similarPriceProducts->count() > 0)
                 <div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden">

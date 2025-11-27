@@ -10,6 +10,16 @@ class ProductController extends Controller
 {
     public function show($category_slug, Product $product)
     {
+        // Eager load relationships for the main product with specific columns where possible
+        $product->load([
+            'brand:id,name,slug', 
+            'category:id,name,slug', 
+            'variantPrices', 
+            'specValues.productSpecItem', 
+            'specValues.productSpecGroup', 
+            'faqs'
+        ]);
+
         if ($product->category->slug !== $category_slug) {
             abort(404);
         }
@@ -17,7 +27,9 @@ class ProductController extends Controller
         $minPrice = $product->base_price - $priceRange;
         $maxPrice = $product->base_price + $priceRange;
 
-        $similarPriceProducts = Product::where('category_id', $product->category_id)
+        $similarPriceProducts = Product::select('id', 'title', 'slug', 'image', 'base_price', 'category_id')
+            ->with('category:id,name,slug') // Eager load category with specific columns
+            ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->where('is_published', true)
             ->whereBetween('base_price', [$minPrice, $maxPrice])
@@ -25,7 +37,9 @@ class ProductController extends Controller
             ->take(5)
             ->get();
 
-        $similarProducts = Product::where('category_id', $product->category_id)
+        $similarProducts = Product::select('id', 'title', 'slug', 'image', 'base_price', 'category_id')
+            ->with('category:id,name,slug') // Eager load category with specific columns
+            ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->where('is_published', true)
             ->whereNotIn('id', $similarPriceProducts->pluck('id'))
@@ -33,7 +47,16 @@ class ProductController extends Controller
             ->take(5)
             ->get();
 
-        return view('product.show', compact('product', 'similarPriceProducts', 'similarProducts'));
+        // Fetch reviews logic moved from Blade with specific columns
+        $approvedReviews = $product->reviews()
+            ->select('id', 'name', 'review', 'rating_design', 'rating_performance', 'rating_camera', 'rating_battery', 'pros', 'cons', 'variant', 'images', 'created_at')
+            ->where('is_approve', true)
+            ->latest()
+            ->take(5)
+            ->get();
+        $totalReviews = $product->reviews()->where('is_approve', true)->count();
+
+        return view('product.show', compact('product', 'similarPriceProducts', 'similarProducts', 'approvedReviews', 'totalReviews'));
     }
     public function storeReview(Request $request, Product $product)
     {
@@ -108,5 +131,47 @@ class ProductController extends Controller
         }
 
         return back()->with('success', 'Review submitted successfully! It will be visible after approval.');
+    }
+
+    public function getReviews(Request $request, Product $product)
+    {
+        $perPage = 5;
+        $page = $request->get('page', 1);
+        
+        $reviews = $product->reviews()
+            ->select('id', 'name', 'review', 'rating_design', 'rating_performance', 'rating_camera', 'rating_battery', 'pros', 'cons', 'variant', 'images', 'created_at')
+            ->where('is_approve', true)
+            ->latest()
+            ->skip(($page - 1) * $perPage)
+            ->take($perPage)
+            ->get();
+        
+        $totalReviews = $product->reviews()->where('is_approve', true)->count();
+        $hasMore = ($page * $perPage) < $totalReviews;
+        
+        return response()->json([
+            'reviews' => $reviews->map(function($review) {
+                $avgRating = collect([
+                    $review->rating_design,
+                    $review->rating_performance,
+                    $review->rating_camera,
+                    $review->rating_battery
+                ])->filter()->avg();
+                
+                return [
+                    'id' => $review->id,
+                    'name' => $review->name,
+                    'review' => $review->review,
+                    'variant' => $review->variant,
+                    'pros' => $review->pros,
+                    'cons' => $review->cons,
+                    'images' => $review->images,
+                    'avg_rating' => $avgRating,
+                    'created_at' => $review->created_at->diffForHumans(),
+                ];
+            }),
+            'hasMore' => $hasMore,
+            'nextPage' => $page + 1,
+        ]);
     }
 }

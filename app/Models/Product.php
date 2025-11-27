@@ -73,7 +73,7 @@ class Product extends Model
 
     public function getSpecGroupsAttribute()
     {
-        $specValues = $this->specValues()->with(['productSpecItem', 'productSpecGroup'])->get();
+        $specValues = $this->specValues;
 
         return $specValues->groupBy(function ($value) {
             return $value->productSpecGroup ? $value->productSpecGroup->name : 'Other';

@@ -1,102 +1,172 @@
 @php
-    $approvedReviews = $product->reviews()->where('is_approve', true)->latest()->get();
-    $reviewCount = $approvedReviews->count();
+    // Format reviews to match AJAX response
+    $formattedReviews = $approvedReviews->map(function($review) {
+        $avgRating = collect([
+            $review->rating_design,
+            $review->rating_performance,
+            $review->rating_camera,
+            $review->rating_battery
+        ])->filter()->avg();
+        
+        return [
+            'id' => $review->id,
+            'name' => $review->name,
+            'review' => $review->review,
+            'variant' => $review->variant,
+            'pros' => $review->pros ?? [],
+            'cons' => $review->cons ?? [],
+            'images' => $review->images ?? [],
+            'avg_rating' => $avgRating,
+            'created_at' => $review->created_at->diffForHumans(),
+        ];
+    })->values()->toArray();
 @endphp
 
-<div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden mt-6" x-data="{ lightboxOpen: false, lightboxImage: '' }">
+{{-- Data Injection --}}
+<script>
+    window.initialReviews = @json($formattedReviews);
+</script>
+
+<div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden mt-6" 
+     x-data="{ 
+        lightboxOpen: false, 
+        lightboxImage: '',
+        reviews: window.initialReviews || [],
+        page: 1,
+        hasMore: {{ $totalReviews > 5 ? 'true' : 'false' }},
+        loading: false,
+        productId: {{ $product->id }},
+        
+        async loadMore() {
+            if (this.loading) return;
+            
+            this.loading = true;
+            this.page++;
+            
+            try {
+                const response = await fetch(`/products/${this.productId}/reviews?page=${this.page}`);
+                const data = await response.json();
+                
+                // Filter out duplicates based on ID
+                const newReviews = data.reviews.filter(newReview => 
+                    !this.reviews.some(existing => existing.id === newReview.id)
+                );
+                
+                this.reviews = [...this.reviews, ...newReviews];
+                this.hasMore = data.hasMore;
+            } catch (error) {
+                console.error('Failed to load reviews:', error);
+            } finally {
+                this.loading = false;
+            }
+        },
+        
+        getInitials(name) {
+            return name ? name.substring(0, 2).toUpperCase() : '??';
+        }
+     }">
     <div class="p-4 border-b border-slate-100 flex items-center justify-between">
-        <h2 class="text-lg font-bold text-slate-800">Reviews ({{ $reviewCount }})</h2>
+        <h2 class="text-lg font-bold text-slate-800">Reviews ({{ $totalReviews }})</h2>
     </div>
     
     <div class="divide-y divide-slate-100">
-        @forelse($approvedReviews as $review)
+        <template x-for="(review, index) in reviews" :key="index">
             <div class="p-4 md:p-6">
                 <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-sm shrink-0">
-                        {{ strtoupper(substr($review->name, 0, 2)) }}
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-sm shrink-0" x-text="getInitials(review.name)">
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between mb-1">
-                            <h3 class="font-bold text-slate-900 text-sm">{{ $review->name }}</h3>
-                            <span class="text-xs text-slate-400">{{ $review->created_at->diffForHumans() }}</span>
+                            <h3 class="font-bold text-slate-900 text-sm" x-text="review.name"></h3>
+                            <span class="text-xs text-slate-400" x-text="review.created_at"></span>
                         </div>
                         
-                        @php
-                            $avgRating = collect([
-                                $review->rating_design,
-                                $review->rating_performance,
-                                $review->rating_camera,
-                                $review->rating_battery
-                            ])->filter()->avg();
-                        @endphp
-
-                        @if($avgRating)
+                        <template x-if="review.avg_rating">
                             <div class="flex items-center gap-1 mb-2">
                                 <div class="flex text-amber-400">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <svg class="w-4 h-4 {{ $i <= round($avgRating) ? 'fill-current' : 'fill-slate-200' }}" viewBox="0 0 20 20">
+                                    <template x-for="i in 5" :key="'star-' + index + '-' + i">
+                                        <svg class="w-4 h-4" :class="i <= Math.round(review.avg_rating) ? 'fill-current' : 'fill-slate-200'" viewBox="0 0 20 20">
                                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                                         </svg>
-                                    @endfor
+                                    </template>
                                 </div>
-                                <span class="text-xs font-medium text-slate-600 ml-1">{{ number_format($avgRating, 1) }}</span>
+                                <span class="text-xs font-medium text-slate-600 ml-1" x-text="review.avg_rating.toFixed(1)"></span>
                             </div>
-                        @endif
+                        </template>
 
-                        @if($review->variant)
+                        <template x-if="review.variant">
                             <div class="text-xs text-slate-500 mb-3">
-                                Variant: <span class="font-medium text-slate-700">{{ $review->variant }}</span>
+                                Variant: <span class="font-medium text-slate-700" x-text="review.variant"></span>
                             </div>
-                        @endif
+                        </template>
 
-                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
-                            {{ $review->review }}
-                        </p>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed" x-text="review.review"></p>
 
-                        @if($review->pros || $review->cons)
+                        <template x-if="(review.pros && review.pros.length > 0) || (review.cons && review.cons.length > 0)">
                             <div class="flex flex-wrap gap-4 mb-4">
-                                @if($review->pros && count($review->pros) > 0)
+                                <template x-if="review.pros && review.pros.length > 0">
                                     <div>
                                         <span class="text-xs font-bold text-green-600 uppercase tracking-wider mb-1 block">Pros</span>
                                         <div class="flex flex-wrap gap-1">
-                                            @foreach($review->pros as $pro)
-                                                <span class="px-2 py-0.5 rounded bg-green-50 text-green-700 text-xs border border-green-100">{{ $pro }}</span>
-                                            @endforeach
+                                            <template x-for="(pro, i) in review.pros" :key="'pro-' + index + '-' + i">
+                                                <span class="px-2 py-0.5 rounded bg-green-50 text-green-700 text-xs border border-green-100" x-text="pro"></span>
+                                            </template>
                                         </div>
                                     </div>
-                                @endif
-                                @if($review->cons && count($review->cons) > 0)
+                                </template>
+                                <template x-if="review.cons && review.cons.length > 0">
                                     <div>
                                         <span class="text-xs font-bold text-red-600 uppercase tracking-wider mb-1 block">Cons</span>
                                         <div class="flex flex-wrap gap-1">
-                                            @foreach($review->cons as $con)
-                                                <span class="px-2 py-0.5 rounded bg-red-50 text-red-700 text-xs border border-red-100">{{ $con }}</span>
-                                            @endforeach
+                                            <template x-for="(con, i) in review.cons" :key="'con-' + index + '-' + i">
+                                                <span class="px-2 py-0.5 rounded bg-red-50 text-red-700 text-xs border border-red-100" x-text="con"></span>
+                                            </template>
                                         </div>
                                     </div>
-                                @endif
+                                </template>
                             </div>
-                        @endif
+                        </template>
 
-                        @if($review->images && count($review->images) > 0)
-                            <div class="flex flex-wrap gap-2 mt-3">
-                                @foreach($review->images as $image)
-                                    <img src="{{ $image }}" 
+                        <template x-if="review.images && review.images.length > 0">
+                            <div class="flex gap-2 mt-3 overflow-x-auto pb-2">
+                                <template x-for="(image, i) in review.images" :key="'img-' + index + '-' + i">
+                                    <img :src="image" 
                                          alt="Review image" 
-                                         @click="lightboxImage = '{{ $image }}'; lightboxOpen = true"
-                                         class="h-32 object-contain rounded border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity bg-slate-50">
-                                @endforeach
+                                         loading="lazy"
+                                         @click="lightboxImage = image; lightboxOpen = true"
+                                         class="h-32 flex-shrink-0 object-contain rounded border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity bg-slate-50">
+                                </template>
                             </div>
-                        @endif
+                        </template>
                     </div>
                 </div>
             </div>
-        @empty
+        </template>
+        
+        <template x-if="reviews.length === 0">
             <div class="p-8 text-center text-slate-500 text-sm">
                 No reviews yet. Be the first to review this product!
             </div>
-        @endforelse
+        </template>
     </div>
+
+    {{-- Load More Button --}}
+    <template x-if="hasMore">
+        <div class="p-4 border-t border-slate-100 text-center">
+            <button @click="loadMore()" 
+                    :disabled="loading"
+                    class="px-4 py-2 rounded-sm border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <span x-show="!loading">Load More Reviews</span>
+                <span x-show="loading" class="flex items-center justify-center gap-2">
+                    <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Loading...
+                </span>
+            </button>
+        </div>
+    </template>
 
     {{-- Image Lightbox --}}
     <div x-show="lightboxOpen" 
@@ -112,6 +182,7 @@
         </button>
         <img :src="lightboxImage" 
              @click.stop
+             loading="lazy"
              class="max-w-full max-h-full object-contain rounded shadow-2xl">
     </div>
 </div>

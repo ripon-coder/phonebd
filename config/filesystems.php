@@ -58,6 +58,7 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
             'report' => false,
+            'visibility' => 'public',
         ],
 
         'backblaze' => [
@@ -67,19 +68,12 @@ return [
             'region' => env('BACKBLAZE_REGION'),
             'bucket' => env('BACKBLAZE_BUCKET'),
             'endpoint' => env('BACKBLAZE_ENDPOINT'),
-
-            'use_path_style_endpoint' => true, // <-- TURN THIS ON
-            'throw' => true,
-            'report' => true,
-
-            'acl' => null,
-
-            // CRITICAL FIX
+            'use_path_style_endpoint' => true,
             'options' => [
-                'ACL' => 'noacl',     // override AWS default ACL
-                '@useObjectACL' => false,
+                'ACL' => '',
             ],
         ],
+
 
 
     ],

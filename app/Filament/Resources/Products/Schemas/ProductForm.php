@@ -73,6 +73,7 @@ class ProductForm
                             ->required(),
 
                         Forms\Components\FileUpload::make('image')
+
                             ->label('Main Product Image')
                             ->image()
                             ->disk('public')

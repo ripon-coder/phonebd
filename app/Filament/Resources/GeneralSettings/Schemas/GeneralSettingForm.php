@@ -29,11 +29,13 @@ class GeneralSettingForm
             Section::make('Branding')
                 ->schema([
                     FileUpload::make('site_logo')
+                        ->disk('public')
                         ->label('Site Logo')
                         ->image()
                         ->directory('settings'),
 
                     FileUpload::make('site_favicon')
+                        ->disk('public')
                         ->label('Favicon')
                         ->image()
                         ->directory('settings'),

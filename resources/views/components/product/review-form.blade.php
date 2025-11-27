@@ -1,4 +1,4 @@
-<div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden" x-data="{ step: 1, rating: 0, hover: 0 }">
+<div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden" x-data="{ step: 1, rating: 0, hover: 0, showSuccess: false, successMessage: '' }">
     {{-- Header --}}
     <div class="bg-slate-100 p-2 border-b border-slate-100">
         <h2 class="text-lg font-bold text-center mb-4 text-slate-800">Write a Review</h2>
@@ -37,16 +37,118 @@
         </div>
     </div>
 
+    {{-- Success Message --}}
+    <div x-show="showSuccess" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 -translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         class="mx-4 mt-4 md:mx-8 md:mt-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3"
+         style="display: none;">
+        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div class="flex-1">
+            <h3 class="text-sm font-semibold text-green-800 mb-1">Review Submitted Successfully!</h3>
+            <p class="text-sm text-green-700" x-text="successMessage"></p>
+        </div>
+        <button @click="showSuccess = false" class="text-green-600 hover:text-green-800">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
     <div class="p-4 md:p-8">
-        <form action="#" method="POST" enctype="multipart/form-data">
-            @csrf
+    <form id="review-form" action="{{ route('reviews.store', $product) }}" method="POST" enctype="multipart/form-data" 
+          @submit.prevent="
+            const form = $el;
+            const formData = new FormData(form);
+            const submitBtn = form.querySelector('button[type=submit]');
+            const originalBtnText = submitBtn.innerHTML;
             
-            {{-- Step 1: Basic (Required) --}}
-            <div x-show="step === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0">
-                <div class="space-y-6">
+            // Remove rating fields with value 0 (not selected)
+            ['rating_design', 'rating_performance', 'rating_camera', 'rating_battery'].forEach(field => {
+                if (formData.get(field) === '0') {
+                    formData.delete(field);
+                }
+            });
+            
+            // Remove empty pros/cons values
+            const prosValues = formData.getAll('pros[]').filter(val => val && val.trim() !== '');
+            const consValues = formData.getAll('cons[]').filter(val => val && val.trim() !== '');
+            
+            // Delete all existing pros/cons
+            formData.delete('pros[]');
+            formData.delete('cons[]');
+            
+            // Re-add only non-empty values
+            prosValues.forEach(val => formData.append('pros[]', val));
+            consValues.forEach(val => formData.append('cons[]', val));
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<svg class='animate-spin -ml-1 mr-2 h-4 w-4 text-white' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'><circle class='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' stroke-width='4'></circle><path class='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'></path></svg> Submitting...`;
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => Promise.reject(err));
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Show inline success message
+                    successMessage = data.message;
+                    showSuccess = true;
+                    
+                    // Reset form
+                    form.reset();
+                    step = 1;
+                    rating = 0;
+                    
+                    // Scroll to success message
+                    setTimeout(() => {
+                        document.querySelector('[x-show=showSuccess]').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                
+                // Handle validation errors
+                if (error.errors) {
+                    const errorMessages = Object.values(error.errors).flat().join('\\n');
+                    const errorAlert = document.createElement('div');
+                    errorAlert.className = 'fixed top-4 right-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded shadow-lg z-50 max-w-md animate-fade-in-down';
+                    errorAlert.innerHTML = `<div class='flex items-start gap-2'><svg class='w-5 h-5 text-red-500 mt-0.5 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'/></svg><div class='text-sm whitespace-pre-line'>${errorMessages}</div></div>`;
+                    document.body.appendChild(errorAlert);
+                    
+                    setTimeout(() => {
+                        errorAlert.remove();
+                    }, 7000);
+                } else {
+                    alert(error.message || 'An error occurred. Please try again.');
+                }
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            });
+          ">
+        @csrf
+        <div x-show="step === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0">
+            <div class="space-y-6">
                     {{-- Detailed Ratings --}}
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6" x-data="{ 
-                        ratings: { design: 0, performance: 0, camera: 0, battery: 0 },
+                        ratings: { design: 4, performance: 4, camera: 4, battery: 4 },
                         hovers: { design: 0, performance: 0, camera: 0, battery: 0 }
                     }">
                         {{-- Design Rating --}}
@@ -304,10 +406,10 @@
                 {{-- Submit Button --}}
                 <button type="submit" 
                     x-show="step === 3" 
-                    class="px-4 py-2 bg-slate-900 text-white font-medium rounded-lg hover:bg-slate-800 transition-colors text-sm shadow-lg shadow-slate-200">
+                    class="px-4 py-2 bg-slate-900 text-white font-medium rounded-lg hover:bg-slate-800 transition-colors text-sm shadow-lg shadow-slate-200 flex items-center gap-2">
                     Submit Review
                 </button>
             </div>
-        </form>
+    </form>
     </div>
 </div>

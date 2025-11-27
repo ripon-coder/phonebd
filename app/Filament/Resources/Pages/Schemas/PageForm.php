@@ -32,6 +32,7 @@ class PageForm
                         RichEditor::make('content')
                             ->columnSpanFull(),
                         FileUpload::make('featured_image')
+                            ->disk('public')
                             ->image()
                             ->directory('pages')
                             ->columnSpanFull(),

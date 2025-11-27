@@ -235,6 +235,7 @@
 
             {{-- Camera Samples --}}
             @include('components.product.camera-sample')
+            @include('components.product.camera-sample-form')
 
             {{-- Similar Price Products --}}
             @if(isset($similarPriceProducts) && $similarPriceProducts->count() > 0)

@@ -44,6 +44,19 @@
       .pb-safe {
         padding-bottom: env(safe-area-inset-bottom);
       }
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translate3d(0, -20px, 0);
+        }
+        to {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+      .animate-fade-in-down {
+        animation: fadeInDown 0.5s ease-out;
+      }
     </style>
 </head>
 <body class="antialiased bg-slate-50 text-slate-900 font-sans">

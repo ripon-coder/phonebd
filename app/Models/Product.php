@@ -30,6 +30,10 @@ class Product extends Model
         'meta_description',
         'meta_keywords',
         'meta_image',
+        'is_sample',
+        'sample_count_max',
+        'is_review',
+        'review_count_max',
     ];
 
     protected $casts = [
@@ -55,6 +59,11 @@ class Product extends Model
     public function variantPrices(): HasMany
     {
         return $this->hasMany(ProductVariantPrice::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
     }
 
     public function faqs(): HasMany

@@ -34,7 +34,7 @@
     
     <div class="p-3 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
         <h3 class="font-bold text-slate-900">Camera Samples</h3>
-        <button class="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1">
+        <button @click="$dispatch('open-sample-drawer')" class="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1">
             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
             Add Samples
         </button>

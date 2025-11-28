@@ -24,6 +24,8 @@ return new class extends Migration
             $table->json('cons')->nullable();
             $table->string('variant')->nullable();
             $table->json('images')->nullable();
+            $table->string('finger_print')->nullable();
+            $table->string('ip_address')->nullable();
             $table->boolean('is_approve')->default(false);
             $table->timestamps();
         });

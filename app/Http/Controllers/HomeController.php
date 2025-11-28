@@ -2,22 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\Product;
+use App\Services\BrandService;
+use App\Services\CategoryService;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    protected $productService;
+    protected $categoryService;
+    protected $brandService;
+
+    public function __construct(
+        ProductService $productService,
+        CategoryService $categoryService,
+        BrandService $brandService
+    ) {
+        $this->productService = $productService;
+        $this->categoryService = $categoryService;
+        $this->brandService = $brandService;
+    }
+
     public function index()
     {
-        $categories = Category::orderBy('sort_order')->take(11)->get();
-        $brands = Brand::orderBy('sort_order')->take(10)->get();
-        $latestPhones = Product::with('category')->where('is_published', true)->latest()->take(10)->get();
-        $upcomingPhones = Product::with('category')->where('status', 'upcoming')->where('is_published', true)->latest()->take(10)->get();
-        $officialPhones = Product::with('category')->where('status', 'official')->where('is_published', true)->latest()->take(10)->get();
-        $unofficialPhones = Product::with('category')->where('status', 'unofficial')->where('is_published', true)->latest()->take(10)->get();
-        
+        $categories = $this->categoryService->getTopCategories();
+        $brands = $this->brandService->getTopBrands();
+        $latestPhones = $this->productService->getLatest();
+        $upcomingPhones = $this->productService->getUpcoming();
+        $officialPhones = $this->productService->getOfficial();
+        $unofficialPhones = $this->productService->getUnofficial();
+
         return view('home.index', compact('categories', 'brands', 'latestPhones', 'upcomingPhones', 'officialPhones', 'unofficialPhones'));
     }
 }

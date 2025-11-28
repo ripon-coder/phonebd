@@ -4,13 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
+use App\Services\BlogService;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
+    protected $blogService;
+
+    public function __construct(BlogService $blogService)
+    {
+        $this->blogService = $blogService;
+    }
+
     public function index()
     {
-        $posts = BlogPost::where('published', true)->paginate(10);
+        $posts = $this->blogService->getAllPosts();
         return view('blog.index', compact('posts'));
     }
 
@@ -21,7 +29,7 @@ class BlogController extends Controller
 
     public function category(BlogCategory $category)
     {
-        $posts = $category->posts()->where('published', true)->paginate(10);
+        $posts = $this->blogService->getPostsByCategory($category);
         return view('blog.category', compact('category', 'posts'));
     }
 }

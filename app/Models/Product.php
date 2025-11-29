@@ -71,6 +71,11 @@ class Product extends Model
         return $this->hasMany(ProductFaq::class);
     }
 
+    public function cameraSamples(): HasMany
+    {
+        return $this->hasMany(CameraSample::class);
+    }
+
     public function getSpecGroupsAttribute()
     {
         $specValues = $this->specValues;

@@ -1,26 +1,60 @@
 <div x-data="{ 
     isOpen: false,
+    loading: false,
     images: [],
+    files: [],
+    successMessage: '',
+    errorMessage: '',
+    formData: {
+        name: '',
+        variant: '',
+        finger_print: ''
+    },
+    
+    init() {
+        // Initialize FingerprintJS
+        const getFingerprint = async () => {
+            try {
+                let retries = 0;
+                while (!window.FingerprintJS && retries < 10) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    retries++;
+                }
+
+                if (window.FingerprintJS) {
+                    const fp = await window.FingerprintJS.load();
+                    const result = await fp.get();
+                    this.formData.finger_print = result.visitorId;
+                }
+            } catch (error) {
+                console.error('Fingerprint error:', error);
+            }
+        };
+        getFingerprint();
+    },
+
     handleFileChange(event) {
         const files = Array.from(event.target.files);
         
         // Validate max files
         if (files.length > 4) {
-            alert('You can upload a maximum of 4 photos.');
+            this.errorMessage = 'You can upload a maximum of 4 photos.';
             event.target.value = ''; // Clear input
             return;
         }
 
-        // Validate file size (7MB = 7 * 1024 * 1024 bytes)
+        // Validate file size (7MB)
         const maxSize = 7 * 1024 * 1024;
         const oversizedFiles = files.filter(file => file.size > maxSize);
         
         if (oversizedFiles.length > 0) {
-            alert('Each photo must be less than 7MB.');
+            this.errorMessage = 'Each photo must be less than 7MB.';
             event.target.value = ''; // Clear input
             return;
         }
 
+        this.errorMessage = ''; // Clear error
+        this.files = files;
         this.images = [];
         files.forEach(file => {
             const reader = new FileReader();
@@ -30,12 +64,65 @@
             reader.readAsDataURL(file);
         });
     },
+
     clearImages() {
         this.images = [];
+        this.files = [];
         document.getElementById('sample-photos').value = '';
+    },
+
+    async submitForm() {
+        if (this.loading) return;
+        this.loading = true;
+        this.successMessage = '';
+        this.errorMessage = '';
+
+        const formData = new FormData();
+        formData.append('name', this.formData.name);
+        if (this.formData.variant) formData.append('variant', this.formData.variant);
+        if (this.formData.finger_print) formData.append('finger_print', this.formData.finger_print);
+        
+        this.files.forEach(file => {
+            formData.append('photos[]', file);
+        });
+
+        try {
+            const response = await fetch('{{ route('camera-samples.store', $product->id) }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                this.successMessage = result.message || 'Samples uploaded successfully!';
+                this.clearImages();
+                this.formData.name = '';
+                this.formData.variant = '';
+                // Optional: Close after a delay
+                // setTimeout(() => this.isOpen = false, 2000);
+            } else {
+                if (result.errors) {
+                    // Get the first error message from the errors object
+                    const firstError = Object.values(result.errors)[0];
+                    this.errorMessage = Array.isArray(firstError) ? firstError[0] : firstError;
+                } else {
+                    this.errorMessage = result.message || 'Something went wrong. Please try again.';
+                }
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            this.errorMessage = 'Failed to upload samples. Please try again.';
+        } finally {
+            this.loading = false;
+        }
     }
 }"
-@open-sample-drawer.window="isOpen = true"
+@open-sample-drawer.window="isOpen = true; successMessage = ''; errorMessage = ''"
 @keydown.escape.window="isOpen = false">
 
     {{-- Drawer Overlay --}}
@@ -72,19 +159,39 @@
 
         {{-- Form --}}
         <div class="p-6 space-y-6">
-            <form action="#" method="POST" enctype="multipart/form-data" class="space-y-6">
-                @csrf
-                
+            {{-- Success Message --}}
+            <div x-show="successMessage" x-transition class="p-4 rounded-lg bg-green-50 border border-green-200 text-green-700 flex items-center gap-3" style="display: none;">
+                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div class="text-sm">
+                    <span class="font-semibold">Success!</span>
+                    <span x-text="successMessage"></span>
+                </div>
+            </div>
+
+            {{-- Error Message --}}
+            <div x-show="errorMessage" x-transition class="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 flex items-center gap-3" style="display: none;">
+                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div class="text-sm">
+                    <span class="font-semibold">Error:</span>
+                    <span x-text="errorMessage"></span>
+                </div>
+            </div>
+
+            <form @submit.prevent="submitForm" class="space-y-6">
                 {{-- User Info --}}
                 <div>
                     <label for="sample_name" class="block text-sm font-medium text-slate-700 mb-2">Your Name <span class="text-red-500">*</span></label>
-                    <input type="text" id="sample_name" name="name" required class="w-full rounded-sm border-slate-200 focus:border-blue-500 focus:ring-blue-500 focus:outline-none text-sm bg-slate-50 p-3" placeholder="Enter your name">
+                    <input type="text" id="sample_name" x-model="formData.name" required class="w-full rounded-sm border-slate-200 focus:border-blue-500 focus:ring-blue-500 focus:outline-none text-sm bg-slate-50 p-3" placeholder="Enter your name">
                 </div>
 
                 {{-- Device Variant --}}
                 <div>
                     <label for="sample_variant" class="block text-sm font-medium text-slate-700 mb-2">Device Variant (Optional)</label>
-                    <input type="text" id="sample_variant" name="variant" class="w-full rounded-sm border-slate-200 focus:border-blue-500 focus:ring-blue-500 focus:outline-none text-sm bg-slate-50 p-3" placeholder="e.g. 8GB/128GB">
+                    <input type="text" id="sample_variant" x-model="formData.variant" class="w-full rounded-sm border-slate-200 focus:border-blue-500 focus:ring-blue-500 focus:outline-none text-sm bg-slate-50 p-3" placeholder="e.g. 8GB/128GB">
                 </div>
 
                 {{-- Photo Upload --}}
@@ -103,7 +210,7 @@
                                 <p class="mb-2 text-sm text-slate-500"><span class="font-semibold text-slate-700">Click to upload</span> or drag and drop</p>
                                 <p class="text-xs text-slate-400">JPG, PNG or GIF (Max 7MB, up to 4 photos)</p>
                             </div>
-                            <input id="sample-photos" type="file" name="photos[]" multiple accept="image/*" class="hidden" @change="handleFileChange" required />
+                            <input id="sample-photos" type="file" multiple accept="image/*" class="hidden" @change="handleFileChange" required />
                         </label>
                     </div>
 
@@ -125,9 +232,13 @@
 
                 {{-- Submit Button --}}
                 <div class="pt-4 border-t border-slate-100">
-                    <button type="submit" class="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm shadow-lg shadow-blue-200 flex items-center justify-center gap-2">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                        Upload Samples
+                    <button type="submit" :disabled="loading" class="w-full px-6 py-3 bg-slate-900 text-white font-medium rounded-lg hover:bg-slate-800 transition-colors text-sm shadow-lg shadow-slate-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                        <svg x-show="!loading" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                        <svg x-show="loading" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span x-text="loading ? 'Uploading...' : 'Upload Samples'"></span>
                     </button>
                     <p class="text-xs text-slate-400 text-center mt-3">By uploading, you agree to our terms and conditions.</p>
                 </div>

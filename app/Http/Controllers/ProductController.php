@@ -4,19 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Http\Requests\StoreReviewRequest;
+use App\Http\Requests\StoreCameraSampleRequest;
 use App\Services\ProductService;
 use App\Services\ReviewService;
+use App\Services\CameraSampleService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     protected $productService;
     protected $reviewService;
+    protected $cameraSampleService;
 
-    public function __construct(ProductService $productService, ReviewService $reviewService)
+    public function __construct(ProductService $productService, ReviewService $reviewService, CameraSampleService $cameraSampleService)
     {
         $this->productService = $productService;
         $this->reviewService = $reviewService;
+        $this->cameraSampleService = $cameraSampleService;
     }
 
     public function show($category_slug, Product $product)
@@ -33,8 +37,10 @@ class ProductController extends Controller
         $approvedReviews = $this->reviewService->getApprovedReviews($product);
         $totalReviews = $this->reviewService->getTotalApprovedReviews($product);
         $averageRating = $this->reviewService->getAverageRating($product);
+        $cameraSamples = $this->cameraSampleService->getApprovedSamples($product);
+        $totalCameraSamples = $this->cameraSampleService->getTotalApprovedSamples($product);
 
-        return view('product.show', compact('product', 'similarPriceProducts', 'similarProducts', 'approvedReviews', 'totalReviews', 'averageRating'));
+        return view('product.show', compact('product', 'similarPriceProducts', 'similarProducts', 'approvedReviews', 'totalReviews', 'averageRating', 'cameraSamples', 'totalCameraSamples'));
     }
 
     public function storeReview(StoreReviewRequest $request, Product $product)
@@ -51,6 +57,22 @@ class ProductController extends Controller
         }
 
         return back()->with('success', 'Review submitted successfully! It will be visible after approval.');
+    }
+
+    public function storeCameraSample(StoreCameraSampleRequest $request, Product $product)
+    {
+        $validated = $request->validated();
+
+        $this->cameraSampleService->storeSample($validated, $product, $request->file('photos', []));
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Camera samples submitted successfully! They will be visible after approval.',
+            ]);
+        }
+
+        return back()->with('success', 'Camera samples submitted successfully! They will be visible after approval.');
     }
 
     public function getReviews(Request $request, Product $product)

@@ -50,7 +50,7 @@
                 ];
             @endphp
             @foreach($priceRanges as $key => $range)
-                <a href="#" class="group flex items-center justify-between px-4 py-3 bg-white border border-slate-200 rounded-lg hover:border-slate-900 hover:text-slate-900 transition-all duration-200">
+                <a href="#" class="group flex items-center justify-between px-4 py-3 bg-white border border-slate-200 rounded-lg hover:border-slate-800 hover:text-slate-900 transition-all duration-200">
                     <div class="flex flex-col">
                         <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Budget</span>
                         <span class="text-sm font-bold text-slate-900 transition-colors whitespace-nowrap">{{ $range }}</span>

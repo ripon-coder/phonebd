@@ -28,6 +28,7 @@
 
     <style>
       /* small critical CSS to ensure white bg and smoother font rendering */
+      html { scroll-behavior: smooth; }
       html,body{background:#ffffff;color:#0f172a;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;}
       a{color:inherit}
       [x-cloak] { display: none !important; }

@@ -103,9 +103,10 @@
 
           {{-- Right: Desktop Nav --}}
           <nav class="hidden md:flex items-center gap-1">
-            <a href="#" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Brands</a>
+            <a href="{{ route('products.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Devices</a>
+            <a href="{{ route('brands.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Brands</a>
             <a href="#" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Latest</a>
-            <a href="#" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Blog</a>
+            <a href="{{ route('blog.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Blog</a>
           </nav>
 
           {{-- Mobile Menu Button --}}
@@ -136,10 +137,11 @@
         style="display: none;"
       >
         <div class="px-4 pt-2 pb-6 space-y-1">
-            <a href="#" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Home</a>
-            <a href="#" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Brands</a>
+            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Home</a>
+            <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Devices</a>
+            <a href="{{ route('brands.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Brands</a>
             <a href="#" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Latest Phones</a>
-            <a href="#" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Blog</a>
+            <a href="{{ route('blog.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Blog</a>
         </div>
       </div>
     </header>

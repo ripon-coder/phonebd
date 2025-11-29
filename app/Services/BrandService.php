@@ -10,4 +10,9 @@ class BrandService
     {
         return Brand::orderBy('sort_order')->take($limit)->get();
     }
+
+    public function getAllBrands()
+    {
+        return Brand::orderBy('name')->get(['id', 'name', 'slug', 'image']);
+    }
 }

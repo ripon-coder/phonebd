@@ -18,14 +18,19 @@ class BlogPost extends Model
         'slug',
         'featured_image',
         'content',
-        'published',
+        'is_published',
         'meta_title',
         'meta_description',
-        'meta_keywords',
+        'published_at',
     ];
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(BlogCategory::class, 'blog_category_id');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

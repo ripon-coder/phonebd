@@ -10,7 +10,7 @@
     <div class="mb-10 mt-4">
         <div class="flex items-center justify-between mb-5 px-1">
             <h2 class="text-md lg:text-lg  font-bold text-slate-900 tracking-tight">Browse Categories</h2>
-            <a href="#"
+            <a href="{{ route('products.index') }}"
                 class="md:hidden text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
                 <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24"
@@ -24,7 +24,7 @@
         <div
             class="flex flex-nowrap md:flex-wrap gap-1 overflow-x-auto md:overflow-visible pb-1 md:pb-0 snap-x snap-mandatory hide-scrollbar">
             @foreach ($categories as $category)
-                <a href="#"
+                <a href="{{ route('products.index', ['categories[]' => $category->id]) }}"
                     class="snap-start shrink-0 px-5 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-medium hover:border-slate-900 hover:text-slate-900 transition-all duration-200 shadow-sm">
                     {{ $category->name }}
                 </a>
@@ -41,19 +41,22 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             @php
                 $priceRanges = [
-                    '1-10k' => '৳1 - ৳10,000',
-                    '10-15k' => '৳10,000 - ৳15,000',
-                    '15-20k' => '৳15,000 - ৳20,000',
-                    '20-30k' => '৳20,000 - ৳30,000',
-                    '30-50k' => '৳30,000 - ৳50,000',
-                    '50k+' => '৳50,000+',
+                    '1-10000' => '৳1 - ৳10,000',
+                    '10000-15000' => '৳10,000 - ৳15,000',
+                    '15000-20000' => '৳15,000 - ৳20,000',
+                    '20000-30000' => '৳20,000 - ৳30,000',
+                    '30000-50000' => '৳30,000 - ৳50,000',
+                    '50000-1000000' => '৳50,000+',
                 ];
             @endphp
-            @foreach($priceRanges as $key => $range)
-                <a href="#" class="group flex items-center justify-between px-4 py-3 bg-white border border-slate-200 rounded-lg hover:border-slate-800 hover:text-slate-900 transition-all duration-200">
+            @foreach($priceRanges as $rangeKey => $label)
+                @php
+                    [$min, $max] = explode('-', $rangeKey);
+                @endphp
+                <a href="{{ route('products.index', ['min_price' => $min, 'max_price' => $max]) }}" class="group flex items-center justify-between px-4 py-3 bg-white border border-slate-200 rounded-lg hover:border-slate-800 hover:text-slate-900 transition-all duration-200">
                     <div class="flex flex-col">
                         <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Budget</span>
-                        <span class="text-sm font-bold text-slate-900 transition-colors whitespace-nowrap">{{ $range }}</span>
+                        <span class="text-sm font-bold text-slate-900 transition-colors whitespace-nowrap">{{ $label }}</span>
                     </div>
                     <div class="hidden md:flex w-8 h-8 rounded-full bg-slate-50 items-center justify-center group-hover text-slate-900 transition-colors">
                         <svg class="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,7 +72,7 @@
     <div class="mb-10">
         <div class="flex items-center justify-between mb-6 px-1">
             <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Just Arrived</h2>
-            <a href="#"
+            <a href="{{ route('products.index', ['sort' => 'latest']) }}"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
                 <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24"
@@ -83,13 +86,6 @@
             @foreach ($latestPhones as $phone)
                 <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
                     class="group relative bg-white rounded-sm border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
-                    @if ($phone->created_at > now()->subDays(30))
-                        <div class="absolute top-3 left-3 z-10">
-                            <span
-                                class="bg-slate-900 text-white text-[8px] md:text-[10px] lg:text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">New</span>
-                        </div>
-                    @endif
-
                     <div class="relative aspect-square bg-slate-50/50 p-1 group-hover:bg-slate-50 transition-colors">
                         @if ($phone->image)
                             <img src="{{ asset('storage/' . $phone->image) }}"
@@ -127,7 +123,7 @@
     <div class="mb-10">
         <div class="flex items-center justify-between mb-6 px-1">
             <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Popular Brands</h2>
-            <a href="#"
+            <a href="{{ route('brands.index') }}"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
                 <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24"
@@ -139,7 +135,7 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-4">
             @foreach ($brands as $brand)
-                <a href="#"
+                <a href="{{ route('products.index', ['brands[]' => $brand->id]) }}"
                     class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-sm p-4 hover:border-slate-300 transition-all duration-200">
                     <div
                         class="w-10 h-10 mb-2 relative grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
@@ -165,7 +161,7 @@
     <div class="mb-10">
         <div class="flex items-center justify-between mb-6 px-1">
             <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Official Phones</h2>
-            <a href="#"
+            <a href="{{ route('products.index', ['status[]' => 'official']) }}"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
                 <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24"
@@ -216,7 +212,7 @@
     <div class="mb-10">
         <div class="flex items-center justify-between mb-6 px-1">
             <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Unofficial Phones</h2>
-            <a href="#"
+            <a href="{{ route('products.index', ['status[]' => 'unofficial']) }}"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
                 <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24"
@@ -267,7 +263,7 @@
     <div class="mb-0">
         <div class="flex items-center justify-between mb-6 px-1">
             <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Coming Soon</h2>
-            <a href="#"
+            <a href="{{ route('products.index', ['status[]' => 'upcoming']) }}"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
                 <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24"

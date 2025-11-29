@@ -9,11 +9,11 @@ class BlogService
 {
     public function getAllPosts($perPage = 10)
     {
-        return BlogPost::where('published', true)->paginate($perPage);
+        return BlogPost::where('is_published', true)->paginate($perPage);
     }
 
     public function getPostsByCategory(BlogCategory $category, $perPage = 10)
     {
-        return $category->posts()->where('published', true)->paginate($perPage);
+        return $category->posts()->where('is_published', true)->paginate($perPage);
     }
 }

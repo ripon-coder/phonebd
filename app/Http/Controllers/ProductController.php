@@ -15,13 +15,33 @@ class ProductController extends Controller
     protected $productService;
     protected $reviewService;
     protected $cameraSampleService;
+    protected $brandService;
+    protected $categoryService;
 
-    public function __construct(ProductService $productService, ReviewService $reviewService, CameraSampleService $cameraSampleService)
-    {
+    public function __construct(
+        ProductService $productService, 
+        ReviewService $reviewService, 
+        CameraSampleService $cameraSampleService,
+        \App\Services\BrandService $brandService,
+        \App\Services\CategoryService $categoryService
+    ) {
         $this->productService = $productService;
         $this->reviewService = $reviewService;
         $this->cameraSampleService = $cameraSampleService;
+        $this->brandService = $brandService;
+        $this->categoryService = $categoryService;
     }
+
+    public function index(Request $request)
+    {
+        $filters = $request->only(['brands', 'categories', 'min_price', 'max_price', 'sort', 'status']);
+        $products = $this->productService->getAllPaginated($filters, 20);
+        $brands = $this->brandService->getAllBrands();
+        $categories = $this->categoryService->getAllCategories();
+        
+        return view('product.index', compact('products', 'brands', 'categories'));
+    }
+
 
     public function show($category_slug, Product $product)
     {

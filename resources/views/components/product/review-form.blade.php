@@ -1,4 +1,4 @@
-<div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden" x-data="{ step: 1, rating: 0, hover: 0, showSuccess: false, successMessage: '' }">
+<div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden" x-data="{ step: 1, rating: 0, hover: 0, showSuccess: false, successMessage: '', showError: false, errorMessage: '' }">
     {{-- Header --}}
     <div class="bg-slate-100 p-2 border-b border-slate-100">
         <h2 class="text-lg font-bold text-center mb-4 text-slate-800">Write a Review</h2>
@@ -58,6 +58,26 @@
         </button>
     </div>
 
+    {{-- Error Message --}}
+    <div x-show="showError" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 -translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         class="mx-4 mt-4 md:mx-8 md:mt-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3"
+         style="display: none;">
+        <svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div class="flex-1 text-sm text-red-700">
+            <span class="font-semibold text-red-800">Error:</span> <span x-text="errorMessage"></span>
+        </div>
+        <button @click="showError = false" class="text-red-600 hover:text-red-800">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
     <div class="p-4 md:p-8">
     <form id="review-form" action="{{ route('reviews.store', $product) }}" method="POST" enctype="multipart/form-data" 
           @submit.prevent="
@@ -88,6 +108,10 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = `<svg class='animate-spin -ml-1 mr-2 h-4 w-4 text-white' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'><circle class='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' stroke-width='4'></circle><path class='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'></path></svg> Submitting...`;
 
+            // Reset error state
+            showError = false;
+            errorMessage = '';
+
             fetch(form.action, {
                 method: 'POST',
                 body: formData,
@@ -108,6 +132,7 @@
                     // Show inline success message
                     successMessage = data.message;
                     showSuccess = true;
+                    showError = false;
                     
                     // Reset form
                     form.reset();
@@ -121,22 +146,21 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                let msg = 'An error occurred. Please try again.';
                 
-                // Handle validation errors
                 if (error.errors) {
-                    const errorMessages = Object.values(error.errors).flat().join('\\n');
-                    const errorAlert = document.createElement('div');
-                    errorAlert.className = 'fixed top-4 right-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded shadow-lg z-50 max-w-md animate-fade-in-down';
-                    errorAlert.innerHTML = `<div class='flex items-start gap-2'><svg class='w-5 h-5 text-red-500 mt-0.5 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'/></svg><div class='text-sm whitespace-pre-line'>${errorMessages}</div></div>`;
-                    document.body.appendChild(errorAlert);
-                    
-                    setTimeout(() => {
-                        errorAlert.remove();
-                    }, 7000);
-                } else {
-                    alert(error.message || 'An error occurred. Please try again.');
+                    msg = Object.values(error.errors).flat().join('\n');
+                } else if (error.message) {
+                    msg = error.message;
                 }
+                
+                errorMessage = msg;
+                showError = true;
+                showSuccess = false;
+                
+                setTimeout(() => {
+                    document.querySelector('[x-show=showError]').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
             })
             .finally(() => {
                 submitBtn.disabled = false;
@@ -148,7 +172,7 @@
             <div class="space-y-6">
                     {{-- Detailed Ratings --}}
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6" x-data="{ 
-                        ratings: { design: 4, performance: 4, camera: 4, battery: 4 },
+                        ratings: { design: 0, performance: 0, camera: 0, battery: 0 },
                         hovers: { design: 0, performance: 0, camera: 0, battery: 0 }
                     }">
                         {{-- Design Rating --}}
@@ -325,6 +349,17 @@
                             this.images = [];
                             return;
                         }
+
+                        // Check file size (max 1MB)
+                        const maxSize = 1024 * 1024; // 1MB
+                        const oversizedFiles = files.filter(file => file.size > maxSize);
+                        
+                        if (oversizedFiles.length > 0) {
+                            alert('Each photo must be less than 1MB');
+                            event.target.value = '';
+                            this.images = [];
+                            return;
+                        }
                         
                         this.images = [];
                         files.forEach(file => {
@@ -353,7 +388,7 @@
                                         </svg>
                                     </div>
                                     <p class="mb-2 text-sm text-slate-500"><span class="font-semibold text-slate-700">Click to upload</span> or drag and drop</p>
-                                    <p class="text-xs text-slate-400">SVG, PNG, JPG or GIF (Max 2 photos)</p>
+                                    <p class="text-xs text-slate-400">SVG, PNG, JPG or GIF (Max 2 photos, 1MB each)</p>
                                 </div>
                                 <input id="dropzone-file" type="file" name="photos[]" multiple accept="image/*" class="hidden" @change="handleFileChange" />
                             </label>
@@ -410,6 +445,31 @@
                     Submit Review
                 </button>
             </div>
+            <input type="hidden" name="finger_print" id="finger_print">
     </form>
     </div>
 </div>
+
+<script>
+    // Initialize FingerprintJS
+    // Ensure FingerprintJS is loaded from app.js
+    const initFingerprint = () => {
+        if (window.FingerprintJS) {
+            const fpPromise = window.FingerprintJS.load();
+
+            // Get the visitor identifier when you need it.
+            fpPromise
+                .then(fp => fp.get())
+                .then(result => {
+                    // This is the visitor identifier:
+                    const visitorId = result.visitorId;
+                    document.getElementById('finger_print').value = visitorId;
+                });
+        } else {
+            // Retry if app.js hasn't loaded yet
+            setTimeout(initFingerprint, 100);
+        }
+    };
+
+    initFingerprint();
+</script>

@@ -19,6 +19,10 @@ class Review extends Model
         'cons',
         'variant',
         'images',
+        'storage_type',
+        'finger_print',
+        'ip_address',
+        'no_spam_rating',
         'is_approve',
     ];
 

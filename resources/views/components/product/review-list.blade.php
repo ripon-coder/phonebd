@@ -18,6 +18,7 @@
             'images' => $review->images ?? [],
             'avg_rating' => $avgRating,
             'created_at' => $review->created_at->diffForHumans(),
+            'no_spam_rating' => $review->no_spam_rating,
         ];
     })->values()->toArray();
 @endphp
@@ -63,6 +64,25 @@
         
         getInitials(name) {
             return name ? name.substring(0, 2).toUpperCase() : '??';
+        },
+
+        getSpamBadge(score) {
+            if (score === null || score === undefined) return null;
+            if (score >= 6) return { 
+                title: 'No Spam', 
+                class: 'bg-emerald-50 text-emerald-700 border-emerald-200', 
+                icon: '<path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z\' />' 
+            };
+            if (score >= 3) return { 
+                title: 'Low Spam', 
+                class: 'bg-amber-50 text-amber-700 border-amber-200',
+                icon: '<path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z\' />'
+            };
+            return { 
+                title: 'High Spam', 
+                class: 'bg-rose-50 text-rose-700 border-rose-200',
+                icon: '<path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0z\' />'
+            };
         }
      }">
     <div class="p-4 border-b border-slate-100 flex items-center justify-between">
@@ -73,7 +93,16 @@
         <template x-for="(review, index) in reviews" :key="index">
             <div class="p-4 md:p-6">
                 <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-sm shrink-0" x-text="getInitials(review.name)">
+                    <div class="relative">
+                        <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-sm shrink-0" x-text="getInitials(review.name)">
+                        </div>
+                        <template x-if="review.no_spam_rating !== null && review.no_spam_rating !== undefined">
+                            <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white flex items-center justify-center shadow-sm"
+                                 :class="getSpamBadge(review.no_spam_rating).class"
+                                 :title="getSpamBadge(review.no_spam_rating).title">
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" x-html="getSpamBadge(review.no_spam_rating).icon"></svg>
+                            </div>
+                        </template>
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between mb-1">
@@ -134,7 +163,7 @@
                                          alt="Review image" 
                                          loading="lazy"
                                          @click="lightboxImage = image; lightboxOpen = true"
-                                         class="h-32 flex-shrink-0 object-contain rounded border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity bg-slate-50">
+                                         class="h-16 flex-shrink-0 object-contain rounded border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity bg-slate-50">
                                 </template>
                             </div>
                         </template>

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreReviewRequest extends FormRequest
 {
@@ -33,7 +34,23 @@ class StoreReviewRequest extends FormRequest
             'cons' => 'nullable|array',
             'cons.*' => 'nullable|string',
             'variant' => 'nullable|string|max:255',
-            'photos.*' => 'nullable|image|max:5120', // 5MB max
+            'photos.*' => 'nullable|image|max:1024', // 1MB max
+            'finger_print' => [
+                'required',
+                'string',
+                Rule::unique('reviews')->where(function ($query) {
+                    return $query->where('product_id', $this->route('product')->id);
+                }),
+            ],
+            'storage_type' => 'nullable|string',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'finger_print.unique' => 'You have already submitted a review for this product.',
+            'finger_print.required' => 'Unable to verify device identity. Please disable ad blockers and try again.',
         ];
     }
 }

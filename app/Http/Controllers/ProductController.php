@@ -32,8 +32,9 @@ class ProductController extends Controller
 
         $approvedReviews = $this->reviewService->getApprovedReviews($product);
         $totalReviews = $this->reviewService->getTotalApprovedReviews($product);
+        $averageRating = $this->reviewService->getAverageRating($product);
 
-        return view('product.show', compact('product', 'similarPriceProducts', 'similarProducts', 'approvedReviews', 'totalReviews'));
+        return view('product.show', compact('product', 'similarPriceProducts', 'similarProducts', 'approvedReviews', 'totalReviews', 'averageRating'));
     }
 
     public function storeReview(StoreReviewRequest $request, Product $product)
@@ -80,6 +81,7 @@ class ProductController extends Controller
                     'images' => $review->images,
                     'avg_rating' => $avgRating,
                     'created_at' => $review->created_at->diffForHumans(),
+                    'no_spam_rating' => $review->no_spam_rating,
                 ];
             }),
             'hasMore' => $hasMore,

@@ -29,10 +29,11 @@ return new class extends Migration
             $table->text('meta_description')->nullable();
             $table->string('meta_keywords')->nullable();
             $table->string('meta_image')->nullable();
+            $table->string('storage_type')->nullable();
             $table->boolean('is_sample')->default(true);
-            $table->tinyInteger('sample_count_max')->default(10);
+            $table->tinyInteger('sample_count_max')->default(20);
             $table->boolean('is_review')->default(true);
-            $table->tinyInteger('review_count_max')->default(10);
+            $table->tinyInteger('review_count_max')->default(20);
             $table->timestamps();
             $table->softDeletes();
 

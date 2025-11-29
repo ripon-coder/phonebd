@@ -24,8 +24,10 @@ return new class extends Migration
             $table->json('cons')->nullable();
             $table->string('variant')->nullable();
             $table->json('images')->nullable();
+            $table->string('storage_type')->nullable();
             $table->string('finger_print')->nullable();
             $table->string('ip_address')->nullable();
+            $table->integer('no_spam_rating')->default(0)->comment('0-2 = high spam, 3-5 = low spam, 6-10 = no spam');
             $table->boolean('is_approve')->default(false);
             $table->timestamps();
         });

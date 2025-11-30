@@ -16,4 +16,15 @@ class BlogService
     {
         return $category->posts()->where('is_published', true)->paginate($perPage);
     }
+
+    public function getAllCategories()
+    {
+        return BlogCategory::where('is_active', true)
+            ->withCount(['posts' => function ($query) {
+                $query->where('is_published', true);
+            }])
+            ->having('posts_count', '>', 0)
+            ->orderBy('name')
+            ->get();
+    }
 }

@@ -19,17 +19,20 @@ class BlogController extends Controller
     public function index()
     {
         $posts = $this->blogService->getAllPosts();
-        return view('blog.index', compact('posts'));
+        $categories = $this->blogService->getAllCategories();
+        return view('blog.index', compact('posts', 'categories'));
     }
 
     public function show(BlogPost $post)
     {
-        return view('blog.show', compact('post'));
+        $categories = $this->blogService->getAllCategories();
+        return view('blog.show', compact('post', 'categories'));
     }
 
     public function category(BlogCategory $category)
     {
         $posts = $this->blogService->getPostsByCategory($category);
-        return view('blog.category', compact('category', 'posts'));
+        $categories = $this->blogService->getAllCategories();
+        return view('blog.category', compact('category', 'posts', 'categories'));
     }
 }

@@ -261,10 +261,14 @@
             @include('components.product.camera-sample-form')
 
             {{-- Feature Scores --}}
-            @include('components.product.feature-scores')
+            @if($product->productPerformance && ($product->productPerformance->gaming_fps || $product->productPerformance->battery_sot || $product->productPerformance->camera_score))
+                @include('components.product.feature-scores', ['performance' => $product->productPerformance])
+            @endif
 
             {{-- Antutu Score --}}
-            @include('components.product.antutu-score')
+            @if($product->antutuScore && $product->antutuScore->total_score)
+                @include('components.product.antutu-score', ['score' => $product->antutuScore])
+            @endif
 
             {{-- Write a Review (Mobile Only) --}}
             <div id="reviews-mobile" class="lg:hidden">

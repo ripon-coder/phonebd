@@ -103,7 +103,7 @@ class ReviewService
             'variant' => $data['variant'] ?? null,
             'images' => !empty($imagePaths) ? $imagePaths : null,
             'storage_type' => $disk,
-            //'finger_print' => $data['finger_print'] ?? null,
+            'finger_print' => $data['finger_print'] ?? null,
             'ip_address' => request()->ip(),
             'no_spam_rating' => $this->calculateSpamScore($data),
             'is_approve' => false,

@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
@@ -64,6 +65,13 @@ class ProductsTable
                 ForceDeleteAction::make(),
                 RestoreAction::make(),
                 EditAction::make(),
+                Action::make('performance')
+                    ->label('Performance')
+                    ->icon('heroicon-o-chart-bar')
+                    ->url(fn ($record) => $record->performance 
+                        ? \App\Filament\Resources\ProductPerformances\ProductPerformanceResource::getUrl('edit', ['record' => $record->performance])
+                        : \App\Filament\Resources\ProductPerformances\ProductPerformanceResource::getUrl('create', ['product_id' => $record->id])
+                    ),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

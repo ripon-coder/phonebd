@@ -76,6 +76,11 @@ class Product extends Model
         return $this->hasMany(CameraSample::class);
     }
 
+    public function performance()
+    {
+        return $this->hasOne(ProductPerformance::class);
+    }
+
     public function getSpecGroupsAttribute()
     {
         $specValues = $this->specValues;

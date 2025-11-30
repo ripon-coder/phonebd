@@ -76,9 +76,19 @@ class Product extends Model
         return $this->hasMany(CameraSample::class);
     }
 
-    public function performance()
+    public function productPerformance()
     {
         return $this->hasOne(ProductPerformance::class);
+    }
+
+    public function antutuScore()
+    {
+        return $this->hasOne(AntutuScore::class);
+    }
+
+    public function productFaqs()
+    {
+        return $this->hasMany(ProductFaq::class);
     }
 
     public function getSpecGroupsAttribute()

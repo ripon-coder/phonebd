@@ -17,9 +17,10 @@ class ProductFaqForm
                     ->schema([
                         Forms\Components\Select::make('product_id')
                             ->label('Product')
-                            ->options(Product::all()->pluck('title', 'id'))
+                            ->relationship('product', 'title')
                             ->searchable()
-                            ->required(),
+                            ->required()
+                            ->default(request()->query('product_id')),
 
                         Forms\Components\TextInput::make('question')
                             ->required()

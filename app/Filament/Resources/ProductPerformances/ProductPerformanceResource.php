@@ -9,6 +9,7 @@ use App\Filament\Resources\ProductPerformances\Schemas\ProductPerformanceForm;
 use App\Filament\Resources\ProductPerformances\Tables\ProductPerformancesTable;
 use App\Models\ProductPerformance;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,13 @@ class ProductPerformanceResource extends Resource
 {
     protected static ?string $model = ProductPerformance::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChartBar;
+
+    protected static UnitEnum|string|null $navigationGroup = 'Products';
+
+    protected static ?int $navigationSort = 9;
+
+    protected static ?string $recordTitleAttribute = 'product.title';
 
     public static function form(Schema $schema): Schema
     {

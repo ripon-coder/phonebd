@@ -2,6 +2,10 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use App\Filament\Resources\ProductPerformances\ProductPerformanceResource;
+use App\Filament\Resources\AntutuScores\AntutuScoreResource;
+use App\Filament\Resources\ProductFaqs\ProductFaqResource;
+use App\Models\Product;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ForceDeleteBulkAction;
@@ -68,10 +72,36 @@ class ProductsTable
                 Action::make('performance')
                     ->label('Performance')
                     ->icon('heroicon-o-chart-bar')
-                    ->url(fn ($record) => $record->performance 
-                        ? \App\Filament\Resources\ProductPerformances\ProductPerformanceResource::getUrl('edit', ['record' => $record->performance])
-                        : \App\Filament\Resources\ProductPerformances\ProductPerformanceResource::getUrl('create', ['product_id' => $record->id])
+                    ->url(fn (Product $record): string => 
+                        $record->productPerformance 
+                            ? ProductPerformanceResource::getUrl('edit', ['record' => $record->productPerformance]) 
+                            : ProductPerformanceResource::getUrl('create', ['product_id' => $record->id])
                     ),
+
+                Action::make('antutu')
+                    ->label('Antutu')
+                    ->icon('heroicon-o-fire')
+                    ->color('danger')
+                    ->url(fn (Product $record): string => 
+                        $record->antutuScore 
+                            ? AntutuScoreResource::getUrl('edit', ['record' => $record->antutuScore]) 
+                            : AntutuScoreResource::getUrl('create', ['product_id' => $record->id])
+                    ),
+
+                Action::make('faqs')
+                    ->label('FAQs')
+                    ->icon('heroicon-o-question-mark-circle')
+                    ->color('success')
+                    ->url(function (Product $record): string {
+                        $count = $record->productFaqs()->count();
+                        if ($count === 0) {
+                            return ProductFaqResource::getUrl('create', ['product_id' => $record->id]);
+                        } elseif ($count === 1) {
+                            return ProductFaqResource::getUrl('edit', ['record' => $record->productFaqs()->first()]);
+                        } else {
+                            return ProductFaqResource::getUrl('index', ['tableFilters' => ['product' => ['value' => $record->id]]]);
+                        }
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

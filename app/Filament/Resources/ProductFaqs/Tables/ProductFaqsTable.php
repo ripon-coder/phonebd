@@ -39,6 +39,10 @@ class ProductFaqsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('product')
+                    ->relationship('product', 'title')
+                    ->searchable()
+                    ->preload(),
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->recordActions([

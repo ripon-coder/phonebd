@@ -23,7 +23,7 @@ class ProductFaqResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Products';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 8;
 
     public static function form(Schema $schema): Schema
     {

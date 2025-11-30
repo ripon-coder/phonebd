@@ -17,6 +17,7 @@ class BlogPost extends Model
         'title',
         'slug',
         'featured_image',
+        'storage_type',
         'content',
         'is_published',
         'meta_title',
@@ -24,7 +25,7 @@ class BlogPost extends Model
         'published_at',
     ];
 
-    public function category(): BelongsTo
+    public function blogCategory(): BelongsTo
     {
         return $this->belongsTo(BlogCategory::class, 'blog_category_id');
     }

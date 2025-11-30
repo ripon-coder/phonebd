@@ -15,7 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->string('image')->nullable();
+            $table->string('storage_type')->default('local');
+            $table->boolean('is_active')->default(true);
             $table->tinyInteger('sort_order')->default(0);
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

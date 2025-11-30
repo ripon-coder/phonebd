@@ -29,6 +29,15 @@ class BlogCategoryForm
                             ->required()
                             ->unique(table: 'blog_categories', ignoreRecord: true),
 
+                        Forms\Components\FileUpload::make('image')
+                            ->image()
+                            ->disk('public')
+                            ->directory('blog-categories')
+                            ->columnSpanFull(),
+
+                        Forms\Components\Hidden::make('storage_type')
+                            ->default('local'),
+
                         Forms\Components\Toggle::make('is_active')
                             ->required(),
 

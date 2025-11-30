@@ -19,7 +19,6 @@ class BlogPostForm
                         Forms\Components\Select::make('blog_category_id')
                             ->label('Category')
                             ->relationship('blogCategory', 'name')
-                            ->searchable()
                             ->required(),
 
                         Forms\Components\TextInput::make('title')
@@ -40,17 +39,18 @@ class BlogPostForm
                             ->required()
                             ->columnSpanFull(),
 
-                        Forms\Components\FileUpload::make('image')
+                        Forms\Components\FileUpload::make('featured_image')
                             ->image()
+                            ->disk('public')
+                            ->directory('blog-posts')
                             ->columnSpanFull(),
+
+                        Forms\Components\Hidden::make('storage_type')
+                            ->default('local'),
 
                         Forms\Components\Toggle::make('is_published')
                             ->required(),
 
-                        Forms\Components\TextInput::make('sort_order')
-                            ->required()
-                            ->numeric()
-                            ->default(0),
                         ]),
      
 

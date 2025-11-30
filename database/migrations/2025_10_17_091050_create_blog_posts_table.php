@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('featured_image')->nullable();
+            $table->string('storage_type')->default('local');
             $table->longText('content');
             $table->boolean('is_published')->default(false);
             $table->string('meta_title')->nullable();

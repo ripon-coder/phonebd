@@ -19,6 +19,8 @@ class BlogCategoriesTable
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('image')
+                    ->disk('public'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug'),

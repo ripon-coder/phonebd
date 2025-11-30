@@ -21,7 +21,8 @@ class BlogPostsTable
     {
         return $table
             ->columns([
-                \Filament\Tables\Columns\ImageColumn::make('image'),
+                \Filament\Tables\Columns\ImageColumn::make('featured_image')
+                    ->disk('public'),
                 TextColumn::make('title')
                     ->searchable(),
                 TextColumn::make('blogCategory.name')
@@ -29,8 +30,6 @@ class BlogPostsTable
                     ->searchable(),
                 IconColumn::make('is_published')
                     ->boolean(),
-                TextInputColumn::make('sort_order')
-                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

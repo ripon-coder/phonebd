@@ -16,7 +16,7 @@
             <li>
                 <div class="flex items-center">
                     <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <a href="{{ route('brands.show', $product->brand) }}" class="ml-1 md:ml-2 font-medium text-slate-500 hover:text-slate-900 transition-colors">{{ $product->brand->name }}</a>
+                    <a href="{{ route('brands.show', $product->brand) }}" class="ml-1 md:ml-2 font-medium text-slate-500 hover:text-slate-900 transition-colors truncate max-w-[80px] md:max-w-none">{{ $product->brand->name }}</a>
                 </div>
             </li>
             <li aria-current="page">
@@ -99,7 +99,7 @@
                                 </svg>
                                 <span>Review</span>
                             </a>
-                            <button x-data="favorite({{ $product->id }})" @click="toggle()" :class="isFavorite ? 'bg-red-50 text-red-500' : 'bg-slate-100 text-slate-400 hover:bg-red-50 hover:text-red-500'" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-sm transition-colors">
+                            <button x-data="favorite({{ $product->id }})" @click="toggle()" :class="isFavorite ? 'bg-red-50 text-red-500' : 'bg-slate-100 text-slate-400 md:hover:bg-red-50 md:hover:text-red-500'" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-sm transition-colors">
                                 <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
@@ -122,12 +122,12 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <span class="block text-xs md:text-sm font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{{ $variant->ram }} / {{ $variant->storage }}</span>
-                                            <span class="block text-[10px] md:text-xs font-medium text-slate-500">Official</span>
+                                            <span class="block text-sm md:text-base font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{{ $variant->ram }} / {{ $variant->storage }}</span>
+                                            <span class="block text-xs md:text-sm font-medium text-slate-500">Official</span>
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <span class="block text-base md:text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">৳{{ number_format($variant->amount) }}</span>
+                                        <span class="block text-lg md:text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">৳{{ number_format($variant->amount) }}</span>
                                     </div>
                                 </div>
                             @endforeach
@@ -146,7 +146,7 @@
                     @forelse($product->specGroups as $group)
                         <div class="bg-white rounded-sm border border-slate-150 overflow-hidden">
                             <div class="px-2 py-1.5 md:px-4 md:py-2 border-b border-slate-100 flex items-center gap-2">
-                                <h3 class="text-xs md:text-sm font-bold text-slate-800 uppercase tracking-wide">
+                                <h3 class="text-sm md:text-sm font-bold text-slate-800 uppercase tracking-wide">
                                     {{ $group->name }}
                                 </h3>
                             </div>
@@ -155,10 +155,10 @@
                                     <tbody class="divide-y divide-slate-50">
                                         @foreach($group->items as $item)
                                             <tr class="group/row hover:bg-slate-50/50 transition-colors">
-                                                <td class="py-1.5 px-2 md:py-2 md:pr-4 align-top w-[35%] md:w-[30%] text-xs md:text-sm font-medium text-slate-500 bg-slate-100">
+                                                <td class="py-1.5 px-2 md:py-2 md:pr-4 align-top w-[35%] md:w-[30%] text-sm md:text-sm font-medium text-slate-500 bg-slate-100">
                                                     {{ $item->key }}
                                                 </td>
-                                                <td class="py-1.5 px-2 md:py-2 md:pr-4 align-top text-xs md:text-md  text-slate-900 break-words group-hover/row:text-blue-700 transition-colors">
+                                                <td class="py-1.5 px-2 md:py-2 md:pr-4 align-top text-sm text-slate-900 break-words group-hover/row:text-blue-700 transition-colors">
                                                     {{ $item->value }}
                                                 </td>
                                             </tr>

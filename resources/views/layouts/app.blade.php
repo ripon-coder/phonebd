@@ -24,6 +24,48 @@
     @stack('styles')
 
     {{-- Alpine.js for interactivity --}}
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('favorite', (id) => ({
+                isFavorite: false,
+                init() {
+                    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                    this.isFavorite = favorites.includes(id);
+                },
+                toggle() {
+                    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                    if (this.isFavorite) {
+                        favorites = favorites.filter(i => i !== id);
+                    } else {
+                        favorites.push(id);
+                    }
+                    localStorage.setItem('favorites', JSON.stringify(favorites));
+                    this.isFavorite = !this.isFavorite;
+                    window.dispatchEvent(new CustomEvent('favorites-updated', { detail: { count: favorites.length } }));
+                }
+            }))
+
+            Alpine.data('favoritesCount', () => ({
+                count: 0,
+                init() {
+                    this.updateCount();
+                    window.addEventListener('favorites-updated', (e) => {
+                        this.count = e.detail.count;
+                    });
+                    // Also listen for storage events in case it changes in another tab
+                    window.addEventListener('storage', (e) => {
+                        if (e.key === 'favorites') {
+                            this.updateCount();
+                        }
+                    });
+                },
+                updateCount() {
+                    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                    this.count = favorites.length;
+                }
+            }))
+        })
+    </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
@@ -105,6 +147,12 @@
           <nav class="hidden md:flex items-center gap-1">
             <a href="{{ route('products.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Devices</a>
             <a href="{{ route('brands.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Brands</a>
+            <a href="{{ route('favorites.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all" x-data="favoritesCount">
+                <span class="relative">
+                    Favorites
+                    <span x-show="count > 0" x-text="count" class="absolute -top-2 -right-3 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-slate-900 rounded-full border-2 border-white"></span>
+                </span>
+            </a>
             <a href="#" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Latest</a>
             <a href="{{ route('blog.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Blog</a>
           </nav>
@@ -140,6 +188,12 @@
             <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Home</a>
             <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Devices</a>
             <a href="{{ route('brands.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Brands</a>
+            <a href="{{ route('favorites.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50" x-data="favoritesCount">
+                <span class="relative inline-block">
+                    Favorites
+                    <span x-show="count > 0" x-text="count" class="absolute -top-1 -right-3 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-slate-900 rounded-full border-2 border-white"></span>
+                </span>
+            </a>
             <a href="#" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Latest Phones</a>
             <a href="{{ route('blog.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Blog</a>
         </div>
@@ -163,7 +217,7 @@
     {{-- Main content --}}
     <main class="flex-1">
       @yield('hero')
-      <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-4 lg:px-4 pb-8">
+      <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-4 lg:px-4 pb-3">
         @yield('content')
       </div>
     </main>

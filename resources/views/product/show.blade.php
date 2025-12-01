@@ -96,7 +96,7 @@
                                 </svg>
                                 <span>Review</span>
                             </a>
-                            <button class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-sm bg-slate-100 text-slate-400 hover:bg-red-50 hover:text-red-500 transition-colors">
+                            <button x-data="favorite({{ $product->id }})" @click="toggle()" :class="isFavorite ? 'bg-red-50 text-red-500' : 'bg-slate-100 text-slate-400 hover:bg-red-50 hover:text-red-500'" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-sm transition-colors">
                                 <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>

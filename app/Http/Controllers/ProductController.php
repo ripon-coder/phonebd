@@ -130,4 +130,35 @@ class ProductController extends Controller
             'nextPage' => $page + 1,
         ]);
     }
+    public function favoritesList(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        
+        if (empty($ids)) {
+            return '<div class="col-span-full text-center py-12 text-slate-500">No favorite items found.</div>';
+        }
+
+        $products = Product::whereIn('id', $ids)->with('category')->get();
+
+        // Maintain the order of ids if possible, or just return retrieved products
+        // To maintain order:
+        // $products = $products->sortBy(function($product) use ($ids) {
+        //     return array_search($product->id, $ids);
+        // });
+
+        return view('components.product.favorites-grid', compact('products'));
+    }
+
+    public function checkFavorites(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        
+        if (empty($ids)) {
+            return response()->json(['valid_ids' => []]);
+        }
+
+        $validIds = Product::whereIn('id', $ids)->pluck('id')->toArray();
+
+        return response()->json(['valid_ids' => $validIds]);
+    }
 }

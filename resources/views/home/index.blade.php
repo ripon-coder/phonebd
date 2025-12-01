@@ -68,6 +68,8 @@
         </div>
     </div>
 
+    <x-home.dynamic-pages :dynamic-pages="$dynamicPages" />
+
     {{-- Latest Phones --}}
     <div class="mb-10">
         <div class="flex items-center justify-between mb-6 px-1">

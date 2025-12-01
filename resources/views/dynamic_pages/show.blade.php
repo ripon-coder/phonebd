@@ -1,6 +1,6 @@
 @extends('layouts.app', [
-    'title' => $brand->name . ' Mobile Phones Price in Bangladesh',
-    'meta_description' => 'Latest ' . $brand->name . ' mobile phones price in Bangladesh. Check out ' . $brand->name . ' smartphone specifications, reviews, and features.',
+    'title' => $dynamicPage->title . ' - Buying Guide - Mobile Phones Price in Bangladesh',
+    'meta_description' => $dynamicPage->meta_description ?? 'Check out our ' . $dynamicPage->title . ' buying guide. Best deals on ' . $dynamicPage->title . ' smartphones in Bangladesh.',
 ])
 
 @section('content')
@@ -20,7 +20,7 @@
                     <svg class="w-6 h-6 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                     </svg>
-                    <a href="{{ route('brands.index') }}" class="ml-1 text-sm font-medium text-slate-700 hover:text-blue-600 md:ml-2">Brands</a>
+                    <span class="ml-1 text-slate-500 md:ml-2">Buying Guide</span>
                 </div>
             </li>
             <li>
@@ -28,58 +28,81 @@
                     <svg class="w-6 h-6 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                     </svg>
-                    <span class="ml-1 font-medium text-slate-900 md:ml-2">{{ $brand->name }}</span>
+                    <span class="ml-1 font-medium text-slate-900 md:ml-2">{{ $dynamicPage->title }}</span>
                 </div>
             </li>
         </ol>
     </nav>
 
     <div class="mb-6 mt-4">
-        {{-- Brand Header --}}
-        <div class="bg-white rounded-sm border border-slate-200 p-2 mb-5 flex items-center gap-5">
-            <div class="w-20 h-20 shrink-0 flex items-center justify-center bg-slate-50 rounded-sm p-2 border border-slate-100">
-                @if ($brand->image)
-                    <img src="{{ asset('storage/' . $brand->image) }}" class="w-full h-full object-contain" alt="{{ $brand->name }}">
-                @else
-                    <span class="text-3xl font-bold text-slate-300">{{ substr($brand->name, 0, 1) }}</span>
-                @endif
-            </div>
-            <div>
-                <h1 class="text-xl md:text-2xl font-bold text-slate-900 mb-1">{{ $brand->name }}</h1>
-                <p class="text-sm text-slate-500">{{ $brand->meta_description ?? 'Explore the latest ' . $brand->name . ' mobile phones, prices, and specifications in Bangladesh.' }}</p>
-            </div>
+        {{-- Header --}}
+        <div class="bg-white rounded-sm border border-slate-200 p-3 mb-4">
+            <h1 class="text-xl md:text-2xl font-bold text-slate-900 mb-1">{{ $dynamicPage->title }}</h1>
+            <p class="text-sm text-slate-500">Explore our {{ $dynamicPage->title }} buying guide for mobile phones, prices, and specifications in Bangladesh.</p>
         </div>
 
-        <div class="flex flex-col gap-8">
+        <div class="flex flex-col gap-4">
+            @if($dynamicPage->youtube_link)
+                <div class="bg-white rounded-sm border border-slate-200 p-2 lg:p-2 mb-0">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        {{-- Video Column --}}
+                        <div class="w-full lg:w-80 shrink-0" x-data="{ videoModalOpen: false }">
+                            <div class="aspect-w-1 aspect-h-1 relative group cursor-pointer" @click="videoModalOpen = true">
+                                <img src="https://img.youtube.com/vi/{{ $dynamicPage->youtube_link }}/maxresdefault.jpg" 
+                                     alt="Video Thumbnail" 
+                                     class="w-full h-full object-cover rounded-sm">
+                                <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors rounded-sm">
+                                    <div class="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                        <svg class="w-5 h-5 text-red-600 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Video Modal --}}
+                            <template x-teleport="body">
+                                <div x-show="videoModalOpen" 
+                                     class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+                                     x-transition:enter="transition ease-out duration-300"
+                                     x-transition:enter-start="opacity-0"
+                                     x-transition:enter-end="opacity-100"
+                                     x-transition:leave="transition ease-in duration-200"
+                                     x-transition:leave-start="opacity-100"
+                                     x-transition:leave-end="opacity-0"
+                                     style="display: none;">
+                                    
+                                    <div class="relative w-full max-w-6xl aspect-video bg-black rounded-lg shadow-2xl overflow-hidden" @click.away="videoModalOpen = false">
+                                        <button @click="videoModalOpen = false" class="absolute top-4 right-4 z-10 text-white/70 hover:text-white bg-black/50 hover:bg-black/70 rounded-full p-2 transition-colors">
+                                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                        <iframe x-show="videoModalOpen" src="https://www.youtube.com/embed/{{ $dynamicPage->youtube_link }}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
+                        {{-- Content Column --}}
+                        @if($dynamicPage->content)
+                            <div class="prose prose-sm md:prose-base prose-slate max-w-none flex-1 text-sm md:text-base">
+                                {!! $dynamicPage->content !!}
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @elseif($dynamicPage->content)
+                <div class="bg-white rounded-sm border border-slate-200 p-6 lg:p-8 prose prose-sm md:prose-base prose-slate max-w-none mb-0 text-sm md:text-base">
+                    {!! $dynamicPage->content !!}
+                </div>
+            @endif
             {{-- Main Content --}}
             <div class="w-full">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                    <div class="flex items-baseline justify-between w-full sm:w-auto sm:justify-start gap-2">
-                        <h2 class="text-xl lg:text-xl font-bold text-slate-900 tracking-tight">{{ $brand->name }} Devices</h2>
-                        <span class="text-slate-500 text-sm">{{ $products->total() }} devices found</span>
-                    </div>
 
-                    @if($products->total() > 0)
-                    <div class="flex items-center gap-3 w-full sm:w-auto">
-                        {{-- Sort Dropdown --}}
-                        <div class="relative flex-1 sm:flex-none">
-                            <select onchange="updateSort(this.value)" class="w-full sm:w-48 appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-4 pr-8 rounded leading-tight focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm font-medium cursor-pointer">
-                                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Latest Arrivals</option>
-                                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
-                                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
-                                <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>Most Popular</option>
-                                <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>Best Rating</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-                </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-3">
-                    @forelse ($products as $phone)
+                    @foreach ($dynamicPage->products as $phone)
                         <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
                             class="group relative bg-white rounded-sm border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
                             
@@ -126,60 +149,9 @@
                                 </div>
                             </div>
                         </a>
-                    @empty
-                        <div class="col-span-full flex flex-col items-center justify-center py-12 text-center">
-                            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                                <svg class="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-medium text-slate-900 mb-1">No devices found</h3>
-                            <p class="text-slate-500">We couldn't find any devices for this brand.</p>
-                        </div>
-                    @endforelse
-                </div>
-
-                <div class="mt-8">
-                    {{ $products->links() }}
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
-
-    @push('scripts')
-    <script>
-        function updateSort(value) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('sort', value);
-            window.location.href = url.toString();
-        }
-
-        function setPriceAndSubmit(radio, min, max) {
-            const form = document.getElementById('filter-form');
-            const minInput = form.querySelector('input[name="min_price"]');
-            const maxInput = form.querySelector('input[name="max_price"]');
-            
-            // If clicking the same radio, clear it
-            if (minInput.value == min && maxInput.value == max) {
-                minInput.value = '';
-                maxInput.value = '';
-                radio.checked = false;
-            } else {
-                minInput.value = min;
-                maxInput.value = max;
-            }
-            form.submit();
-        }
-
-        function setPriceAndSubmitMobile(radio, min, max) {
-             // Just set the values, let the Apply button submit
-            const form = radio.closest('form');
-            const minInput = form.querySelector('input[name="min_price"]');
-            const maxInput = form.querySelector('input[name="max_price"]');
-            
-            minInput.value = min;
-            maxInput.value = max;
-        }
-    </script>
-    @endpush
 @endsection

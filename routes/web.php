@@ -11,6 +11,9 @@ Route::get('/blog', [App\Http\Controllers\BlogController::class, 'index'])->name
 Route::get('/blog/{post}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
 Route::get('/blog/category/{category}', [App\Http\Controllers\BlogController::class, 'category'])->name('blog.category');
 
+Route::get('/buying-guide/{slug}', [App\Http\Controllers\DynamicPageController::class, 'show'])->name('dynamic_pages.show');
+
+
 Route::get('/{category_slug}/{product:slug}', [App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
 Route::post('/products/{product}/reviews', [App\Http\Controllers\ProductController::class, 'storeReview'])->name('reviews.store');
 Route::post('/products/{product}/camera-samples', [App\Http\Controllers\ProductController::class, 'storeCameraSample'])->name('camera-samples.store');
@@ -21,3 +24,7 @@ Route::get('/favorites', function () {
 
 Route::post('/products/favorites-list', [App\Http\Controllers\ProductController::class, 'favoritesList'])->name('products.favorites_list');
 Route::post('/products/favorites-check', [App\Http\Controllers\ProductController::class, 'checkFavorites'])->name('products.favorites_check');
+
+Route::get('/{page}', [App\Http\Controllers\PageController::class, 'show'])
+    ->name('pages.show')
+    ->where('page', '^(?!admin).*$');

@@ -10,6 +10,9 @@ class ProductService
     {
         $product->load([
             'brand:id,name,slug', 
+            'brand.dynamicPages' => function ($query) {
+                $query->where('is_active', true)->orderBy('sort_order', 'asc');
+            },
             'category:id,name,slug', 
             'variantPrices', 
             'specValues.productSpecItem', 

@@ -25,4 +25,9 @@ class Brand extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function dynamicPages(): HasMany
+    {
+        return $this->hasMany(DynamicPage::class);
+    }
 }

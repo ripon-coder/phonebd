@@ -31,11 +31,13 @@
             <div>
                 <h3 class="font-bold text-slate-900 mb-4">Quick Links</h3>
                 <ul class="space-y-2 text-sm text-slate-600">
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">Latest Phones</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">Upcoming Phones</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">Best Camera Phones</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">Gaming Phones</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">Compare Phones</a></li>
+                    @foreach($footerDynamicPages as $page)
+                        <li>
+                            <a href="{{ route('dynamic_pages.show', $page->slug) }}" class="hover:text-blue-600 transition-colors">
+                                {{ $page->title }}
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
 
@@ -43,11 +45,13 @@
             <div>
                 <h3 class="font-bold text-slate-900 mb-4">Support</h3>
                 <ul class="space-y-2 text-sm text-slate-600">
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">Contact Us</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">Terms of Service</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">Disclaimer</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">Sitemap</a></li>
+                    @foreach($footerSupportPages as $page)
+                        <li>
+                            <a href="{{ route('pages.show', $page) }}" class="hover:text-blue-600 transition-colors">
+                                {{ $page->title }}
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
 

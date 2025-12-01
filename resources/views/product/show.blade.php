@@ -53,7 +53,7 @@
                         <h1 class="text-base md:text-2xl font-bold text-slate-900 tracking-tight mb-1 md:mb-2">{{ $product->title }}</h1>
                         <div class="flex items-center gap-2 mb-2 md:mb-4">
                             <span class="text-xs md:text-sm font-medium text-slate-500">Brand:</span>
-                            <a href="#" class="text-xs md:text-sm font-semibold text-blue-600 hover:underline">{{ $product->brand->name }}</a>
+                            <a href="{{ route('brands.show', $product->brand) }}" class="text-xs md:text-sm font-semibold text-blue-600 hover:underline">{{ $product->brand->name }}</a>
                         </div>
 
                         {{-- Ratings --}}

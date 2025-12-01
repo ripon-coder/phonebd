@@ -57,6 +57,13 @@ class ProductService
     public function getLatest($limit = 10)
     {
         return Product::with('category')
+            ->select('*')
+            ->selectSub(function ($q) {
+                $q->selectRaw('AVG((COALESCE(rating_design,0) + COALESCE(rating_performance,0) + COALESCE(rating_camera,0) + COALESCE(rating_battery,0)) / 4)')
+                  ->from('reviews')
+                  ->whereColumn('reviews.product_id', 'products.id')
+                  ->where('is_approve', true);
+             }, 'avg_rating')
             ->where('is_published', true)
             ->latest()
             ->take($limit)
@@ -66,6 +73,13 @@ class ProductService
     public function getUpcoming($limit = 10)
     {
         return Product::with('category')
+            ->select('*')
+            ->selectSub(function ($q) {
+                $q->selectRaw('AVG((COALESCE(rating_design,0) + COALESCE(rating_performance,0) + COALESCE(rating_camera,0) + COALESCE(rating_battery,0)) / 4)')
+                  ->from('reviews')
+                  ->whereColumn('reviews.product_id', 'products.id')
+                  ->where('is_approve', true);
+             }, 'avg_rating')
             ->where('status', 'upcoming')
             ->where('is_published', true)
             ->latest()
@@ -76,6 +90,13 @@ class ProductService
     public function getOfficial($limit = 10)
     {
         return Product::with('category')
+            ->select('*')
+            ->selectSub(function ($q) {
+                $q->selectRaw('AVG((COALESCE(rating_design,0) + COALESCE(rating_performance,0) + COALESCE(rating_camera,0) + COALESCE(rating_battery,0)) / 4)')
+                  ->from('reviews')
+                  ->whereColumn('reviews.product_id', 'products.id')
+                  ->where('is_approve', true);
+             }, 'avg_rating')
             ->where('status', 'official')
             ->where('is_published', true)
             ->latest()
@@ -86,6 +107,13 @@ class ProductService
     public function getUnofficial($limit = 10)
     {
         return Product::with('category')
+            ->select('*')
+            ->selectSub(function ($q) {
+                $q->selectRaw('AVG((COALESCE(rating_design,0) + COALESCE(rating_performance,0) + COALESCE(rating_camera,0) + COALESCE(rating_battery,0)) / 4)')
+                  ->from('reviews')
+                  ->whereColumn('reviews.product_id', 'products.id')
+                  ->where('is_approve', true);
+             }, 'avg_rating')
             ->where('status', 'unofficial')
             ->where('is_published', true)
             ->latest()
@@ -97,6 +125,12 @@ class ProductService
     {
         $query = Product::with('category:id,name,slug')
             ->select('id', 'title', 'slug', 'base_price', 'image', 'category_id', 'created_at')
+            ->selectSub(function ($q) {
+                $q->selectRaw('AVG((COALESCE(rating_design,0) + COALESCE(rating_performance,0) + COALESCE(rating_camera,0) + COALESCE(rating_battery,0)) / 4)')
+                  ->from('reviews')
+                  ->whereColumn('reviews.product_id', 'products.id')
+                  ->where('is_approve', true);
+             }, 'avg_rating')
             ->where('is_published', true);
 
         // Filter by Brands
@@ -136,12 +170,6 @@ class ProductService
                       ->orderBy('reviews_count', 'desc');
                 break;
             case 'rating':
-                 $query->selectSub(function ($q) {
-                    $q->selectRaw('AVG((COALESCE(rating_design,0) + COALESCE(rating_performance,0) + COALESCE(rating_camera,0) + COALESCE(rating_battery,0)) / 4)')
-                      ->from('reviews')
-                      ->whereColumn('reviews.product_id', 'products.id')
-                      ->where('is_approve', true);
-                 }, 'avg_rating');
                  $query->orderBy('avg_rating', 'desc');
                 break;
             case 'latest':

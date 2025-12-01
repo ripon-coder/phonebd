@@ -15,4 +15,9 @@ class BrandService
     {
         return Brand::orderBy('name')->get(['id', 'name', 'slug', 'image']);
     }
+
+    public function getBrandBySlug($slug)
+    {
+        return Brand::where('slug', $slug)->firstOrFail();
+    }
 }

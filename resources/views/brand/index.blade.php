@@ -26,7 +26,7 @@
         </ol>
     </nav>
 
-    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+    <div class="bg-white rounded-sm shadow-sm border border-slate-200 p-6">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold text-slate-900 tracking-tight">All Brands</h1>
         </div>

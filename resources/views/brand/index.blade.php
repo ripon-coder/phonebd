@@ -5,7 +5,7 @@
 
 @section('content')
     {{-- Breadcrumb --}}
-    <nav class="flex mb-4 text-sm text-slate-500" aria-label="Breadcrumb">
+    <nav class="flex mb-3 text-sm text-slate-500" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="{{ route('home') }}" class="inline-flex items-center hover:text-slate-900 transition-colors">
@@ -26,15 +26,15 @@
         </ol>
     </nav>
 
-    <div class="bg-white rounded-sm shadow-sm border border-slate-200 p-6">
-        <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">All Brands</h1>
+    <div class="bg-white rounded-sm shadow-sm border border-slate-200 p-3">
+        <div class="flex items-center justify-between mb-3">
+            <h1 class="text-lg md:text-2xl font-bold text-slate-900 tracking-tight">All Brands</h1>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             @foreach ($brands as $brand)
                 <a href="{{ route('brands.show', $brand->slug) }}"
-                    class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-sm p-6 hover:border-slate-900 hover:shadow-md transition-all duration-200">
+                    class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-sm p-3 hover:border-slate-900 hover:shadow-md transition-all duration-200">
                     <div
                         class="w-16 h-16 mb-4 relative grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
                         @if ($brand->image)

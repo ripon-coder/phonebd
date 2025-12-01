@@ -7,9 +7,9 @@
 @section('content')
 
     {{-- Categories --}}
-    <div class="mb-10 mt-4">
-        <div class="flex items-center justify-between mb-5 px-1">
-            <h2 class="text-md lg:text-lg  font-bold text-slate-900 tracking-tight">Browse Categories</h2>
+    <div class="mb-6 mt-2">
+        <div class="flex items-center justify-between mb-3 px-1">
+            <h2 class="text-md lg:text-lg  font-semibold text-slate-900 tracking-tight">Browse Categories</h2>
             <a href="{{ route('products.index') }}"
                 class="md:hidden text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
@@ -25,55 +25,21 @@
             class="flex flex-nowrap md:flex-wrap gap-1 overflow-x-auto md:overflow-visible pb-1 md:pb-0 snap-x snap-mandatory hide-scrollbar">
             @foreach ($categories as $category)
                 <a href="{{ route('products.index', ['categories[]' => $category->id]) }}"
-                    class="snap-start shrink-0 px-5 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-medium hover:border-slate-900 hover:text-slate-900 transition-all duration-200 shadow-sm">
+                    class="snap-start shrink-0 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-medium hover:border-slate-900 hover:text-slate-900 transition-all duration-200 shadow-sm">
                     {{ $category->name }}
                 </a>
             @endforeach
         </div>
     </div>
 
-    {{-- Browse by Price --}}
-    <div class="mb-10">
-        <div class="flex items-center justify-between mb-5 px-1">
-            <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Browse by Price</h2>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            @php
-                $priceRanges = [
-                    '1-10000' => '৳1 - ৳10,000',
-                    '10000-15000' => '৳10,000 - ৳15,000',
-                    '15000-20000' => '৳15,000 - ৳20,000',
-                    '20000-30000' => '৳20,000 - ৳30,000',
-                    '30000-50000' => '৳30,000 - ৳50,000',
-                    '50000-1000000' => '৳50,000+',
-                ];
-            @endphp
-            @foreach($priceRanges as $rangeKey => $label)
-                @php
-                    [$min, $max] = explode('-', $rangeKey);
-                @endphp
-                <a href="{{ route('products.index', ['min_price' => $min, 'max_price' => $max]) }}" class="group flex items-center justify-between px-4 py-3 bg-white border border-slate-200 rounded-lg hover:border-slate-800 hover:text-slate-900 transition-all duration-200">
-                    <div class="flex flex-col">
-                        <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Budget</span>
-                        <span class="text-sm font-bold text-slate-900 transition-colors whitespace-nowrap">{{ $label }}</span>
-                    </div>
-                    <div class="hidden md:flex w-8 h-8 rounded-full bg-slate-50 items-center justify-center group-hover text-slate-900 transition-colors">
-                        <svg class="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
-                </a>
-            @endforeach
-        </div>
-    </div>
+    <x-home.browse-by-price />
 
     <x-home.dynamic-pages :dynamic-pages="$dynamicPages" />
 
     {{-- Latest Phones --}}
-    <div class="mb-10">
-        <div class="flex items-center justify-between mb-6 px-1">
-            <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Just Arrived</h2>
+    <div class="mb-6">
+        <div class="flex items-center justify-between mb-3 px-1">
+            <h2 class="text-md lg:text-lg font-semibold text-slate-900 tracking-tight">Just Arrived</h2>
             <a href="{{ route('products.index', ['sort' => 'latest']) }}"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
@@ -102,7 +68,7 @@
                         @endif
                     </div>
 
-                    <div class="p-4">
+                    <div class="p-3">
                         <h3
                             class="font-bold text-slate-900 text-sm mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {{ $phone->title }}</h3>
@@ -130,9 +96,9 @@
     </div>
 
     {{-- Popular Brands --}}
-    <div class="mb-10">
-        <div class="flex items-center justify-between mb-6 px-1">
-            <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Popular Brands</h2>
+    <div class="mb-6">
+        <div class="flex items-center justify-between mb-3 px-1">
+            <h2 class="text-md lg:text-lg font-semibold text-slate-900 tracking-tight">Popular Brands</h2>
             <a href="{{ route('brands.index') }}"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
@@ -146,7 +112,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-4">
             @foreach ($brands as $brand)
                 <a href="{{ route('brands.show', $brand) }}"
-                    class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-sm p-4 hover:border-slate-300 transition-all duration-200">
+                    class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-sm p-3 hover:border-slate-300 transition-all duration-200">
                     <div
                         class="w-10 h-10 mb-2 relative grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
                         @if ($brand->image)
@@ -168,9 +134,9 @@
 
 
     {{-- Official Phones --}}
-    <div class="mb-10">
-        <div class="flex items-center justify-between mb-6 px-1">
-            <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Official Phones</h2>
+    <div class="mb-6">
+        <div class="flex items-center justify-between mb-3 px-1">
+            <h2 class="text-md lg:text-lg font-semibold text-slate-900 tracking-tight">Official Phones</h2>
             <a href="{{ route('products.index', ['status[]' => 'official']) }}"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
@@ -199,7 +165,7 @@
                         @endif
                     </div>
 
-                    <div class="p-4">
+                    <div class="p-3">
                         <h3
                             class="font-bold text-slate-900 text-sm mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {{ $phone->title }}</h3>
@@ -227,9 +193,9 @@
     </div>
 
     {{-- Unofficial Phones --}}
-    <div class="mb-10">
-        <div class="flex items-center justify-between mb-6 px-1">
-            <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Unofficial Phones</h2>
+    <div class="mb-6">
+        <div class="flex items-center justify-between mb-3 px-1">
+            <h2 class="text-md lg:text-lg font-semibold text-slate-900 tracking-tight">Unofficial Phones</h2>
             <a href="{{ route('products.index', ['status[]' => 'unofficial']) }}"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
@@ -258,7 +224,7 @@
                         @endif
                     </div>
 
-                    <div class="p-4">
+                    <div class="p-3">
                         <h3
                             class="font-bold text-slate-900 text-sm mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {{ $phone->title }}</h3>
@@ -287,8 +253,8 @@
 
     {{-- Upcoming Phones --}}
     <div class="mb-0">
-        <div class="flex items-center justify-between mb-6 px-1">
-            <h2 class="text-md lg:text-lg font-bold text-slate-900 tracking-tight">Coming Soon</h2>
+        <div class="flex items-center justify-between mb-3 px-1">
+            <h2 class="text-md lg:text-lg font-semibold text-slate-900 tracking-tight">Coming Soon</h2>
             <a href="{{ route('products.index', ['status[]' => 'upcoming']) }}"
                 class="text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
                 View All
@@ -322,7 +288,7 @@
                         @endif
                     </div>
 
-                    <div class="p-4">
+                    <div class="p-3">
                         <h3
                             class="font-bold text-slate-900 text-sm mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {{ $phone->title }}</h3>

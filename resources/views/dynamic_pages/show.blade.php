@@ -5,7 +5,7 @@
 
 @section('content')
     {{-- Breadcrumb --}}
-    <nav class="flex mb-4 text-sm text-slate-500" aria-label="Breadcrumb">
+    <nav class="flex mb-3 text-sm text-slate-500" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="{{ route('home') }}" class="inline-flex items-center hover:text-slate-900 transition-colors">
@@ -34,14 +34,14 @@
         </ol>
     </nav>
 
-    <div class="mb-6 mt-4">
+    <div class="mb-4 mt-2">
         {{-- Header --}}
-        <div class="bg-white rounded-sm border border-slate-200 p-3 mb-4">
+        <div class="bg-white rounded-sm border border-slate-200 p-2 mb-2">
             <h1 class="text-xl md:text-2xl font-bold text-slate-900 mb-1">{{ $dynamicPage->title }}</h1>
             <p class="text-sm text-slate-500">Explore our {{ $dynamicPage->title }} buying guide for mobile phones, prices, and specifications in Bangladesh.</p>
         </div>
 
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-3">
             @if($dynamicPage->youtube_link)
                 <div class="bg-white rounded-sm border border-slate-200 p-2 lg:p-2 mb-0">
                     <div class="flex flex-col lg:flex-row gap-6">
@@ -93,7 +93,7 @@
                     </div>
                 </div>
             @elseif($dynamicPage->content)
-                <div class="bg-white rounded-sm border border-slate-200 p-6 lg:p-8 prose prose-sm md:prose-base prose-slate max-w-none mb-0 text-sm md:text-base">
+                <div class="bg-white rounded-sm border border-slate-200 p-3 lg:p-4 prose prose-sm md:prose-base prose-slate max-w-none mb-0 text-sm md:text-base">
                     {!! $dynamicPage->content !!}
                 </div>
             @endif
@@ -120,7 +120,7 @@
                                 @endif
                             </div>
 
-                            <div class="p-4">
+                            <div class="p-3">
                                 <h3
                                     class="font-bold text-slate-900 text-sm mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                                     {{ $phone->title }}</h3>

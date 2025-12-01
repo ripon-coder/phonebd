@@ -5,7 +5,7 @@
 
 @section('content')
     {{-- Breadcrumb --}}
-    <nav class="flex mb-4 text-sm text-slate-500" aria-label="Breadcrumb">
+    <nav class="flex mb-3 text-sm text-slate-500" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="{{ route('home') }}" class="inline-flex items-center hover:text-slate-900 transition-colors">
@@ -34,9 +34,9 @@
         </ol>
     </nav>
 
-    <div class="mb-6 mt-4">
+    <div class="mb-4 mt-2">
         {{-- Brand Header --}}
-        <div class="bg-white rounded-sm border border-slate-200 p-2 mb-5 flex items-center gap-5">
+        <div class="bg-white rounded-sm border border-slate-200 p-2 mb-3 flex items-center gap-5">
             <div class="w-20 h-20 shrink-0 flex items-center justify-center bg-slate-50 rounded-sm p-2 border border-slate-100">
                 @if ($brand->image)
                     <img src="{{ asset('storage/' . $brand->image) }}" class="w-full h-full object-contain" alt="{{ $brand->name }}">
@@ -45,17 +45,17 @@
                 @endif
             </div>
             <div>
-                <h1 class="text-xl md:text-2xl font-bold text-slate-900 mb-1">{{ $brand->name }}</h1>
+                <h1 class="text-lg md:text-2xl font-bold text-slate-900 mb-1">{{ $brand->name }}</h1>
                 <p class="text-sm text-slate-500">{{ $brand->meta_description ?? 'Explore the latest ' . $brand->name . ' mobile phones, prices, and specifications in Bangladesh.' }}</p>
             </div>
         </div>
 
-        <div class="flex flex-col gap-8">
+        <div class="flex flex-col gap-4">
             {{-- Main Content --}}
             <div class="w-full">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 gap-4">
                     <div class="flex items-baseline justify-between w-full sm:w-auto sm:justify-start gap-2">
-                        <h2 class="text-xl lg:text-xl font-bold text-slate-900 tracking-tight">{{ $brand->name }} Devices</h2>
+                        <h2 class="text-lg md:text-xl font-bold text-slate-900 tracking-tight">{{ $brand->name }} Devices</h2>
                         <span class="text-slate-500 text-sm">{{ $products->total() }} devices found</span>
                     </div>
 
@@ -97,7 +97,7 @@
                                 @endif
                             </div>
 
-                            <div class="p-4">
+                            <div class="p-3">
                                 <h3
                                     class="font-bold text-slate-900 text-sm mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                                     {{ $phone->title }}</h3>
@@ -139,7 +139,7 @@
                     @endforelse
                 </div>
 
-                <div class="mt-8">
+                <div class="mt-4">
                     {{ $products->links() }}
                 </div>
             </div>

@@ -5,7 +5,7 @@
 
 @section('content')
     {{-- Breadcrumb --}}
-    <nav class="flex mb-4 text-sm text-slate-500" aria-label="Breadcrumb">
+    <nav class="flex mb-3 text-sm text-slate-500" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="{{ route('home') }}" class="inline-flex items-center hover:text-slate-900 transition-colors">
@@ -26,10 +26,10 @@
         </ol>
     </nav>
 
-    <div class="mb-10 mt-4">
-        <div class="flex flex-col lg:flex-row gap-8">
+    <div class="mb-4 mt-2">
+        <div class="flex flex-col lg:flex-row gap-4">
             {{-- Sidebar Filters (Desktop) --}}
-            <aside class="hidden lg:block w-64 shrink-0 space-y-8">
+            <aside class="hidden lg:block w-64 shrink-0 space-y-4">
                 <form action="{{ route('products.index') }}" method="GET" id="filter-form">
                     {{-- Retain Sort Order --}}
                     @if(request('sort'))
@@ -65,7 +65,7 @@
                     </div>
 
                     {{-- Status Filter --}}
-                    <div class="mt-8">
+                    <div class="mt-4">
                         <h3 class="font-bold text-slate-900 mb-4">Availability</h3>
                         <div class="space-y-2">
                             @foreach (['official' => 'Official', 'unofficial' => 'Unofficial', 'upcoming' => 'Coming Soon'] as $value => $label)
@@ -81,7 +81,7 @@
                     </div>
 
                     {{-- Brand Filter --}}
-                    <div class="mt-8">
+                    <div class="mt-4">
                         <h3 class="font-bold text-slate-900 mb-4">Brands</h3>
                         <div class="space-y-2 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
                         <div class="space-y-2 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
@@ -98,7 +98,7 @@
                     </div>
 
                     {{-- Price Filter --}}
-                    <div class="mt-8">
+                    <div class="mt-4">
                         <h3 class="font-bold text-slate-900 mb-4">Price Range</h3>
                         <div class="space-y-2">
                              @php
@@ -146,7 +146,7 @@
 
             {{-- Main Content --}}
             <div class="flex-1">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 gap-4">
                     <div>
                         <h1 class="text-xl lg:text-2xl font-bold text-slate-900 tracking-tight">All Devices</h1>
                         <span class="text-slate-500 text-sm">{{ $products->total() }} devices found</span>
@@ -197,7 +197,7 @@
                                 @endif
                             </div>
 
-                            <div class="p-4">
+                            <div class="p-3">
                                 <h3
                                     class="font-bold text-slate-900 text-sm mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                                     {{ $phone->title }}</h3>
@@ -229,7 +229,7 @@
                     @endforeach
                 </div>
 
-                <div class="mt-8">
+                <div class="mt-4">
                     {{ $products->links() }}
                 </div>
             </div>

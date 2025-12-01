@@ -8,7 +8,7 @@
     <div class="bg-white">
         {{-- Breadcrumb --}}
         <div class="bg-slate-50 border-b border-slate-200">
-            <div class="max-w-7xl mx-auto px-1 sm:px-1 lg:px-1 py-3">
+            <div class="max-w-7xl mx-auto px-1 sm:px-1 lg:px-1 py-1.5">
                 <nav class="flex text-sm text-slate-500">
                     <a href="{{ route('home') }}" class="flex items-center hover:text-blue-600 transition-colors">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -23,11 +23,11 @@
         </div>
 
         {{-- Page Content --}}
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-4">{{ $page->title }}</h1>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{{ $page->title }}</h1>
             
             @if($page->featured_image)
-                <div class="mb-4 rounded-sm overflow-hidden shadow-lg">
+                <div class="mb-2 rounded-sm overflow-hidden shadow-lg">
                     <img src="{{ Storage::url($page->featured_image) }}" alt="{{ $page->title }}" class="w-full h-auto object-cover">
                 </div>
             @endif

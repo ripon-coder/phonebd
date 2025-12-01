@@ -5,7 +5,7 @@
 
 @section('content')
     {{-- Breadcrumb --}}
-    <nav class="flex mb-6 text-sm text-slate-500" aria-label="Breadcrumb">
+    <nav class="flex mb-3 text-sm text-slate-500" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-2">
             <li class="inline-flex items-center">
                 <a href="{{ route('home') }}" class="inline-flex items-center hover:text-slate-900 transition-colors">
@@ -28,16 +28,16 @@
         </ol>
     </nav>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-6">
         {{-- Main Content --}}
-        <div class="lg:col-span-8 space-y-4">
+        <div class="lg:col-span-8 space-y-3">
             
             {{-- Product Hero --}}
-            <div class="bg-white rounded-sm p-4 md:p-4 shadow-sm border border-slate-100">
-                <div class="grid grid-cols-2 gap-3 md:gap-8 items-stretch">
+            <div class="bg-white rounded-sm p-3 md:p-3 shadow-sm border border-slate-100">
+                <div class="grid grid-cols-2 gap-3 md:gap-6 items-stretch">
                     {{-- Image --}}
                     <div class="relative group h-full">
-                        <div class="h-full bg-slate-50 rounded-sm overflow-hidden flex items-center justify-center p-2 md:p-4 w-full md:max-w-sm md:mx-auto">
+                        <div class="h-full bg-slate-50 rounded-sm overflow-hidden flex items-center justify-center p-2 md:p-3 w-full md:max-w-sm md:mx-auto">
                             @if ($product->image)
                                 <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->title }}" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500">
                             @else
@@ -53,14 +53,14 @@
 
                     {{-- Info --}}
                     <div>
-                        <h1 class="text-base md:text-2xl font-bold text-slate-900 tracking-tight mb-1 md:mb-2">{{ $product->title }}</h1>
-                        <div class="flex items-center gap-2 mb-2 md:mb-4">
+                        <h1 class="text-base md:text-2xl font-bold text-slate-900 tracking-tight mb-1">{{ $product->title }}</h1>
+                        <div class="flex items-center gap-2 mb-2">
                             <span class="text-xs md:text-sm font-medium text-slate-500">Brand:</span>
                             <a href="{{ route('brands.show', $product->brand) }}" class="text-xs md:text-sm font-semibold text-blue-600 hover:underline">{{ $product->brand->name }}</a>
                         </div>
 
                         {{-- Ratings --}}
-                        <div class="flex items-center gap-2 mb-3 md:mb-6">
+                        <div class="flex items-center gap-2 mb-2 md:mb-4">
                             <div class="flex items-center text-amber-400">
                                 @for($i = 1; $i <= 5; $i++)
                                     <svg class="w-3.5 h-3.5 md:w-4 md:h-4 {{ $i <= round($averageRating) ? 'fill-current' : 'text-slate-300 fill-current' }}" viewBox="0 0 20 20">
@@ -71,7 +71,7 @@
                             <span class="text-xs md:text-sm font-medium text-slate-500">({{ $averageRating }}/5)</span>
                         </div>
 
-                        <div class="mb-3 md:mb-6">
+                        <div class="mb-2 md:mb-4">
                             <span class="text-xs md:text-sm text-slate-500 block mb-1">Price in Bangladesh</span>
                             <div class="flex items-baseline gap-2">
                                 <span class="text-lg md:text-2xl font-bold text-slate-900">
@@ -86,14 +86,14 @@
 
                         {{-- Quick Actions --}}
                         {{-- Quick Actions --}}
-                        <div class="flex gap-3 mt-3 md:mt-6">
-                            <a href="#reviews" class="hidden lg:flex flex-1 px-3 py-2 md:px-6 md:py-3 rounded-sm border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 transition-colors text-xs md:text-base items-center justify-center gap-1.5 md:gap-2">
+                        <div class="flex gap-3 mt-2 md:mt-4">
+                            <a href="#reviews" class="hidden lg:flex flex-1 px-3 py-1.5 md:px-5 md:py-2 rounded-sm border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 transition-colors text-xs md:text-base items-center justify-center gap-1.5 md:gap-2">
                                 <svg class="w-3.5 h-3.5 md:w-5 md:h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                 </svg>
                                 <span>Write a Review</span>
                             </a>
-                            <a href="#reviews-mobile" class="lg:hidden flex flex-1 px-3 py-2 md:px-6 md:py-3 rounded-sm border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 transition-colors text-xs md:text-base items-center justify-center gap-1.5 md:gap-2">
+                            <a href="#reviews-mobile" class="lg:hidden flex flex-1 px-3 py-1.5 md:px-5 md:py-2 rounded-sm border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 transition-colors text-xs md:text-base items-center justify-center gap-1.5 md:gap-2">
                                 <svg class="w-3.5 h-3.5 md:w-5 md:h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                 </svg>
@@ -110,11 +110,11 @@
 
                 {{-- Variant Prices --}}
                 @if($product->variantPrices->count() > 0)
-                    <div class="mt-6 md:mt-8 pt-6 border-t border-slate-100">
+                    <div class="mt-4 md:mt-6 pt-4 border-t border-slate-100">
                         <h3 class="text-sm font-medium text-slate-500 mb-3">Available Variants</h3>
                         <div class="grid grid-cols-1 gap-3">
                             @foreach($product->variantPrices as $variant)
-                                <div class="group flex items-center justify-between p-4 rounded-sm bg-slate-50 border border-slate-100 hover:border-blue-500 hover:bg-white transition-all duration-300 cursor-default">
+                                <div class="group flex items-center justify-between p-3 rounded-sm bg-slate-50 border border-slate-100 hover:border-blue-500 hover:bg-white transition-all duration-300 cursor-default">
                                     <div class="flex items-center gap-4">
                                         <div class="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-400 group-hover:text-blue-600 group-hover:border-blue-100 transition-colors">
                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,14 +138,14 @@
 
             {{-- Specifications --}}
             <div class="bg-white rounded-sm border border-slate-100 overflow-hidden">
-                <div class="p-3 border-b border-slate-100">
+                <div class="p-2 border-b border-slate-100">
                     <h2 class="text-[15px] md:text-xl font-bold text-slate-900">Full Specifications</h2>
                 </div>
                 
-                <div class="space-y-2 md:space-y-2 p-2 md:p-2">
+                <div class="space-y-1 md:space-y-1 p-1 md:p-1">
                     @forelse($product->specGroups as $group)
                         <div class="bg-white rounded-sm border border-slate-150 overflow-hidden">
-                            <div class="px-2 py-2 md:px-6 md:py-3 border-b border-slate-100 flex items-center gap-2">
+                            <div class="px-2 py-1.5 md:px-4 md:py-2 border-b border-slate-100 flex items-center gap-2">
                                 <h3 class="text-xs md:text-sm font-bold text-slate-800 uppercase tracking-wide">
                                     {{ $group->name }}
                                 </h3>
@@ -155,10 +155,10 @@
                                     <tbody class="divide-y divide-slate-50">
                                         @foreach($group->items as $item)
                                             <tr class="group/row hover:bg-slate-50/50 transition-colors">
-                                                <td class="py-2 px-2 md:py-3 md:pr-4 align-top w-[35%] md:w-[30%] text-xs md:text-sm font-medium text-slate-500 bg-slate-100">
+                                                <td class="py-1.5 px-2 md:py-2 md:pr-4 align-top w-[35%] md:w-[30%] text-xs md:text-sm font-medium text-slate-500 bg-slate-100">
                                                     {{ $item->key }}
                                                 </td>
-                                                <td class="py-2 px-2 md:py-3 md:pr-4 align-top text-xs md:text-md font-semibold text-slate-900 break-words group-hover/row:text-blue-700 transition-colors">
+                                                <td class="py-1.5 px-2 md:py-2 md:pr-4 align-top text-xs md:text-md  text-slate-900 break-words group-hover/row:text-blue-700 transition-colors">
                                                     {{ $item->value }}
                                                 </td>
                                             </tr>
@@ -176,7 +176,7 @@
             </div>
             
             {{-- Disclaimer --}}
-            <div class="bg-blue-50 rounded-sm p-5 border border-blue-100 mb-6">
+            <div class="bg-blue-50 rounded-sm p-3 border border-blue-100 mb-6">
                 <div class="flex gap-3">
                     <svg class="w-5 h-5 text-blue-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -190,13 +190,13 @@
             {{-- FAQs --}}
             @if($product->faqs->count() > 0)
                 <div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="p-3 border-b border-slate-100">
+                    <div class="p-2 border-b border-slate-100">
                         <h2 class="text-[15px] md:text-xl font-bold text-slate-900">Frequently Asked Questions</h2>
                     </div>
                     <div class="divide-y divide-slate-100">
                         @foreach($product->faqs as $faq)
                             <div x-data="{ open: false }" class="bg-white">
-                                <button @click="open = !open" class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-slate-50 transition-colors">
+                                <button @click="open = !open" class="w-full text-left px-4 py-2 flex justify-between items-center hover:bg-slate-50 transition-colors">
                                     <span class="font-semibold text-[13px] md:text-sm text-slate-900">{{ $faq->question }}</span>
                                     <span class="ml-6 flex-shrink-0 text-slate-400">
                                         <svg x-show="!open" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -207,7 +207,7 @@
                                         </svg>
                                     </span>
                                 </button>
-                                <div x-show="open" class="px-6 pb-4 pt-2 text-slate-600 text-sm" style="display: none;">
+                                <div x-show="open" class="px-4 pb-2 pt-1 text-slate-600 text-sm" style="display: none;">
                                     {!! $faq->answer !!}
                                 </div>
                             </div>
@@ -219,10 +219,10 @@
             {{-- Description --}}
             @if($product->short_description || $product->raw_html)
                 <div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="p-3 border-b border-slate-100">
+                    <div class="p-2 border-b border-slate-100">
                         <h2 class="text-[15px] md:text-xl font-bold text-slate-900">Description</h2>
                     </div>
-                    <div class="p-3 prose prose-sm text-slate-600 max-w-none text-[14px] md:text-[15px]">
+                    <div class="p-2 prose prose-sm text-slate-600 max-w-none text-[14px] md:text-[15px]">
                         @if($product->is_raw_html && $product->raw_html)
                             {!! $product->raw_html !!}
                         @else
@@ -238,7 +238,7 @@
                 @if($totalReviews < $product->review_count_max)
                     @include('components.product.review-form')
                 @else
-                    <div class="bg-white rounded-sm shadow-sm border border-slate-100 p-8 text-center">
+                    <div class="bg-white rounded-sm shadow-sm border border-slate-100 p-4 text-center">
                         <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 mb-4">
                             <svg class="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -257,7 +257,7 @@
         </div>
 
         {{-- Sidebar (Right Column) --}}
-        <div class="lg:col-span-4 space-y-4">
+        <div class="lg:col-span-4 space-y-3">
 
             {{-- Camera Samples --}}
             @include('components.product.camera-sample')
@@ -298,12 +298,12 @@
             {{-- Similar Price Products --}}
             @if(isset($similarPriceProducts) && $similarPriceProducts->count() > 0)
                 <div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="p-3 border-b border-slate-100 bg-slate-50/50">
+                    <div class="p-2 border-b border-slate-100 bg-slate-50/50">
                         <h3 class="font-bold text-slate-900">Similar Price</h3>
                     </div>
                     <div class="divide-y divide-slate-100">
                         @foreach($similarPriceProducts as $similar)
-                            <a href="{{ route('product.show', ['category_slug' => $similar->category->slug, 'product' => $similar->slug]) }}" class="flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors group">
+                            <a href="{{ route('product.show', ['category_slug' => $similar->category->slug, 'product' => $similar->slug]) }}" class="flex items-center gap-4 p-3 hover:bg-slate-50 transition-colors group">
                                 <div class="w-16 h-16 bg-slate-50 rounded-lg flex items-center justify-center p-2 shrink-0 border border-slate-100">
                                     @if($similar->image)
                                         <img src="{{ asset('storage/' . $similar->image) }}" alt="{{ $similar->title }}" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-300">
@@ -314,7 +314,7 @@
                                     @endif
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">{{ $similar->title }}</h4>
+                                    <h4 class="text-sm  text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">{{ $similar->title }}</h4>
                                     <div class="mt-1 font-bold text-blue-600 text-sm">
                                         @if($similar->base_price)
                                             ৳{{ number_format($similar->base_price) }}
@@ -335,12 +335,12 @@
             {{-- Similar Products --}}
             @if(isset($similarProducts) && $similarProducts->count() > 0)
                 <div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="p-3 border-b border-slate-100 bg-slate-50/50">
+                    <div class="p-2 border-b border-slate-100 bg-slate-50/50">
                         <h3 class="font-bold text-slate-900">Similar Items</h3>
                     </div>
                     <div class="divide-y divide-slate-100">
                         @foreach($similarProducts as $similar)
-                            <a href="{{ route('product.show', ['category_slug' => $similar->category->slug, 'product' => $similar->slug]) }}" class="flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors group">
+                            <a href="{{ route('product.show', ['category_slug' => $similar->category->slug, 'product' => $similar->slug]) }}" class="flex items-center gap-4 p-3 hover:bg-slate-50 transition-colors group">
                                 <div class="w-16 h-16 bg-slate-50 rounded-lg flex items-center justify-center p-2 shrink-0 border border-slate-100">
                                     @if($similar->image)
                                         <img src="{{ asset('storage/' . $similar->image) }}" alt="{{ $similar->title }}" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-300">
@@ -351,7 +351,7 @@
                                     @endif
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">{{ $similar->title }}</h4>
+                                    <h4 class="text-sm text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">{{ $similar->title }}</h4>
                                     <div class="mt-1 font-bold text-blue-600 text-sm">
                                         @if($similar->base_price)
                                             ৳{{ number_format($similar->base_price) }}

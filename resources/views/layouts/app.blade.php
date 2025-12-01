@@ -111,7 +111,7 @@
         class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 transition-all duration-300"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
+        <div class="flex items-center justify-between h-14">
           
           {{-- Left: Logo --}}
           <div class="flex items-center gap-4">
@@ -137,7 +137,7 @@
                 name="q" 
                 type="search" 
                 placeholder="Search phones, brands, specs..." 
-                class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-full leading-5 bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 sm:text-sm"
+                class="block w-full pl-10 pr-3 py-1.5 border border-gray-200 rounded-full leading-5 bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 sm:text-sm"
                 autocomplete="off"
               >
             </form>
@@ -145,16 +145,16 @@
 
           {{-- Right: Desktop Nav --}}
           <nav class="hidden md:flex items-center gap-1">
-            <a href="{{ route('products.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Devices</a>
-            <a href="{{ route('brands.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Brands</a>
-            <a href="{{ route('favorites.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all" x-data="favoritesCount">
+            <a href="{{ route('products.index') }}" class="px-3 py-1 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Devices</a>
+            <a href="{{ route('brands.index') }}" class="px-3 py-1 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Brands</a>
+            <a href="{{ route('favorites.index') }}" class="px-3 py-1 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all" x-data="favoritesCount">
                 <span class="relative">
                     Favorites
                     <span x-show="count > 0" x-text="count" class="absolute -top-2 -right-3 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-slate-900 rounded-full border-2 border-white"></span>
                 </span>
             </a>
-            <a href="#" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Latest</a>
-            <a href="{{ route('blog.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Blog</a>
+            <a href="#" class="px-3 py-1 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Latest</a>
+            <a href="{{ route('blog.index') }}" class="px-3 py-1 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Blog</a>
           </nav>
 
           {{-- Mobile Menu Button --}}
@@ -171,7 +171,7 @@
       </div>
 
       {{-- Mobile Search Bar --}}
-      <div x-show="searchOpen" x-collapse class="md:hidden border-t border-gray-100 bg-gray-50 px-4 py-3">
+      <div x-show="searchOpen" x-collapse class="md:hidden border-t border-gray-100 bg-gray-50 px-4 py-2">
         <form action="" method="GET">
             <input type="search" name="q" placeholder="Search phones..." class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
         </form>
@@ -184,24 +184,24 @@
         class="md:hidden border-t border-gray-100 bg-white shadow-lg"
         style="display: none;"
       >
-        <div class="px-4 pt-2 pb-6 space-y-1">
-            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Home</a>
-            <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Devices</a>
-            <a href="{{ route('brands.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Brands</a>
-            <a href="{{ route('favorites.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50" x-data="favoritesCount">
+        <div class="px-4 pt-2 pb-3 space-y-1">
+            <a href="{{ route('home') }}" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Home</a>
+            <a href="{{ route('products.index') }}" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Devices</a>
+            <a href="{{ route('brands.index') }}" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Brands</a>
+            <a href="{{ route('favorites.index') }}" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50" x-data="favoritesCount">
                 <span class="relative inline-block">
                     Favorites
                     <span x-show="count > 0" x-text="count" class="absolute -top-1 -right-3 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-slate-900 rounded-full border-2 border-white"></span>
                 </span>
             </a>
-            <a href="#" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Latest Phones</a>
-            <a href="{{ route('blog.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Blog</a>
+            <a href="#" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Latest Phones</a>
+            <a href="{{ route('blog.index') }}" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Blog</a>
         </div>
       </div>
     </header>
 
     {{-- Flash / status messages --}}
-    <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-6 lg:px-8 mt-4">
+    <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-6 lg:px-8 mt-2">
       @if(session('success'))
         <div class="rounded-md bg-green-50 border border-green-100 px-4 py-2 text-green-800 text-sm">
           {{ session('success') }}
@@ -217,7 +217,7 @@
     {{-- Main content --}}
     <main class="flex-1">
       @yield('hero')
-      <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-4 lg:px-4 pb-3">
+      <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-4 lg:px-4 pb-2">
         @yield('content')
       </div>
     </main>

@@ -28,7 +28,7 @@
 
     <div class="mb-3 mt-4" x-data="favoritesPage()">
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-xl lg:text-2xl font-bold text-slate-900 tracking-tight">My Favorites</h1>
+            <h1 class="text-md lg:text-2xl font-bold text-slate-900 tracking-tight">My Favorites</h1>
             <div class="flex items-center gap-4">
                 <span class="text-slate-500 text-sm" x-text="allIds.length + ' items saved'"></span>
                 <button x-show="allIds.length > 0" @click="clearAll()" class="text-red-600 text-sm font-medium hover:text-red-700 hover:underline transition-colors">Clear All</button>

@@ -34,7 +34,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             @foreach ($brands as $brand)
                 <a href="{{ route('products.index', ['brands[]' => $brand->id]) }}"
-                    class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-lg p-6 hover:border-slate-900 hover:shadow-md transition-all duration-200">
+                    class="group flex flex-col items-center justify-center bg-white border border-slate-100 rounded-sm p-6 hover:border-slate-900 hover:shadow-md transition-all duration-200">
                     <div
                         class="w-16 h-16 mb-4 relative grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
                         @if ($brand->image)

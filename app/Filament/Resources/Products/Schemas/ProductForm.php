@@ -226,6 +226,19 @@ class ProductForm
                             ->relationship('variantPrices')
                             ->label('Variants')
                             ->schema([
+                                Forms\Components\Select::make('market_status')
+                                    ->options([
+                                        'official' => 'Official',
+                                        'unofficial' => 'Unofficial',
+                                    ])
+                                    ->label('Status')
+                                    ->placeholder('Select Status'),
+
+                                Forms\Components\TextInput::make('variant_type')
+                                    ->label('Variant Type')
+                                    ->placeholder('e.g. USA, Indian')
+                                    ->nullable(),
+
                                 Forms\Components\TextInput::make('ram')
                                     ->label('RAM')
                                     ->placeholder('8GB')
@@ -242,11 +255,16 @@ class ProductForm
                                     ->prefix('৳')
                                     ->required(),
 
+                                Forms\Components\Toggle::make('is_expected')
+                                    ->label('Expected Price')
+                                    ->inline(false)
+                                    ->columnSpan(1),
+
                                 Forms\Components\TextInput::make('currency')
                                     ->default('BDT')
                                     ->disabled(),
                             ])
-                            ->columns(4)
+                            ->columns(3)
                             ->defaultItems(1)
                             ->addActionLabel('Add Another Variant')
                             ->columnSpan(2),

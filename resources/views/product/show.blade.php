@@ -123,10 +123,31 @@
                                         </div>
                                         <div>
                                             <span class="block text-sm md:text-base font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{{ $variant->ram }} / {{ $variant->storage }}</span>
-                                            <span class="block text-xs md:text-sm font-medium text-slate-500">Official</span>
+                                            <div class="flex flex-wrap gap-1.5 mt-1">
+                                                @if($variant->market_status)
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] md:text-[11px] font-medium border {{ $variant->market_status === 'official' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-amber-50 text-amber-600 border-amber-100' }}">
+                                                        {{ ucfirst($variant->market_status) }}
+                                                    </span>
+                                                @endif
+                                                
+                                                @if($variant->variant_type)
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] md:text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                                        {{ $variant->variant_type }}
+                                                    </span>
+                                                @endif
+
+                                                @if(!$variant->market_status && !$variant->variant_type)
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] md:text-[11px] font-medium bg-blue-50 text-blue-600 border border-blue-100">
+                                                        Official
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="text-right">
+                                        @if($variant->is_expected)
+                                            <span class="block text-[10px] md:text-xs font-bold text-amber-500 uppercase tracking-wider mb-0.5">Expected</span>
+                                        @endif
                                         <span class="block text-lg md:text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">৳{{ number_format($variant->amount) }}</span>
                                     </div>
                                 </div>

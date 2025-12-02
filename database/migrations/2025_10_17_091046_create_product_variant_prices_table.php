@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('product_variant_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->string('ram');
-            $table->string('storage');
+            $table->string('market_status')->nullable();
+            $table->string('variant_type')->nullable();
+            $table->boolean('is_expected')->default(false);
+            $table->string('ram')->nullable();
+            $table->string('storage')->nullable();
             $table->decimal('amount', 10, 2);
             $table->string('currency')->default('BDT');
             $table->timestamps();

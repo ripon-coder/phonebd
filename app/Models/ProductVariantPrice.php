@@ -14,6 +14,9 @@ class ProductVariantPrice extends Model
 
     protected $fillable = [
         'product_id',
+        'market_status',
+        'variant_type',
+        'is_expected',
         'ram',
         'storage',
         'amount',

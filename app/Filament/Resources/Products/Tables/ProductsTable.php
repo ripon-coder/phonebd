@@ -76,7 +76,7 @@ class ProductsTable
                         $record->productPerformance 
                             ? ProductPerformanceResource::getUrl('edit', ['record' => $record->productPerformance]) 
                             : ProductPerformanceResource::getUrl('create', ['product_id' => $record->id])
-                    ),
+                    )->openUrlInNewTab(),
 
                 Action::make('antutu')
                     ->label('Antutu')
@@ -86,7 +86,7 @@ class ProductsTable
                         $record->antutuScore 
                             ? AntutuScoreResource::getUrl('edit', ['record' => $record->antutuScore]) 
                             : AntutuScoreResource::getUrl('create', ['product_id' => $record->id])
-                    ),
+                    )->openUrlInNewTab(),
 
                 Action::make('faqs')
                     ->label('FAQs')
@@ -101,7 +101,7 @@ class ProductsTable
                         } else {
                             return ProductFaqResource::getUrl('index', ['tableFilters' => ['product' => ['value' => $record->id]]]);
                         }
-                    }),
+                    })->openUrlInNewTab(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

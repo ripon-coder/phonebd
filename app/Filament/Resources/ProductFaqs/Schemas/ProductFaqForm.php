@@ -26,9 +26,10 @@ class ProductFaqForm
                             ->required()
                             ->maxLength(255),
 
-                        Forms\Components\RichEditor::make('answer')
+                        Forms\Components\Textarea::make('answer')
                             ->required()
                             ->maxLength(65535)
+                            ->rows(5)
                             ->columnSpanFull(),
 
                         Forms\Components\TextInput::make('sort_order')
@@ -38,5 +39,34 @@ class ProductFaqForm
                     ])
                     
             ])->columns(1);
+    }
+    public static function makeRepeater(): Forms\Components\Repeater
+    {
+        return Forms\Components\Repeater::make('faqs')
+            ->relationship('faqs')
+            ->label('Frequently Asked Questions')
+            ->schema([
+                Forms\Components\TextInput::make('question')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+
+                Forms\Components\Textarea::make('answer')
+                    ->required()
+                    ->maxLength(65535)
+                    ->rows(5)
+                    ->columnSpanFull(),
+
+                Forms\Components\TextInput::make('sort_order')
+                    ->required()
+                    ->numeric()
+                    ->default(0)
+                    ->label('Sort Order'),
+            ])
+            ->itemLabel(fn (array $state): ?string => $state['question'] ?? null)
+            ->collapsed()
+            ->collapseAllAction(fn ($action) => $action->label('Collapse All'))
+            ->defaultItems(0)
+            ->columnSpanFull();
     }
 }

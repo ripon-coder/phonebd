@@ -15,6 +15,7 @@ class DynamicPage extends Model
         'meta_description',
         'sort_order',
         'is_active',
+        'storage_type',
     ];
 
     protected $casts = [

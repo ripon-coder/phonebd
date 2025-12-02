@@ -29,7 +29,7 @@ return new class extends Migration
             $table->text('meta_description')->nullable();
             $table->string('meta_keywords')->nullable();
             $table->string('meta_image')->nullable();
-            $table->string('storage_type')->nullable();
+            $table->string('storage_type')->default('backblaze')->nullable();
             $table->boolean('is_sample')->default(true);
             $table->tinyInteger('sample_count_max')->default(20);
             $table->boolean('is_review')->default(true);

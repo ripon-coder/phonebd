@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->longText('content')->nullable();
             $table->string('featured_image')->nullable();
+            $table->string('storage_type')->default('backblaze')->nullable();
 
             // SEO fields
             $table->string('meta_title')->nullable();

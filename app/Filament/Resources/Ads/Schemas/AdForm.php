@@ -5,6 +5,10 @@ namespace App\Filament\Resources\Ads\Schemas;
 use Filament\Forms;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class AdForm
 {
@@ -20,8 +24,38 @@ class AdForm
 
                         Forms\Components\FileUpload::make('image')
                             ->image()
+                            ->disk('backblaze')
+                            ->directory('ads')
+                            ->visibility('public')
+                            ->previewable(false)
+                            ->openable(true)
+                            ->downloadable(true)
                             ->required()
+                            ->saveUploadedFileUsing(function (UploadedFile $file) {
+                                $manager = new ImageManager(new Driver());
+                                $image = $manager->read($file);
+                                
+                                // Optimize
+                                if ($image->width() > 1200) {
+                                    $image->scale(width: 1200);
+                                }
+                                
+                                $encoded = $image->toWebp(quality: 80);
+                                
+                                $filename = pathinfo($file->hashName(), PATHINFO_FILENAME) . '.webp';
+                                $path = 'ads/' . $filename;
+                                
+                                Storage::disk('backblaze')->put($path, (string) $encoded, [
+                                    'visibility' => 'public',
+                                    'mimetype' => 'image/webp'
+                                ]);
+                                
+                                return $path;
+                            })
                             ->columnSpanFull(),
+
+                        Forms\Components\Hidden::make('storage_type')
+                            ->default('backblaze'),
 
                         Forms\Components\TextInput::make('link')
                             ->required()

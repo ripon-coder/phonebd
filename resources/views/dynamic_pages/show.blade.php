@@ -117,12 +117,13 @@
                                         </svg>
                                         <div class="hidden md:block absolute right-full top-1/2 -translate-y-1/2 mr-2 px-2 py-1 bg-slate-800 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                                             <span x-text="isFavorite ? 'Remove' : 'Add to Favorites'"></span>
+                                            <div class="absolute top-1/2 -right-1 -translate-y-1/2 w-2 h-2 bg-slate-800 rotate-45"></div>
                                         </div>
                                     </div>
                                 </div>
                                 @if ($phone->image)
-                                    <img src="{{ asset('storage/' . $phone->image) }}"
-                                        class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500">
+                                    <img src="{{ $phone->getImageUrl('image') }}"
+                                        class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-slate-300">
                                         <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">

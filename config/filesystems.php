@@ -69,6 +69,10 @@ return [
             'bucket' => env('BACKBLAZE_BUCKET'),
             'endpoint' => env('BACKBLAZE_ENDPOINT'),
             'use_path_style_endpoint' => true,
+            'url' => env('BACKBLAZE_PUBLIC_URL', 'https://f005.backblazeb2.com/file/phonebd'),
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
             'options' => [
                 'ACL' => '',
             ],

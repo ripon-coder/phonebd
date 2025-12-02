@@ -51,7 +51,7 @@
                     @if($post->featured_image)
                         <div class="relative h-64 md:h-96 w-full">
                             <img 
-                                src="{{ asset('storage/' . $post->featured_image) }}" 
+                                src="{{ $post->getImageUrl('featured_image') }}" 
                                 alt="{{ $post->title }}" 
                                 class="w-full h-full object-cover"
                             >

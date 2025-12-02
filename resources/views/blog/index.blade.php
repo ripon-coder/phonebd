@@ -22,9 +22,9 @@
                             <article class="bg-white rounded-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row group h-full md:h-44 transition-colors hover:border-blue-200">
                                 <a href="{{ route('blog.show', $post->slug) }}" class="md:w-56 relative overflow-hidden h-48 md:h-auto shrink-0">
                                     <img 
-                                        src="{{ $post->featured_image ? asset('storage/' . $post->featured_image) : 'https://placehold.co/600x400/e2e8f0/1e293b?text=No+Image' }}" 
+                                        src="{{ $post->getImageUrl('featured_image') ?? 'https://placehold.co/600x400/e2e8f0/1e293b?text=No+Image' }}" 
                                         alt="{{ $post->title }}" 
-                                        class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                                        class="w-full h-full object-cover"
                                     >
                                 </a>
                                 

@@ -9,6 +9,10 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class GeneralSettingForm
 {
@@ -32,13 +36,58 @@ class GeneralSettingForm
                         ->disk('public')
                         ->label('Site Logo')
                         ->image()
-                        ->directory('settings'),
+                        ->directory('settings')
+                        ->saveUploadedFileUsing(function (UploadedFile $file) {
+                            $manager = new ImageManager(new Driver());
+                            $image = $manager->read($file);
+                            
+                            // Optimize
+                            if ($image->width() > 1200) {
+                                $image->scale(width: 1200);
+                            }
+                            
+                            $encoded = $image->toWebp(quality: 80);
+                            
+                            $filename = pathinfo($file->hashName(), PATHINFO_FILENAME) . '.webp';
+                            $path = 'settings/' . $filename;
+                            
+                            Storage::disk('public')->put($path, (string) $encoded, [
+                                'visibility' => 'public',
+                                'mimetype' => 'image/webp'
+                            ]);
+                            
+                            return $path;
+                        }),
 
                     FileUpload::make('site_favicon')
                         ->disk('public')
                         ->label('Favicon')
                         ->image()
-                        ->directory('settings'),
+                        ->directory('settings')
+                        ->saveUploadedFileUsing(function (UploadedFile $file) {
+                            $manager = new ImageManager(new Driver());
+                            $image = $manager->read($file);
+                            
+                            // Optimize
+                            if ($image->width() > 1200) {
+                                $image->scale(width: 1200);
+                            }
+                            
+                            $encoded = $image->toWebp(quality: 80);
+                            
+                            $filename = pathinfo($file->hashName(), PATHINFO_FILENAME) . '.webp';
+                            $path = 'settings/' . $filename;
+                            
+                            Storage::disk('public')->put($path, (string) $encoded, [
+                                'visibility' => 'public',
+                                'mimetype' => 'image/webp'
+                            ]);
+                            
+                            return $path;
+                        }),
+                        
+                    \Filament\Forms\Components\Hidden::make('storage_type')
+                        ->default('public'),
                 ])->columns(2),
 
             Section::make('Appearance')

@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\HasStorageImage; // Added this line
 
 class BlogCategory extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasStorageImage, \App\Traits\DeletesOldImages; // Modified this line
+
+    protected $webpFields = ['image'];
 
     protected $fillable = [
         'name',

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('position');
             $table->string('image')->nullable();
+            $table->string('storage_type')->default('backblaze')->nullable();
             $table->string('link')->nullable();
             $table->text('script')->nullable();
             $table->boolean('is_active')->default(true); // Changed from 'status' to 'is_active'

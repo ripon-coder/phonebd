@@ -15,6 +15,7 @@ use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Table;
 use Filament\Tables;
 
@@ -68,6 +69,7 @@ class ProductsTable
                 DeleteAction::make(),
                 ForceDeleteAction::make(),
                 RestoreAction::make(),
+                ViewAction::make(),
                 EditAction::make(),
                 Action::make('performance')
                     ->label('Performance')
@@ -88,20 +90,20 @@ class ProductsTable
                             : AntutuScoreResource::getUrl('create', ['product_id' => $record->id])
                     )->openUrlInNewTab(),
 
-                Action::make('faqs')
-                    ->label('FAQs')
-                    ->icon('heroicon-o-question-mark-circle')
-                    ->color('success')
-                    ->url(function (Product $record): string {
-                        $count = $record->productFaqs()->count();
-                        if ($count === 0) {
-                            return ProductFaqResource::getUrl('create', ['product_id' => $record->id]);
-                        } elseif ($count === 1) {
-                            return ProductFaqResource::getUrl('edit', ['record' => $record->productFaqs()->first()]);
-                        } else {
-                            return ProductFaqResource::getUrl('index', ['tableFilters' => ['product' => ['value' => $record->id]]]);
-                        }
-                    })->openUrlInNewTab(),
+                // Action::make('faqs')
+                //     ->label('FAQs')
+                //     ->icon('heroicon-o-question-mark-circle')
+                //     ->color('success')
+                //     ->url(function (Product $record): string {
+                //         $count = $record->faqs()->count();
+                //         if ($count === 0) {
+                //             return ProductFaqResource::getUrl('create', ['product_id' => $record->id]);
+                //         } elseif ($count === 1) {
+                //             return ProductFaqResource::getUrl('edit', ['record' => $record->faqs()->first()]);
+                //         } else {
+                //             return ProductFaqResource::getUrl('index', ['tableFilters' => ['product' => ['value' => $record->id]]]);
+                //         }
+                //     })->openUrlInNewTab(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

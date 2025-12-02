@@ -64,6 +64,51 @@
                     this.count = favorites.length;
                 }
             }))
+
+            Alpine.data('search', () => ({
+                query: '',
+                results: [],
+                isOpen: false,
+                isLoading: false,
+                controller: null,
+                init() {
+                    this.$watch('query', (value) => {
+                        if (value.length < 2) {
+                            this.results = [];
+                            this.isOpen = false;
+                            return;
+                        }
+                        this.fetchResults(value);
+                    });
+                },
+                fetchResults(value) {
+                    // Cancel previous request if it exists
+                    if (this.controller) {
+                        this.controller.abort();
+                    }
+                    this.controller = new AbortController();
+                    const signal = this.controller.signal;
+
+                    this.isLoading = true;
+                    this.isOpen = true; // Force open to show loading state
+                    fetch(`{{ route('search.suggestions') }}?q=${encodeURIComponent(value)}`, { signal })
+                        .then(response => response.json())
+                        .then(data => {
+                            this.results = data;
+                            this.isOpen = true;
+                            this.isLoading = false;
+                        })
+                        .catch(error => {
+                            // Ignore abort errors
+                            if (error.name !== 'AbortError') {
+                                this.isLoading = false;
+                            }
+                        });
+                },
+                close() {
+                    this.isOpen = false;
+                }
+            }))
         })
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -126,8 +171,8 @@
           </div>
 
           {{-- Center: Desktop Search --}}
-          <div class="hidden md:flex flex-1 max-w-lg mx-8">
-            <form action="" method="GET" class="w-full relative group">
+          <div class="hidden md:flex flex-1 max-w-lg mx-8" x-data="search" @click.away="close()">
+            <form action="{{ route('search.index') }}" method="GET" class="w-full relative group">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg class="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -136,10 +181,56 @@
               <input 
                 name="q" 
                 type="search" 
+                x-model.debounce.300ms="query"
+                @focus="isOpen = true"
                 placeholder="Search phones, brands, specs..." 
                 class="block w-full pl-10 pr-3 py-1.5 border border-gray-200 rounded-full leading-5 bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 sm:text-sm"
                 autocomplete="off"
               >
+              
+              {{-- Suggestions Dropdown --}}
+              <div x-show="isOpen && (results.length > 0 || isLoading)" 
+                   x-transition:enter="transition ease-out duration-200"
+                   x-transition:enter-start="opacity-0 translate-y-1"
+                   x-transition:enter-end="opacity-100 translate-y-0"
+                   class="absolute top-full left-0 w-full mt-2 bg-white rounded-lg shadow-xl border border-slate-100 overflow-hidden z-50"
+                   style="display: none;">
+                  
+                  {{-- Loading State --}}
+                  <div x-show="isLoading" class="py-4 text-center text-slate-500">
+                      <svg class="animate-spin h-5 w-5 mx-auto text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                  </div>
+
+                  <div x-show="!isLoading && results.length > 0" class="py-2">
+                      <template x-for="result in results" :key="result.url">
+                          <a :href="result.url" class="flex items-center gap-3 px-4 py-2 hover:bg-slate-50 transition-colors">
+                              <div class="w-10 h-10 rounded-md bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 p-1">
+                                  <template x-if="result.image">
+                                      <img :src="result.image" class="w-full h-full object-contain mix-blend-multiply" loading="lazy">
+                                  </template>
+                                  <template x-if="!result.image">
+                                      <svg class="w-5 h-5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                      </svg>
+                                  </template>
+                              </div>
+                              <div class="flex-1 min-w-0">
+                                  <div class="flex items-center justify-between">
+                                      <h4 class="text-sm font-medium text-slate-900 truncate" x-text="result.title"></h4>
+                                      <span x-show="result.type === 'product'" class="text-xs font-bold text-blue-600 whitespace-nowrap ml-2" x-text="result.price"></span>
+                                  </div>
+                                  <p class="text-xs text-slate-500 capitalize" x-text="result.type"></p>
+                              </div>
+                          </a>
+                      </template>
+                  </div>
+                  <a x-show="!isLoading && results.length > 0" :href="'{{ route('search.index') }}?q=' + query" class="block w-full text-center py-2 bg-slate-50 text-sm font-medium text-blue-600 hover:text-blue-700 border-t border-slate-100">
+                      View all results
+                  </a>
+              </div>
             </form>
           </div>
 
@@ -171,9 +262,60 @@
       </div>
 
       {{-- Mobile Search Bar --}}
-      <div x-show="searchOpen" x-collapse class="md:hidden border-t border-gray-100 bg-gray-50 px-4 py-2">
-        <form action="" method="GET">
-            <input type="search" name="q" placeholder="Search phones..." class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+      <div x-show="searchOpen" x-collapse class="md:hidden border-t border-gray-100 bg-gray-50 px-4 py-2" x-data="search" @click.away="close()">
+        <form action="{{ route('search.index') }}" method="GET" class="relative">
+            <input 
+                type="search" 
+                name="q" 
+                x-model.debounce.300ms="query"
+                @focus="isOpen = true"
+                placeholder="Search phones..." 
+                class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            >
+
+            {{-- Suggestions Dropdown --}}
+            <div x-show="isOpen && (results.length > 0 || isLoading)" 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 translate-y-1"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 class="absolute top-full left-0 w-full mt-2 bg-white rounded-lg shadow-xl border border-slate-100 overflow-hidden z-50"
+                 style="display: none;">
+                
+                {{-- Loading State --}}
+                <div x-show="isLoading" class="py-4 text-center text-slate-500">
+                    <svg class="animate-spin h-5 w-5 mx-auto text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+
+                <div x-show="!isLoading && results.length > 0" class="py-2">
+                    <template x-for="result in results" :key="result.url">
+                        <a :href="result.url" class="flex items-center gap-3 px-4 py-2 hover:bg-slate-50 transition-colors">
+                            <div class="w-10 h-10 rounded-md bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 p-1">
+                                <template x-if="result.image">
+                                    <img :src="result.image" class="w-full h-full object-contain mix-blend-multiply" loading="lazy">
+                                </template>
+                                <template x-if="!result.image">
+                                    <svg class="w-5 h-5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </template>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-sm font-medium text-slate-900 truncate" x-text="result.title"></h4>
+                                    <span x-show="result.type === 'product'" class="text-xs font-bold text-blue-600 whitespace-nowrap ml-2" x-text="result.price"></span>
+                                </div>
+                                <p class="text-xs text-slate-500 capitalize" x-text="result.type"></p>
+                            </div>
+                        </a>
+                    </template>
+                </div>
+                <a x-show="!isLoading && results.length > 0" :href="'{{ route('search.index') }}?q=' + query" class="block w-full text-center py-2 bg-slate-50 text-sm font-medium text-blue-600 hover:text-blue-700 border-t border-slate-100">
+                    View all results
+                </a>
+            </div>
         </form>
       </div>
 

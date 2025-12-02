@@ -10,7 +10,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Brand extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, \Laravel\Scout\Searchable, \App\Traits\DeletesOldImages;
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'name_nospace' => str_replace(' ', '', $this->name),
+        ];
+    }
 
     protected $fillable = [
         'name',
@@ -19,6 +28,7 @@ class Brand extends Model
         'image',
         'meta_title',
         'meta_description',
+        'storage_type',
     ];
 
     public function products(): HasMany

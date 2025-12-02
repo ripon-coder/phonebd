@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, \App\Traits\DeletesOldImages;
 
     protected $fillable = [
         'name',
@@ -19,6 +19,7 @@ class Category extends Model
         'image',
         'meta_title',
         'meta_description',
+        'storage_type',
     ];
 
     public function products(): HasMany

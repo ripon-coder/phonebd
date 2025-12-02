@@ -11,6 +11,9 @@ Route::get('/blog', [App\Http\Controllers\BlogController::class, 'index'])->name
 Route::get('/blog/{post}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
 Route::get('/blog/category/{category}', [App\Http\Controllers\BlogController::class, 'category'])->name('blog.category');
 
+Route::get('/search/suggestions', [App\Http\Controllers\SearchController::class, 'suggestions'])->name('search.suggestions');
+Route::get('/search', [App\Http\Controllers\SearchController::class, 'index'])->name('search.index');
+
 Route::get('/buying-guide/{slug}', [App\Http\Controllers\DynamicPageController::class, 'show'])->name('dynamic_pages.show');
 
 

@@ -3,6 +3,10 @@
 namespace App\Filament\Resources\Products\Schemas;
 
 use Filament\Forms;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Support\Str;
@@ -16,6 +20,7 @@ use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Infolists\Components\RepeatableEntry;
+use App\Filament\Resources\ProductFaqs\Schemas\ProductFaqForm;
 
 
 
@@ -76,12 +81,39 @@ class ProductForm
 
                             ->label('Main Product Image')
                             ->image()
-                            ->disk('public')
+                            ->disk('backblaze')
                             ->directory('products')
-                            ->imageEditor()
+                            ->visibility('public')
+                            ->previewable(false)
+                            ->openable(true)
+                            ->downloadable(true)
                             ->maxSize(2048)
                             ->helperText('Upload main product image (Max: 2MB)')
+                            ->saveUploadedFileUsing(function (UploadedFile $file) {
+                                $manager = new ImageManager(new Driver());
+                                $image = $manager->read($file);
+                                
+                                // Optimize
+                                if ($image->width() > 1200) {
+                                    $image->scale(width: 1200);
+                                }
+                                
+                                $encoded = $image->toWebp(quality: 80);
+                                
+                                $filename = pathinfo($file->hashName(), PATHINFO_FILENAME) . '.webp';
+                                $path = 'products/' . $filename;
+                                
+                                Storage::disk('backblaze')->put($path, (string) $encoded, [
+                                    'visibility' => 'public',
+                                    'mimetype' => 'image/webp'
+                                ]);
+                                
+                                return $path;
+                            })
                             ->columnSpan(2),
+
+                        Forms\Components\Hidden::make('storage_type')
+                            ->default('backblaze'),
 
                         Forms\Components\Textarea::make('short_description')
                             ->rows(4)
@@ -309,15 +341,47 @@ class ProductForm
                                         Forms\Components\FileUpload::make('meta_image')
                                             ->label('Social Share Image')
                                             ->image()
-                                            ->disk('public')
+                                            ->disk('backblaze')
                                             ->directory('seo')
+                                            ->visibility('public')
+                                            ->previewable(false)
+                                            ->openable(true)
                                             ->maxSize(1024)
                                             ->imageEditor()
-                                            ->helperText('Image for social media previews (OG Image).'),
+                                            ->helperText('Image for social media previews (OG Image).')
+                                            ->saveUploadedFileUsing(function (UploadedFile $file) {
+                                                $manager = new ImageManager(new Driver());
+                                                $image = $manager->read($file);
+                                                
+                                                // Optimize
+                                                if ($image->width() > 1200) {
+                                                    $image->scale(width: 1200);
+                                                }
+                                                
+                                                $encoded = $image->toWebp(quality: 80);
+                                                
+                                                $filename = pathinfo($file->hashName(), PATHINFO_FILENAME) . '.webp';
+                                                $path = 'seo/' . $filename;
+                                                
+                                                Storage::disk('backblaze')->put($path, (string) $encoded, [
+                                                    'visibility' => 'public',
+                                                    'mimetype' => 'image/webp'
+                                                ]);
+                                                
+                                                return $path;
+                                            }),
                                     ])
                                     ->columnSpan(1),
                             ])
                             ->columns(3),
+                    ]),
+                    
+                /**
+                 * STEP 5: FAQS
+                 */
+                Step::make('FAQs')
+                    ->schema([
+                        ProductFaqForm::makeRepeater(),
                     ]),
 
             ])

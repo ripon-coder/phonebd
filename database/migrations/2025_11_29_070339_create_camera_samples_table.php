@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('variant')->nullable();
             $table->json('images')->nullable();
+            $table->string('storage_type')->default('backblaze')->nullable();
             $table->boolean('is_approve')->default(false);
             $table->string('ip_address')->nullable();
             $table->string('finger_print')->nullable();
-            $table->string('storage_type')->nullable();
             $table->timestamps();
         });
     }

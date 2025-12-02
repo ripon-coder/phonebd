@@ -11,7 +11,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, \App\Traits\HasStorageImage, \Laravel\Scout\Searchable, \App\Traits\DeletesOldImages;
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'title_nospace' => str_replace(' ', '', $this->title),
+            'brand' => $this->brand ? $this->brand->name : '',
+            'brand_nospace' => $this->brand ? str_replace(' ', '', $this->brand->name) : '',
+        ];
+    }
+
+    protected $webpFields = ['image', 'meta_image'];
 
     protected $fillable = [
         'title',
@@ -20,6 +33,7 @@ class Product extends Model
         'category_id',
         'image',
         'short_description',
+        'storage_type',
         'status',
         'base_price',
         'raw_html',
@@ -86,10 +100,7 @@ class Product extends Model
         return $this->hasOne(AntutuScore::class);
     }
 
-    public function productFaqs()
-    {
-        return $this->hasMany(ProductFaq::class);
-    }
+
 
     public function getSpecGroupsAttribute()
     {

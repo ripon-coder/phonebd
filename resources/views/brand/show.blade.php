@@ -39,7 +39,7 @@
         <div class="bg-white rounded-sm border border-slate-200 p-2 mb-3 flex items-center gap-5">
             <div class="w-20 h-20 shrink-0 flex items-center justify-center bg-slate-50 rounded-sm p-2 border border-slate-100">
                 @if ($brand->image)
-                    <img src="{{ asset('storage/' . $brand->image) }}" class="w-full h-full object-contain" alt="{{ $brand->name }}">
+                    <img src="{{ $brand->getImageUrl('image') }}" class="w-full h-full object-contain" alt="{{ $brand->name }}">
                 @else
                     <span class="text-3xl font-bold text-slate-300">{{ substr($brand->name, 0, 1) }}</span>
                 @endif
@@ -83,7 +83,7 @@
                         <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"
                             class="group relative bg-white rounded-sm border border-slate-100 p-0 overflow-hidden hover:border-slate-300 transition-all duration-200 block">
                             
-                            <div class="relative aspect-square bg-slate-50/50 p-1 group-hover:bg-slate-50 transition-colors">
+                            <div class="relative aspect-square bg-slate-50/50 group-hover:bg-slate-50 transition-colors">
                                 <div class="absolute top-2 right-2 z-10">
                                     <div x-data="favorite({{ $phone->id }})" @click.prevent="toggle()" :class="isFavorite ? 'text-red-500' : 'text-slate-400 hover:text-red-500'" class="group relative transition-colors cursor-pointer bg-white/80 rounded-full p-1 shadow-sm backdrop-blur-sm">
                                         <svg class="w-5 h-5" :fill="isFavorite ? 'currentColor' : 'none'" viewBox="0 0 24 24" stroke="currentColor">
@@ -92,12 +92,13 @@
                                         </svg>
                                         <div class="hidden md:block absolute right-full top-1/2 -translate-y-1/2 mr-2 px-2 py-1 bg-slate-800 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                                             <span x-text="isFavorite ? 'Remove' : 'Add to Favorites'"></span>
+                                            <div class="absolute top-1/2 -right-1 -translate-y-1/2 w-2 h-2 bg-slate-800 rotate-45"></div>
                                         </div>
                                     </div>
                                 </div>
                                 @if ($phone->image)
-                                    <img src="{{ asset('storage/' . $phone->image) }}"
-                                        class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500">
+                                    <img src="{{ $phone->getImageUrl('image') }}"
+                                        class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-slate-300">
                                         <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">

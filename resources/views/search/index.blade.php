@@ -3,15 +3,36 @@
 @section('title', 'Search Results for ' . $query)
 
 @section('content')
-    <div class="py-6">
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-slate-900">Search Results for "{{ $query }}"</h1>
+    <div class="py-3">
+        {{-- Breadcrumb --}}
+        <nav class="flex mb-2 text-sm text-slate-500" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{{ route('home') }}" class="inline-flex items-center hover:text-slate-900 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 font-medium text-slate-900 md:ml-2">Search Results</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+        <div class="mb-4">
+            <h1 class="text-md md:text-2xl font-bold text-slate-900">Search Results for "{{ $query }}"</h1>
         </div>
 
         @if($brands->count() > 0)
-            <div class="mb-8">
-                <h2 class="text-xl font-semibold text-slate-900 mb-4">Brands</h2>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div class="mb-4">
+                <h2 class="text-lg md:text-xl font-semibold text-slate-900 mb-2">Brands</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                     @foreach($brands as $brand)
                         <a href="{{ route('brands.show', $brand->slug) }}" class="bg-white rounded-sm border border-slate-200 p-4 flex items-center justify-center hover:border-blue-500 transition-colors">
                             @if($brand->image)
@@ -27,7 +48,6 @@
 
         @if($products->count() > 0)
             <div>
-                <h2 class="text-xl font-semibold text-slate-900 mb-4">Devices</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                     @foreach($products as $phone)
                         <a href="{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}"

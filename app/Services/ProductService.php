@@ -11,13 +11,18 @@ class ProductService
         $product->load([
             'brand:id,name,slug', 
             'brand.dynamicPages' => function ($query) {
-                $query->where('is_active', true)->orderBy('sort_order', 'asc');
+                $query->select('id', 'brand_id', 'slug', 'title', 'sort_order') // Select only needed columns
+                      ->where('is_active', true)
+                      ->orderBy('sort_order', 'asc');
             },
             'category:id,name,slug', 
-            'variantPrices', 
-            'specValues.productSpecItem', 
-            'specValues.productSpecGroup', 
-            'faqs'
+            'variantPrices:id,product_id,ram,storage,amount', // Select needed columns
+            'specValues' => function($q) {
+                $q->select('id', 'product_id', 'product_spec_item_id', 'product_spec_group_id', 'value');
+            },
+            'specValues.productSpecItem:id,label', 
+            'specValues.productSpecGroup:id,name', 
+            'faqs:id,product_id,question,answer' // Select needed columns
         ]);
 
         if ($product->category->slug !== $slug) {

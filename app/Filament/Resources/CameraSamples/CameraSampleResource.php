@@ -18,7 +18,8 @@ class CameraSampleResource extends Resource
 {
     protected static ?string $model = CameraSample::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCamera;
+    protected static string|\UnitEnum|null $navigationGroup = 'User Interaction';
 
     protected static ?string $recordTitleAttribute = 'name';
 

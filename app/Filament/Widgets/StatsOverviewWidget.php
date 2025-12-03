@@ -21,13 +21,7 @@ class StatsOverviewWidget extends BaseWidget
         
         $totalBlogPosts = BlogPost::count();
         $publishedBlogPosts = BlogPost::where('is_published', true)->count();
-        
-        $activeAds = Ad::where('is_active', true)
-            ->where(function ($query) {
-                $query->whereNull('end_date')
-                    ->orWhere('end_date', '>=', now());
-            })
-            ->count();
+    
 
         return [
             Stat::make('Total Products', $totalProducts)
@@ -50,11 +44,7 @@ class StatsOverviewWidget extends BaseWidget
                 ->description("{$publishedBlogPosts} published")
                 ->descriptionIcon('heroicon-o-document-text')
                 ->color('primary'),
-            
-            Stat::make('Active Ads', $activeAds)
-                ->description('Currently running')
-                ->descriptionIcon('heroicon-o-megaphone')
-                ->color('danger'),
+
         ];
     }
 }

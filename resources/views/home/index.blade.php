@@ -1,7 +1,10 @@
 @extends('layouts.app', [
-    'title' => 'PhoneBD — Mobile Specs & Prices',
+    'title' => 'Mobile Specs & Prices',
     'meta_description' => 'Dummy mobile specs, dummy brand list for testing layout.',
 ])
+
+@section('og_image', asset('images/og-default.jpg'))
+@section('og_type', 'website')
 
 
 @section('content')

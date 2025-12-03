@@ -3,6 +3,9 @@
     'meta_description' => 'Your saved favorite mobile phones and gadgets.',
 ])
 
+@section('og_image', asset('images/og-default.jpg'))
+@section('og_type', 'website')
+
 @section('content')
     {{-- Breadcrumb --}}
     <nav class="flex mb-4 text-sm text-slate-500" aria-label="Breadcrumb">

@@ -3,6 +3,9 @@
     'meta_description' => $dynamicPage->meta_description ?? 'Check out our ' . $dynamicPage->title . ' buying guide. Best deals on ' . $dynamicPage->title . ' smartphones in Bangladesh.',
 ])
 
+@section('og_image', asset('images/og-default.jpg'))
+@section('og_type', 'article')
+
 @section('content')
     {{-- Breadcrumb --}}
     <nav class="flex mb-3 text-sm text-slate-500" aria-label="Breadcrumb">

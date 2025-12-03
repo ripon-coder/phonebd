@@ -5,11 +5,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#0ea5e9" />
-    <meta name="description" content="@yield('meta_description', 'PhoneBD — Mobile & gadget specs, lightning fast.')">
+    <meta name="description" content="{{ $meta_description ?? trim($__env->yieldContent('meta_description', 'PhoneBD — Mobile & gadget specs, lightning fast.')) }}">
 
-    <title>@yield('title','PhoneBD') — {{ config('app.name', 'PhoneBD') }}</title>
+    <title>{{ $title ?? trim($__env->yieldContent('title', config('app.name', 'PhoneBD'))) }} | Phonebd.net</title>
 
-    {{-- CSRF --}}
+    {{-- Open Graph / Facebook --}}
+    <meta property="og:type" content="@yield('og_type', 'website')" />
+    <meta property="og:url" content="{{ url()->current() }}" />
+    <meta property="og:title" content="{{ $title ?? trim($__env->yieldContent('title', config('app.name', 'PhoneBD'))) }} | Phonebd.net" />
+    <meta property="og:description" content="{{ $meta_description ?? trim($__env->yieldContent('meta_description', 'PhoneBD — Mobile & gadget specs, lightning fast.')) }}" />
+    <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))" />
+    <meta property="og:site_name" content="PhoneBD" />
+
+    {{-- Twitter --}}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="{{ url()->current() }}" />
+    <meta name="twitter:title" content="{{ $title ?? trim($__env->yieldContent('title', config('app.name', 'PhoneBD'))) }} | Phonebd.net" />
+    <meta name="twitter:description" content="{{ $meta_description ?? trim($__env->yieldContent('meta_description', 'PhoneBD — Mobile & gadget specs, lightning fast.')) }}" />
+    <meta name="twitter:image" content="@yield('og_image', asset('images/og-default.jpg'))" />
+
+    {{-- Canonical --}}
+    <link rel="canonical" href="@yield('canonical', url()->current())" />
+
     {{-- CSRF --}}
     <meta name="csrf-token" content="">
     <script>
@@ -30,6 +47,9 @@
 
     {{-- Page-specific styles --}}
     @stack('styles')
+
+    {{-- Structured Data / JSON-LD --}}
+    @stack('schema')
 
     {{-- Alpine.js for interactivity --}}
     <script>

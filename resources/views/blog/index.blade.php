@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('title', 'Blog')
+@section('meta_description', 'Stay up to date with the latest mobile technology trends, in-depth reviews, and industry insights on PhoneBD Blog.')
+@section('og_image', asset('images/og-default.jpg'))
+@section('og_type', 'website')
 
 @section('content')
     <div class="py-2 md:py-4">

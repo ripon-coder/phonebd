@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('title', $post->title)
+@section('og_image', $post->featured_image ? $post->getImageUrl('featured_image') : asset('images/og-default.jpg'))
+@section('og_type', 'article')
 
 @section('content')
     <div class="py-4 md:py-6">

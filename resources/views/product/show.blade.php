@@ -2,6 +2,8 @@
 
 @section('title', $product->title)
 @section('meta_description', $product->meta_description ?? $product->short_description)
+@section('og_image', $product->image ? $product->getImageUrl('image') : asset('images/og-default.jpg'))
+@section('og_type', 'product')
 
 @section('content')
     {{-- Breadcrumb --}}

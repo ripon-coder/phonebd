@@ -3,6 +3,43 @@
     'meta_description' => 'Latest ' . $brand->name . ' mobile phones price in Bangladesh. Check out ' . $brand->name . ' smartphone specifications, reviews, and features.',
 ])
 
+@section('og_image', $brand->image ? $brand->getImageUrl('image') : asset('images/og-default.jpg'))
+@section('og_type', 'website')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Brand",
+  "name": "{{ $brand->name }}",
+  "url": "{{ route('brands.show', $brand) }}",
+  "logo": "{{ $brand->image ? $brand->getImageUrl('image') : '' }}",
+  "description": "{{ $brand->meta_description ?? '' }}"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "{{ route('home') }}"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Brands",
+    "item": "{{ route('brands.index') }}"
+  },{
+    "@type": "ListItem",
+    "position": 3,
+    "name": "{{ $brand->name }}"
+  }]
+}
+</script>
+@endpush
+
 @section('content')
     {{-- Breadcrumb --}}
     <nav class="flex mb-3 text-sm text-slate-500" aria-label="Breadcrumb">

@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('title', 'Blog - ' . $category->name)
+@section('meta_description', 'Read the latest articles and reviews in ' . $category->name . ' category on PhoneBD Blog.')
+@section('og_image', asset('images/og-default.jpg'))
+@section('og_type', 'website')
 
 @section('content')
     <div class="py-4 md:py-6">

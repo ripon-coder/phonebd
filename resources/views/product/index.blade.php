@@ -3,6 +3,9 @@
     'meta_description' => 'Browse all mobile phones and accessories available on PhoneBD.',
 ])
 
+@section('og_image', asset('images/og-default.jpg'))
+@section('og_type', 'website')
+
 @section('content')
     {{-- Breadcrumb --}}
     <nav class="flex mb-3 text-sm text-slate-500" aria-label="Breadcrumb">

@@ -19,15 +19,26 @@ class AdsTable
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->disk('backblaze')
+                    ->visibility('public'),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('type')
+                    ->badge()
+                    ->colors([
+                        'primary' => 'image',
+                        'warning' => 'script',
+                        'success' => 'code',
+                    ]),
                 Tables\Columns\TextColumn::make('position')
-                    ->searchable(),
+                    ->searchable()
+                    ->formatStateUsing(fn (string $state): string => ucwords(str_replace('_', ' ', $state))),
+                Tables\Columns\TextColumn::make('views')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
-                Tables\Columns\TextInputColumn::make('sort_order')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

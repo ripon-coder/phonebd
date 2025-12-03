@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductPerformance extends Model
 {
+    use \App\Traits\ClearsResponseCache;
+
     protected $fillable = [
         'product_id',
         'gaming_fps',

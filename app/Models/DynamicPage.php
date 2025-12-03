@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class DynamicPage extends Model
 {
+    use \App\Traits\ClearsResponseCache;
+
     protected $fillable = [
         'title',
         'slug',

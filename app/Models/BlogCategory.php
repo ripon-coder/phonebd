@@ -11,7 +11,7 @@ use App\Traits\HasStorageImage; // Added this line
 
 class BlogCategory extends Model
 {
-    use HasFactory, HasStorageImage, \App\Traits\DeletesOldImages; // Modified this line
+    use HasFactory, HasStorageImage, \App\Traits\DeletesOldImages, \App\Traits\ClearsResponseCache; // Modified this line
 
     protected $webpFields = ['image'];
 

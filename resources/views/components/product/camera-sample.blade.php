@@ -42,7 +42,7 @@
     
     <div class="p-3 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
         <h3 class="font-bold text-slate-900">Camera Samples</h3>
-        @if($totalCameraSamples < $product->sample_count_max)
+        @if($totalCameraSamples < $product->sample_count_max && $product->is_sample)
             <button @click="$dispatch('open-sample-drawer')" class="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1">
                 <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                 Add Samples
@@ -52,7 +52,7 @@
     
     <div class="p-3">
         <template x-if="images.length === 0">
-            @if($totalCameraSamples < $product->sample_count_max)
+            @if($totalCameraSamples < $product->sample_count_max && $product->is_sample)
                 <div @click="$dispatch('open-sample-drawer')" class="flex flex-col items-center justify-center p-8 border-2 border-dashed border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 hover:border-blue-300 cursor-pointer transition-all group">
                     <div class="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center mb-3 group-hover:border-blue-200 group-hover:text-blue-500 text-slate-400 transition-colors shadow-sm">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

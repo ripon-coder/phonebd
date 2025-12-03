@@ -33,8 +33,8 @@ class StoreCameraSampleRequest extends FormRequest
         $productId = $this->route('product')->id;
 
         return [
-            'name' => 'required|string|max:255',
-            'variant' => 'nullable|string|max:255',
+            'name' => 'required|string|max:100',
+            'variant' => 'nullable|string|max:100',
             'photos' => 'required|array|max:4',
             'photos.*' => 'image|max:7168', // 7MB max
             'finger_print' => [
@@ -45,8 +45,14 @@ class StoreCameraSampleRequest extends FormRequest
                 }),
             ],
             'ip_address' => [
+                'bail',
                 'required',
                 'string',
+                function ($attribute, $value, $fail) {
+                    if (\App\Models\CameraSample::where('ip_address', $value)->where('is_ip_banned', true)->exists()) {
+                        $fail('Your IP address has been banned from submitting camera samples.');
+                    }
+                },
                 Rule::unique('camera_samples')->where(function ($query) use ($productId) {
                     return $query->where('product_id', $productId);
                 }),
@@ -57,9 +63,9 @@ class StoreCameraSampleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'finger_print.unique' => 'You have already submitted camera samples for this product.',
+            'finger_print.unique' => 'You have already submitted camera samples for this item.',
             'finger_print.required' => 'Unable to identify your device. Please try again.',
-            'ip_address.unique' => 'You have already submitted camera samples for this product.',
+            'ip_address.unique' => 'You have already submitted camera samples for this item.',
         ];
     }
 }

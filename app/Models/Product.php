@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes, \App\Traits\HasStorageImage, \Laravel\Scout\Searchable, \App\Traits\DeletesOldImages;
+    use HasFactory, SoftDeletes, \App\Traits\HasStorageImage, \Laravel\Scout\Searchable, \App\Traits\DeletesOldImages, \App\Traits\ClearsResponseCache;
 
     public function toSearchableArray()
     {

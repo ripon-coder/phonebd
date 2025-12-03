@@ -18,38 +18,65 @@ class AdForm
             ->components([
                 Section::make('Ad Details')
                     ->schema([
+
                         Forms\Components\TextInput::make('title')
                             ->required()
                             ->maxLength(255),
+
+                        Forms\Components\Select::make('type')
+                            ->options([
+                                'image' => 'Image Banner',
+                                'script' => 'Script (AdSense/JS)',
+                                'code' => 'Custom HTML/Code',
+                            ])
+                            ->required()
+                            ->reactive()
+                            ->default('script'),
+
+                        Forms\Components\Select::make('position')
+                            ->options([
+                                'header_top' => 'Header Top',
+                                'sidebar_right' => 'Sidebar Right',
+                                'article_inline' => 'Article Inline',
+                                'footer_sticky' => 'Footer Sticky',
+                                'product_below_hero' => 'Product: Below Hero',
+                                'product_below_specs' => 'Product: Below Specs',
+                                'product_below_faq' => 'Product: Below FAQ',
+                                'sidebar_middle' => 'Sidebar Middle',
+                                'sidebar_bottom' => 'Sidebar Bottom',
+                            ])
+                            ->required(),
 
                         Forms\Components\FileUpload::make('image')
                             ->image()
                             ->disk('backblaze')
                             ->directory('ads')
                             ->visibility('public')
-                            ->previewable(false)
+                            ->previewable(true)
                             ->openable(true)
                             ->downloadable(true)
-                            ->required()
+                            ->visible(fn ($get) => $get('type') === 'image')
+                            ->required(fn ($get) => $get('type') === 'image')
                             ->saveUploadedFileUsing(function (UploadedFile $file) {
                                 $manager = new ImageManager(new Driver());
                                 $image = $manager->read($file);
-                                
-                                // Optimize
+
+                                // Resize if too large
                                 if ($image->width() > 1200) {
                                     $image->scale(width: 1200);
                                 }
-                                
+
+                                // Encode to WebP
                                 $encoded = $image->toWebp(quality: 80);
-                                
+
                                 $filename = pathinfo($file->hashName(), PATHINFO_FILENAME) . '.webp';
                                 $path = 'ads/' . $filename;
-                                
+
                                 Storage::disk('backblaze')->put($path, (string) $encoded, [
                                     'visibility' => 'public',
-                                    'mimetype' => 'image/webp'
+                                    'mimetype' => 'image/webp',
                                 ]);
-                                
+
                                 return $path;
                             })
                             ->columnSpanFull(),
@@ -58,35 +85,23 @@ class AdForm
                             ->default('backblaze'),
 
                         Forms\Components\TextInput::make('link')
-                            ->required()
                             ->maxLength(255)
-                            ->url(),
+                            ->url()
+                            ->visible(fn ($get) => $get('type') === 'image')
+                            ->required(fn ($get) => $get('type') === 'image'),
 
-                        Forms\Components\Select::make('position')
-                            ->options([
-                                'home_top' => 'Home Top',
-                                'home_middle' => 'Home Middle',
-                                'home_bottom' => 'Home Bottom',
-                                'sidebar' => 'Sidebar',
-                            ])
-                            ->required(),
+                        Forms\Components\Textarea::make('script')
+                            ->rows(5)
+                            ->visible(fn ($get) => in_array($get('type'), ['script', 'code']))
+                            ->required(fn ($get) => in_array($get('type'), ['script', 'code']))
+                            ->columnSpanFull(),
 
                         Forms\Components\Toggle::make('is_active')
+                            ->default(true)
                             ->required(),
 
-                        Forms\Components\TextInput::make('sort_order')
-                            ->required()
-                            ->numeric()
-                            ->default(0),
-                            ]),
-
-                Forms\Components\Textarea::make('script')
-                    ->maxLength(65535),
-
-                Forms\Components\Toggle::make('status')
-                    ->required(),
-
-                Forms\Components\DatePicker::make('end_date'),
+                        Forms\Components\DatePicker::make('start_date'),
+                    ])->columns(2),
             ])->columns(1);
     }
 }

@@ -28,7 +28,7 @@
     window.initialReviews = @json($formattedReviews);
 </script>
 
-<div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden mt-6" 
+<div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden mt-3" 
      x-data="{ 
         lightboxOpen: false, 
         lightboxImage: '',
@@ -45,7 +45,7 @@
             this.page++;
             
             try {
-                const response = await fetch(`/products/${this.productId}/reviews?page=${this.page}`);
+                const response = await fetch(`/products/${this.productId}/reviews?page=${this.page}&t=${new Date().getTime()}`);
                 const data = await response.json();
                 
                 // Filter out duplicates based on ID

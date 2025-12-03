@@ -65,6 +65,13 @@
                                     <a href="{{ route('blog.category', $post->category->slug) }}" class="text-blue-600 font-semibold hover:underline">
                                         {{ $post->category->name }}
                                     </a>
+                                @else
+                                    <span class="flex items-center text-slate-500 font-medium">
+                                        <svg class="w-4 h-4 mr-1 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                        </svg>
+                                        No Category Found
+                                    </span>
                                 @endif
                                 <span class="text-gray-300">&bull;</span>
                                 <span class="flex items-center">
@@ -104,14 +111,18 @@
                         <h3 class="font-bold text-gray-900 text-sm uppercase tracking-wide">Categories</h3>
                     </div>
                     <div class="p-2">
-                        @foreach($categories as $category)
+                        @forelse($categories as $category)
                             <a href="{{ route('blog.category', $category->slug) }}" class="flex items-center justify-between group p-3 rounded-sm hover:bg-gray-50 transition-colors">
                                 <span class="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">{{ $category->name }}</span>
                                 <span class="text-xs font-medium text-gray-400 group-hover:text-blue-600 transition-colors">
                                     {{ $category->posts_count }}
                                 </span>
                             </a>
-                        @endforeach
+                        @empty
+                            <div class="p-4 text-center text-slate-500 text-sm">
+                                No categories found.
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>

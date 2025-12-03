@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Brand extends Model
 {
-    use HasFactory, SoftDeletes, \Laravel\Scout\Searchable, \App\Traits\DeletesOldImages;
+    use HasFactory, SoftDeletes, \Laravel\Scout\Searchable, \App\Traits\DeletesOldImages, \App\Traits\ClearsResponseCache;
 
     public function toSearchableArray()
     {

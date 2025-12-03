@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
+        $this->call([
+            AdSeeder::class,
+        ]);
+
         // 1. Create Brands
         $brands = \App\Models\Brand::factory(10)->create();
 

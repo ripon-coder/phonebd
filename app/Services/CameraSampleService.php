@@ -9,7 +9,7 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 class CameraSampleService
 {
-    public function getApprovedSamples(Product $product, $limit = 6)
+    public function getApprovedSamples(Product $product, $limit = 100)
     {
         return $product->cameraSamples()
             ->where('is_approve', true)

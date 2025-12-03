@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AntutuScore extends Model
 {
+    use \App\Traits\ClearsResponseCache;
+
     protected $fillable = [
         'product_id',
         'total_score',

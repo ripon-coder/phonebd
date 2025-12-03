@@ -16,12 +16,16 @@ Route::middleware(CacheResponse::class)->group(function () {
 
 Route::get('/search/suggestions', [App\Http\Controllers\SearchController::class, 'suggestions'])->name('search.suggestions');
 Route::get('/search', [App\Http\Controllers\SearchController::class, 'index'])->name('search.index');
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+})->name('csrf.token');
 
 Route::middleware(CacheResponse::class)->group(function () {
     Route::get('/buying-guide/{slug}', [App\Http\Controllers\DynamicPageController::class, 'show'])->name('dynamic_pages.show');
     Route::get('/{category_slug}/{product:slug}', [App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
 });
 
+Route::get('/products/{product}/reviews', [App\Http\Controllers\ProductController::class, 'getReviews'])->name('reviews.index');
 Route::post('/products/{product}/reviews', [App\Http\Controllers\ProductController::class, 'storeReview'])->name('reviews.store');
 Route::post('/products/{product}/camera-samples', [App\Http\Controllers\ProductController::class, 'storeCameraSample'])->name('camera-samples.store');
 

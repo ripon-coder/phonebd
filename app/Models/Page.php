@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
-    use HasFactory, \App\Traits\HasStorageImage, \App\Traits\DeletesOldImages;
+    use HasFactory, \App\Traits\HasStorageImage, \App\Traits\DeletesOldImages, \App\Traits\ClearsResponseCache;
 
     protected $webpFields = ['featured_image'];
     protected $fillable = [

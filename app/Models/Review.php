@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
+    use \App\Traits\ClearsResponseCache;
+
+    public $clearResponseCacheOnCreate = false;
+
     protected $fillable = [
         
         'product_id',
@@ -24,6 +28,7 @@ class Review extends Model
         'ip_address',
         'no_spam_rating',
         'is_approve',
+        'is_ip_banned',
     ];
 
     protected $casts = [
@@ -31,6 +36,7 @@ class Review extends Model
         'cons' => 'array',
         'images' => 'array',
         'is_approve' => 'boolean',
+        'is_ip_banned' => 'boolean',
     ];
 
     public function product()

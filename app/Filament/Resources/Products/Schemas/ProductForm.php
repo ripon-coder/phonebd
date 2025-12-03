@@ -304,7 +304,35 @@ class ProductForm
                     ->columns(2),
 
                 /**
-                 * STEP 4: SEO METADATA
+                 * STEP 4: USER INTERACTION
+                 */
+                Step::make('User Interaction')
+                    ->schema([
+                        Section::make('Camera Samples')
+                            ->schema([
+                                Forms\Components\Toggle::make('is_sample')
+                                    ->label('Enable Camera Samples')
+                                    ->default(false),
+                                Forms\Components\TextInput::make('sample_count_max')
+                                    ->label('Max Samples per User')
+                                    ->numeric()
+                                    ->default(0),
+                            ])->columns(2),
+
+                        Section::make('User Reviews')
+                            ->schema([
+                                Forms\Components\Toggle::make('is_review')
+                                    ->label('Enable User Reviews')
+                                    ->default(false),
+                                Forms\Components\TextInput::make('review_count_max')
+                                    ->label('Max Reviews per User')
+                                    ->numeric()
+                                    ->default(0),
+                            ])->columns(2),
+                    ]),
+
+                /**
+                 * STEP 5: SEO METADATA
                  */
                 Step::make('SEO Metadata')
                     ->schema([
@@ -377,7 +405,7 @@ class ProductForm
                     ]),
                     
                 /**
-                 * STEP 5: FAQS
+                 * STEP 6: FAQS
                  */
                 Step::make('FAQs')
                     ->schema([

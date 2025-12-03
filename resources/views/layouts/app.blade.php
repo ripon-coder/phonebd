@@ -10,7 +10,15 @@
     <title>@yield('title','PhoneBD') — {{ config('app.name', 'PhoneBD') }}</title>
 
     {{-- CSRF --}}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- CSRF --}}
+    <meta name="csrf-token" content="">
+    <script>
+        fetch('/csrf-token')
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.csrf_token);
+            });
+    </script>
 
     {{-- Preconnect for performance --}}
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -174,7 +182,7 @@
           <div class="hidden md:flex flex-1 max-w-lg mx-8" x-data="search" @click.away="close()">
             <form action="{{ route('search.index') }}" method="GET" class="w-full relative group">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="h-5 w-5 text-gray-400 group-focus-within:text-slate-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
               </div>
@@ -184,7 +192,7 @@
                 x-model.debounce.300ms="query"
                 @focus="isOpen = true"
                 placeholder="Search phones, brands, specs..." 
-                class="block w-full pl-10 pr-3 py-1.5 border border-gray-200 rounded-full leading-5 bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 sm:text-sm"
+                class="block w-full pl-10 pr-3 py-1.5 border border-gray-200 rounded-full leading-5 bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-0 focus:border-slate-900 transition-all duration-200 sm:text-sm"
                 autocomplete="off"
               >
               
@@ -236,24 +244,24 @@
 
           {{-- Right: Desktop Nav --}}
           <nav class="hidden md:flex items-center gap-1">
-            <a href="{{ route('products.index') }}" class="px-3 py-1 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Devices</a>
-            <a href="{{ route('brands.index') }}" class="px-3 py-1 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Brands</a>
-            <a href="{{ route('favorites.index') }}" class="px-3 py-1 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all" x-data="favoritesCount">
+            <a href="{{ route('products.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('products.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Devices</a>
+            <a href="{{ route('brands.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('brands.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Brands</a>
+            <a href="{{ route('favorites.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('favorites.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}" x-data="favoritesCount">
                 <span class="relative">
                     Favorites
                     <span x-show="count > 0" x-text="count" class="absolute -top-2 -right-3 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-slate-900 rounded-full border-2 border-white"></span>
                 </span>
             </a>
-            <a href="#" class="px-3 py-1 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Latest</a>
-            <a href="{{ route('blog.index') }}" class="px-3 py-1 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Blog</a>
+            <a href="#" class="px-3 py-1 rounded-sm text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Latest</a>
+            <a href="{{ route('blog.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('blog.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Blog</a>
           </nav>
 
           {{-- Mobile Menu Button --}}
           <div class="flex items-center gap-2 md:hidden">
-            <button @click="searchOpen = !searchOpen" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100">
+            <button @click="searchOpen = !searchOpen" class="p-2 rounded-sm text-gray-600 hover:bg-gray-100">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </button>
-            <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100">
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-sm text-gray-600 hover:bg-gray-100">
                 <svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 <svg x-show="mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -270,7 +278,7 @@
                 x-model.debounce.300ms="query"
                 @focus="isOpen = true"
                 placeholder="Search phones..." 
-                class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                class="w-full px-4 py-2 rounded-sm border border-gray-200 focus:ring-0 focus:border-slate-900 outline-none"
             >
 
             {{-- Suggestions Dropdown --}}
@@ -278,7 +286,7 @@
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 translate-y-1"
                  x-transition:enter-end="opacity-100 translate-y-0"
-                 class="absolute top-full left-0 w-full mt-2 bg-white rounded-lg shadow-xl border border-slate-100 overflow-hidden z-50"
+                 class="absolute top-full left-0 w-full mt-2 bg-white rounded-sm shadow-xl border border-slate-100 overflow-hidden z-50"
                  style="display: none;">
                 
                 {{-- Loading State --}}
@@ -292,7 +300,7 @@
                 <div x-show="!isLoading && results.length > 0" class="py-2">
                     <template x-for="result in results" :key="result.url">
                         <a :href="result.url" class="flex items-center gap-3 px-4 py-2 hover:bg-slate-50 transition-colors">
-                            <div class="w-10 h-10 rounded-md bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 p-1">
+                            <div class="w-10 h-10 rounded-sm bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 p-1">
                                 <template x-if="result.image">
                                     <img :src="result.image" class="w-full h-full object-contain mix-blend-multiply" loading="lazy">
                                 </template>
@@ -327,20 +335,22 @@
         style="display: none;"
       >
         <div class="px-4 pt-2 pb-3 space-y-1">
-            <a href="{{ route('home') }}" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Home</a>
-            <a href="{{ route('products.index') }}" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Devices</a>
-            <a href="{{ route('brands.index') }}" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Brands</a>
-            <a href="{{ route('favorites.index') }}" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50" x-data="favoritesCount">
+            <a href="{{ route('home') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('home') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Home</a>
+            <a href="{{ route('products.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('products.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Devices</a>
+            <a href="{{ route('brands.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('brands.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Brands</a>
+            <a href="{{ route('favorites.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('favorites.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}" x-data="favoritesCount">
                 <span class="relative inline-block">
                     Favorites
                     <span x-show="count > 0" x-text="count" class="absolute -top-1 -right-3 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-slate-900 rounded-full border-2 border-white"></span>
                 </span>
             </a>
-            <a href="#" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Latest Phones</a>
-            <a href="{{ route('blog.index') }}" class="block px-3 py-1.5 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Blog</a>
+            <a href="#" class="block px-3 py-1.5 rounded-sm text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Latest Phones</a>
+            <a href="{{ route('blog.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('blog.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Blog</a>
         </div>
       </div>
     </header>
+
+
 
     {{-- Flash / status messages --}}
     <div class="max-w-7xl mx-auto px-2 sm:px-2 md:px-6 lg:px-8 mt-2">

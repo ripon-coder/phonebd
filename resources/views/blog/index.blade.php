@@ -3,24 +3,24 @@
 @section('title', 'Blog')
 
 @section('content')
-    <div class="py-4 md:py-6">
-        <div class="text-center mb-6 md:mb-8">
-            <h1 class="text-2xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 mb-2 md:mb-4">
+    <div class="py-2 md:py-4">
+        <div class="text-center mb-4 md:mb-6">
+            <h1 class="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 mb-1 md:mb-2">
                 Latest News & Reviews
             </h1>
-            <p class="text-sm md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+            <p class="text-sm md:text-base text-gray-600 max-w-2xl mx-auto px-4">
                 Stay up to date with the latest mobile technology trends, in-depth reviews, and industry insights.
             </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6">
             {{-- Main Content --}}
             <div class="lg:col-span-3">
                 @if($posts->count() > 0)
-                    <div class="space-y-4">
+                    <div class="space-y-3">
                         @foreach($posts as $post)
-                            <article class="bg-white rounded-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row group h-full md:h-44 transition-colors hover:border-blue-200">
-                                <a href="{{ route('blog.show', $post->slug) }}" class="md:w-56 relative overflow-hidden h-48 md:h-auto shrink-0">
+                            <article class="bg-white rounded-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row group h-full md:h-36 transition-colors hover:border-blue-200">
+                                <a href="{{ route('blog.show', $post->slug) }}" class="md:w-48 relative overflow-hidden h-40 md:h-auto shrink-0">
                                     <img 
                                         src="{{ $post->getImageUrl('featured_image') ?? 'https://placehold.co/600x400/e2e8f0/1e293b?text=No+Image' }}" 
                                         alt="{{ $post->title }}" 
@@ -28,8 +28,8 @@
                                     >
                                 </a>
                                 
-                                <div class="p-5 flex-1 flex flex-col justify-center">
-                                    <div class="flex items-center gap-2 text-xs font-medium text-gray-500 mb-2">
+                                <div class="p-3 md:p-4 flex-1 flex flex-col justify-center">
+                                    <div class="flex items-center gap-2 text-xs font-medium text-gray-500 mb-1">
                                         @if($post->category)
                                             <span class="text-blue-600 uppercase tracking-wide">
                                                 {{ $post->category->name }}
@@ -41,21 +41,21 @@
                                         </time>
                                     </div>
                                     
-                                    <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 leading-tight">
+                                    <h2 class="text-base md:text-lg font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors line-clamp-2 leading-tight">
                                         <a href="{{ route('blog.show', $post->slug) }}">
                                             {{ $post->title }}
                                         </a>
                                     </h2>
                                     
-                                    <p class="text-gray-600 text-sm line-clamp-2 mb-0 leading-relaxed">
-                                        {{ Str::limit(strip_tags($post->content), 140) }}
+                                    <p class="text-gray-600 text-xs md:text-sm line-clamp-2 mb-0 leading-relaxed">
+                                        {{ Str::limit(strip_tags($post->content), 120) }}
                                     </p>
                                 </div>
                             </article>
                         @endforeach
                     </div>
 
-                    <div class="mt-10">
+                    <div class="mt-6">
                         {{ $posts->links() }}
                     </div>
                 @else
@@ -78,14 +78,18 @@
                         <h3 class="font-bold text-gray-900 text-sm uppercase tracking-wide">Categories</h3>
                     </div>
                     <div class="p-2">
-                        @foreach($categories as $category)
+                        @forelse($categories as $category)
                             <a href="{{ route('blog.category', $category->slug) }}" class="flex items-center justify-between group p-3 rounded-sm hover:bg-gray-50 transition-colors">
                                 <span class="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">{{ $category->name }}</span>
                                 <span class="text-xs font-medium text-gray-400 group-hover:text-blue-600 transition-colors">
                                     {{ $category->posts_count }}
                                 </span>
                             </a>
-                        @endforeach
+                        @empty
+                            <div class="p-4 text-center text-slate-500 text-sm">
+                                No categories found.
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>

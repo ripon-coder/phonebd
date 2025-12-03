@@ -90,7 +90,7 @@
             const response = await fetch('{{ route('camera-samples.store', $product->id) }}', {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name=\'csrf-token\']').getAttribute('content'),
                     'Accept': 'application/json'
                 },
                 body: formData

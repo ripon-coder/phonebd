@@ -9,19 +9,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ad extends Model
 {
-    use HasFactory, \App\Traits\HasStorageImage, \App\Traits\DeletesOldImages;
+    use HasFactory, SoftDeletes, \App\Traits\HasStorageImage, \App\Traits\DeletesOldImages, \App\Traits\ClearsResponseCache;
 
     protected $webpFields = ['image'];
 
     protected $fillable = [
         'title',
+        'type',
         'position',
         'image',
         'link',
         'script',
-        'status',
+        'is_active',
+        'views',
         'start_date',
-        'end_date',
         'storage_type',
     ];
 }

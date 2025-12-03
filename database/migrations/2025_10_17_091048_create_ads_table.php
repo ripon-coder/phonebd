@@ -14,21 +14,19 @@ return new class extends Migration
         Schema::create('ads', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('position');
+            $table->string('type')->default('script'); // image, script, code
+            $table->string('position'); // e.g., home_header, sidebar, footer
             $table->string('image')->nullable();
             $table->string('storage_type')->default('backblaze')->nullable();
             $table->string('link')->nullable();
-            $table->text('script')->nullable();
-            $table->boolean('is_active')->default(true); // Changed from 'status' to 'is_active'
+            $table->text('script')->nullable(); // For AdSense or other scripts
+            $table->boolean('is_active')->default(true);
+            $table->bigInteger('views')->default(0);
             $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
             $table->timestamps();
-            $table->softDeletes(); // Added softDeletes
+            $table->softDeletes();
 
-            // Added index, assuming 'status' in the original instruction meant 'is_active'
-            // and 'sort_order' was a placeholder or intended to be added.
-            // For now, I'll use 'is_active' and omit 'sort_order' as it's not defined.
-            $table->index(['title', 'position', 'is_active']);
+            $table->index(['position', 'is_active']);
         });
     }
 

@@ -100,6 +100,7 @@
             // Delete all existing pros/cons
             formData.delete('pros[]');
             formData.delete('cons[]');
+            formData.delete('_token');
             
             // Re-add only non-empty values
             prosValues.forEach(val => formData.append('pros[]', val));
@@ -149,7 +150,8 @@
                 let msg = 'An error occurred. Please try again.';
                 
                 if (error.errors) {
-                    msg = Object.values(error.errors).flat().join('\n');
+                    const allErrors = Object.values(error.errors).flat();
+                    msg = [...new Set(allErrors)].join('\n');
                 } else if (error.message) {
                     msg = error.message;
                 }

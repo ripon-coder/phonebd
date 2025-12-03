@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class CameraSample extends Model
 {
+    use \App\Traits\ClearsResponseCache;
+
+    public $clearResponseCacheOnCreate = false;
+
     protected $fillable = [
         'product_id',
         'name',
@@ -15,11 +19,13 @@ class CameraSample extends Model
         'ip_address',
         'finger_print',
         'storage_type',
+        'is_ip_banned',
     ];
 
     protected $casts = [
         'images' => 'array',
         'is_approve' => 'boolean',
+        'is_ip_banned' => 'boolean',
     ];
 
     public function product()

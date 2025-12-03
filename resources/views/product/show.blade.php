@@ -157,6 +157,8 @@
                 @endif
             </div>
 
+
+
             {{-- Specifications --}}
             <div class="bg-white rounded-sm border border-slate-100 overflow-hidden">
                 <div class="p-2 border-b border-slate-100">
@@ -192,6 +194,8 @@
                         <div class="p-8 text-center text-slate-500">
                             No specifications available yet.
                         </div>
+            
+
                     @endforelse
                 </div>
             </div>
@@ -237,6 +241,8 @@
                 </div>
             @endif
 
+
+
             {{-- Description --}}
             @if($product->short_description || $product->raw_html)
                 <div class="bg-white rounded-sm shadow-sm border border-slate-100 overflow-hidden">
@@ -254,23 +260,35 @@
             @endif
 
 
+
+
             {{-- Write a Review (Desktop Only) --}}
             <div id="reviews" class="hidden lg:block">
-                @if($totalReviews < $product->review_count_max)
-                    @include('components.product.review-form')
-                @else
-                    <div class="bg-white rounded-sm shadow-sm border border-slate-100 p-4 text-center">
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 mb-4">
-                            <svg class="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-2">Review Limit Reached</h3>
-                        <p class="text-slate-600 max-w-md mx-auto">
-                            This product has reached its maximum limit of {{ $product->review_count_max }} reviews. Thank you for your interest!
-                        </p>
-                    </div>
-                @endif
+@if($totalReviews < $product->review_count_max && $product->is_review)
+    @include('components.product.review-form')
+@else
+    <div class="bg-white rounded-sm shadow-sm border border-slate-100 p-4 text-center">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 mb-4">
+            <svg class="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 mb-2">Review Not Available</h3>
+
+        @if(!$product->is_review)
+            <p class="text-slate-600 max-w-md mx-auto">
+                This product is currently not accepting new reviews.
+            </p>
+        @else
+            <p class="text-slate-600 max-w-md mx-auto">
+                You've reached the maximum review limit. New reviews are disabled.
+            </p>
+        @endif
+    </div>
+@endif
+
 
                 {{-- Reviews List --}}
                 @include('components.product.review-list')
@@ -279,6 +297,8 @@
 
         {{-- Sidebar (Right Column) --}}
         <div class="lg:col-span-4 space-y-3">
+            
+
 
             {{-- Camera Samples --}}
             @include('components.product.camera-sample')
@@ -289,6 +309,10 @@
                 @include('components.product.feature-scores', ['performance' => $product->productPerformance])
             @endif
 
+
+
+
+
             {{-- Antutu Score --}}
             @if($product->antutuScore && $product->antutuScore->total_score)
                 @include('components.product.antutu-score', ['score' => $product->antutuScore])
@@ -296,25 +320,42 @@
 
             {{-- Write a Review (Mobile Only) --}}
             <div id="reviews-mobile" class="lg:hidden">
-                @if($totalReviews < $product->review_count_max)
+                @if($totalReviews < $product->review_count_max && $product->is_review)
                     @include('components.product.review-form')
                 @else
-                    <div class="bg-white rounded-sm shadow-sm border border-slate-100 p-8 text-center">
+                    <div class="bg-white rounded-sm shadow-sm border border-slate-100 p-4 text-center">
                         <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 mb-4">
                             <svg class="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-2">Review Limit Reached</h3>
-                        <p class="text-slate-600 max-w-md mx-auto">
-                            This product has reached its maximum limit of {{ $product->review_count_max }} reviews. Thank you for your interest!
-                        </p>
+
+                        <h3 class="text-md font-bold text-slate-900 mb-2">
+                            Review Not Available
+                        </h3>
+
+                        @if(!$product->is_review)
+                            <p class="text-slate-600 max-w-md mx-auto text-sm">
+                                Reviews for this item are currently turned off.
+                            </p>
+                        @else
+                            <p class="text-slate-600 max-w-md mx-auto text-sm">
+                                This item has reached its review limit.
+                            </p>
+                        @endif
                     </div>
                 @endif
 
                 {{-- Reviews List --}}
                 @include('components.product.review-list')
             </div>
+
+
+
+
+
+
 
             {{-- Similar Price Products --}}
             @if(isset($similarPriceProducts) && $similarPriceProducts->count() > 0)
@@ -386,6 +427,8 @@
                     </div>
                 </div>
             @endif
+
+
         </div>
     </div>
 

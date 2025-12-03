@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GeneralSetting extends Model
 {
-    use HasFactory, \App\Traits\DeletesOldImages;
+    use HasFactory, \App\Traits\DeletesOldImages, \App\Traits\ClearsResponseCache;
     
     public $imageFields = ['site_logo', 'site_favicon'];
     protected $fillable = [

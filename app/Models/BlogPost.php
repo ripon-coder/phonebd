@@ -11,7 +11,7 @@ use App\Traits\HasStorageImage;
 
 class BlogPost extends Model
 {
-    use HasFactory, SoftDeletes, HasStorageImage, \App\Traits\DeletesOldImages;
+    use HasFactory, SoftDeletes, HasStorageImage, \App\Traits\DeletesOldImages, \App\Traits\ClearsResponseCache;
     
     protected $webpFields = ['featured_image'];
 

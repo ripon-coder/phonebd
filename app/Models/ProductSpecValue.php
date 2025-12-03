@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductSpecValue extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, \App\Traits\ClearsResponseCache;
     protected $fillable = [
         'product_id',
         'product_spec_group_id',

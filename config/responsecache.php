@@ -69,7 +69,7 @@ return [
      * Each replacer must implement the Replacer interface.
      */
     'replacers' => [
-        \Spatie\ResponseCache\Replacers\CsrfTokenReplacer::class,
+        \App\Support\ResponseCache\Replacers\CsrfTokenReplacer::class,
     ],
 
     /*

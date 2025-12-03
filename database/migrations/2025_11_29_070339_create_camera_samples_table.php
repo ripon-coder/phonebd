@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('storage_type')->default('backblaze')->nullable();
             $table->boolean('is_approve')->default(false);
             $table->string('ip_address')->nullable();
+            $table->boolean('is_ip_banned')->default(false);
             $table->string('finger_print')->nullable();
             $table->timestamps();
         });

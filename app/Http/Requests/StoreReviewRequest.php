@@ -15,6 +15,13 @@ class StoreReviewRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'ip_address' => $this->ip(),
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -42,6 +49,13 @@ class StoreReviewRequest extends FormRequest
                     return $query->where('product_id', $this->route('product')->id);
                 }),
             ],
+            'ip_address' => [
+                'required',
+                'string',
+                Rule::unique('reviews')->where(function ($query) {
+                    return $query->where('product_id', $this->route('product')->id);
+                }),
+            ],
             'storage_type' => 'nullable|string',
         ];
     }
@@ -51,6 +65,7 @@ class StoreReviewRequest extends FormRequest
         return [
             'finger_print.unique' => 'You have already submitted a review for this product.',
             'finger_print.required' => 'Unable to verify device identity. Please disable ad blockers and try again.',
+            'ip_address.unique' => 'You have already submitted a review for this product.',
         ];
     }
 }

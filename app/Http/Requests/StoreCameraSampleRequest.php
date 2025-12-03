@@ -16,6 +16,13 @@ class StoreCameraSampleRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'ip_address' => $this->ip(),
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -37,6 +44,13 @@ class StoreCameraSampleRequest extends FormRequest
                     return $query->where('product_id', $productId);
                 }),
             ],
+            'ip_address' => [
+                'required',
+                'string',
+                Rule::unique('camera_samples')->where(function ($query) use ($productId) {
+                    return $query->where('product_id', $productId);
+                }),
+            ],
         ];
     }
 
@@ -45,6 +59,7 @@ class StoreCameraSampleRequest extends FormRequest
         return [
             'finger_print.unique' => 'You have already submitted camera samples for this product.',
             'finger_print.required' => 'Unable to identify your device. Please try again.',
+            'ip_address.unique' => 'You have already submitted camera samples for this product.',
         ];
     }
 }

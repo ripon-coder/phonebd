@@ -1,5 +1,5 @@
 @extends('layouts.app', [
-    'title' => $brand->name . ' Mobile Phones Price in Bangladesh',
+    'title' => $brand->name . ' Price in Bangladesh',
     'meta_description' => 'Latest ' . $brand->name . ' mobile phones price in Bangladesh. Check out ' . $brand->name . ' smartphone specifications, reviews, and features.',
 ])
 

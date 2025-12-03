@@ -1,5 +1,5 @@
 @extends('layouts.app', [
-    'title' => $dynamicPage->title . ' - Buying Guide - Mobile Phones Price in Bangladesh',
+    'title' => $dynamicPage->title . ' - Specs & Buying Guide',
     'meta_description' => $dynamicPage->meta_description ?? 'Check out our ' . $dynamicPage->title . ' buying guide. Best deals on ' . $dynamicPage->title . ' smartphones in Bangladesh.',
 ])
 

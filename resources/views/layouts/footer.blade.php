@@ -4,7 +4,7 @@
             {{-- Brand & About --}}
             <div class="col-span-1 md:col-span-1">
                 <a href="{{ url('/') }}" class="flex items-center gap-2 group mb-4">
-                    <img src="{{ asset('images/logo.webp') }}" alt="PhoneBD" class="h-10 w-auto object-contain">
+                    <img loading="lazy" src="{{ asset('images/logo.webp') }}" alt="PhoneBD" class="h-10 w-auto object-contain">
                 </a>
                 <p class="text-slate-500 text-sm leading-relaxed mb-4">
                     Your ultimate destination for mobile phone specifications, reviews, and latest tech news in Bangladesh.
@@ -55,11 +55,11 @@
                 <h3 class="font-bold text-slate-900 mb-4">Stay Updated</h3>
                 <p class="text-slate-500 text-sm mb-4">Subscribe to our newsletter for the latest mobile news and reviews.</p>
                 <form class="space-y-2">
-                    <input type="email" placeholder="Enter your email" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
-                    <button disabled type="submit" class="w-full bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-800 transition-colors">Subscribe</button>
+                    <input type="email" placeholder="Enter your email" class="w-full px-4 py-2 rounded-sm border border-slate-200  outline-none text-sm">
+                    <button disabled type="submit" class="w-full bg-slate-900 text-white px-4 py-2 rounded-sm text-sm font-semibold hover:bg-slate-800 transition-colors">Subscribe</button>
                 </form>
             </div>
-        </div>
+        </div>  
 
         <div class="pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
             <p class="text-sm text-slate-500 text-center md:text-left">

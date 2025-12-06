@@ -54,12 +54,12 @@
         </div>
 
         {{-- Page Content --}}
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{{ $page->title }}</h1>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2 text-center">{{ $page->title }}</h1>
             
             @if($page->featured_image)
                 <div class="mb-2 rounded-sm overflow-hidden shadow-lg">
-                    <img src="{{ Storage::url($page->featured_image) }}" alt="{{ $page->title }}" class="w-full h-auto object-cover">
+                    <img src="{{ Storage::url($page->featured_image) }}" alt="{{ $page->title }}" class="w-full h-auto object-cover" loading="lazy">
                 </div>
             @endif
 

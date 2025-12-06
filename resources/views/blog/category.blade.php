@@ -53,6 +53,7 @@
                                     <img 
                                         src="{{ $post->featured_image ? asset('storage/' . $post->featured_image) : 'https://placehold.co/600x400/e2e8f0/1e293b?text=No+Image' }}" 
                                         alt="{{ $post->title }}" 
+                                        loading="lazy"
                                         class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                                     >
                                 </a>

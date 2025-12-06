@@ -56,6 +56,7 @@
                                     <img 
                                         src="{{ $post->getImageUrl('featured_image') ?? 'https://placehold.co/600x400/e2e8f0/1e293b?text=No+Image' }}" 
                                         alt="{{ $post->title }}" 
+                                        loading="lazy"
                                         class="w-full h-full object-cover"
                                     >
                                 </a>

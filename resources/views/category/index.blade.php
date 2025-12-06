@@ -70,7 +70,7 @@
                         class="w-16 h-16 mb-4 relative flex items-center justify-center">
                         @if ($category->image)
                             <img src="{{ asset('storage/' . $category->image) }}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
-                                alt="{{ $category->name }}">
+                                loading="lazy" alt="{{ $category->name }}">
                         @else
                             <div class="w-full h-full bg-slate-50 rounded-full flex items-center justify-center">
                                 <span class="text-2xl font-bold text-slate-300 group-hover:text-slate-500">{{ substr($category->name, 0, 1) }}</span>

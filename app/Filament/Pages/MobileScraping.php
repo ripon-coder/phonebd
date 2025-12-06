@@ -59,33 +59,100 @@ class MobileScraping extends Page implements HasForms
             ->statePath('data');
     }
 
-    public function submit(): void
-    {
-        $service = app(ScrapingService::class);
-        $data = $this->form->getState();
-        $urls = explode("\n", $data['urls']);
-        $rawHtml = $data['raw_html'] ?? null;
-        $title = $data['title'] ?? null;
-        
-        $results = [];
+    public bool $processing = false;
+    public int $total = 0;
+    public int $processed = 0;
+    public array $queue = [];
+    public array $scrapingResults = [];
+    public ?string $currentUrl = null;
 
+    public function initScraping()
+    {
+        $data = $this->form->getState();
+        
+        $this->queue = [];
+        $rawHtml = $data['raw_html'] ?? null;
+        
         if (!empty($rawHtml)) {
-            // Manual HTML submission (Process only once)
-            // Use the first URL as reference or a placeholder
-            $url = trim($urls[0] ?? 'manual-submission');
+            $url = trim(explode("\n", $data['urls'] ?? '')[0] ?? 'manual-submission');
             if (empty($url)) $url = 'manual-submission';
             
-            $results[] = $service->scrapeAndSave($url, $data['category_id'], $data['brand_id'], $rawHtml, $title);
+            $this->queue[] = [
+                'type' => 'raw',
+                'url' => $url,
+                'content' => $rawHtml,
+                'cat' => $data['category_id'],
+                'brand' => $data['brand_id'],
+                'title' => $data['title'] ?? null,
+            ];
         } else {
-            // Batch URL processing
-            foreach ($urls as $url) {
-                $url = trim($url);
-                if (empty($url)) continue;
-                
-                $results[] = $service->scrapeAndSave($url, $data['category_id'], $data['brand_id'], null, $title);
+            $lines = explode("\n", $data['urls']);
+            foreach ($lines as $line) {
+                $u = trim($line);
+                if (!empty($u)) {
+                    $this->queue[] = [
+                        'type' => 'url',
+                        'url' => $u,
+                        'cat' => $data['category_id'],
+                        'brand' => $data['brand_id'],
+                        'title' => $data['title'] ?? null,
+                    ];
+                }
             }
         }
 
+        $this->total = count($this->queue);
+        $this->processed = 0;
+        $this->scrapingResults = [];
+        $this->processing = true;
+        
+        if ($this->total === 0) {
+            $this->processing = false;
+            Notification::make()->title('No URLs found')->warning()->send();
+            return 0;
+        }
+
+        return $this->total;
+    }
+
+    public function processNext()
+    {
+        if (empty($this->queue)) {
+            $this->processing = false;
+            $this->finalizeScraping();
+            return false;
+        }
+
+        $item = array_shift($this->queue);
+        $this->currentUrl = $item['url'];
+        
+        try {
+            set_time_limit(120); 
+            $service = app(ScrapingService::class);
+            
+            if ($item['type'] === 'raw') {
+                $result = $service->scrapeAndSave($item['url'], $item['cat'], $item['brand'], $item['content'], $item['title']);
+            } else {
+                $result = $service->scrapeAndSave($item['url'], $item['cat'], $item['brand'], null, $item['title']);
+            }
+        } catch (\Exception $e) {
+            $result = ['status' => 'error', 'message' => "Error processing {$item['url']}: " . $e->getMessage()];
+            \Log::error('Scraping Error: ' . $e->getMessage());
+        }
+        
+        $this->scrapingResults[] = $result;
+        $this->processed++;
+        
+        // Return true to continue, unless queue is now empty
+        return count($this->queue) > 0;
+    }
+
+    public function finalizeScraping()
+    {
+        $this->processing = false;
+        $this->currentUrl = null;
+
+        $results = $this->scrapingResults;
         $successCount = collect($results)->where('status', 'success')->count();
         $skippedCount = collect($results)->where('status', 'skipped')->count();
         $errorCount = collect($results)->where('status', 'error')->count();
@@ -94,15 +161,27 @@ class MobileScraping extends Page implements HasForms
             ->title('Scraping Completed')
             ->body("Success: $successCount, Skipped: $skippedCount, Errors: $errorCount")
             ->success()
+            ->persistent()
             ->send();
             
         if ($errorCount > 0) {
              $errors = collect($results)->where('status', 'error')->pluck('message')->join("\n");
+             if (strlen($errors) > 5000) {
+                 $errors = substr($errors, 0, 5000) . '... (truncated)';
+             }
+             
              Notification::make()
                 ->title('Scraping Errors')
                 ->body($errors)
                 ->danger()
+                ->persistent()
                 ->send();
         }
+    }
+
+    // Keep the submit method empty or aliased if needed by interface, but we are using wire:submit="initScraping" in view
+    public function submit(): void 
+    {
+        $this->initScraping();
     }
 }

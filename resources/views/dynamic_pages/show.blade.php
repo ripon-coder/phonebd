@@ -83,6 +83,7 @@
                             <div class="aspect-w-1 aspect-h-1 relative group cursor-pointer" @click="videoModalOpen = true">
                                 <img src="https://img.youtube.com/vi/{{ $dynamicPage->youtube_link }}/maxresdefault.jpg" 
                                      alt="Video Thumbnail" 
+                                     loading="lazy"
                                      class="w-full h-full object-cover rounded-sm">
                                 <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors rounded-sm">
                                     <div class="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
@@ -155,7 +156,7 @@
                                     </div>
                                 </div>
                                 @if ($phone->image)
-                                    <img src="{{ $phone->getImageUrl('image') }}"
+                                    <img loading="lazy" src="{{ $phone->getImageUrl('image') }}"
                                         alt="{{ $phone->title }}"
                                         class="w-full h-full object-cover">
                                 @else

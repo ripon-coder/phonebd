@@ -218,7 +218,7 @@
                     <div class="grid grid-cols-2 gap-4" x-show="images.length > 0" style="display: none;">
                         <template x-for="(image, index) in images" :key="index">
                             <div class="relative group h-32 rounded-lg overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
-                                <img :src="image" class="max-w-full max-h-full object-contain">
+                                <img :src="image" loading="lazy" class="max-w-full max-h-full object-contain">
                             </div>
                         </template>
                         

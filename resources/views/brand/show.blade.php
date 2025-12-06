@@ -76,7 +76,7 @@
         <div class="bg-white rounded-sm border border-slate-200 p-2 mb-3 flex items-center gap-5">
             <div class="w-20 h-20 shrink-0 flex items-center justify-center bg-slate-50 rounded-sm p-2 border border-slate-100">
                 @if ($brand->image)
-                    <img src="{{ $brand->getImageUrl('image') }}" class="w-full h-full object-contain" alt="{{ $brand->name }}">
+                    <img src="{{ $brand->getImageUrl('image') }}" class="w-full h-full object-contain" alt="{{ $brand->name }}" loading="lazy">
                 @else
                     <span class="text-3xl font-bold text-slate-300">{{ substr($brand->name, 0, 1) }}</span>
                 @endif
@@ -134,7 +134,7 @@
                                     </div>
                                 </div>
                                 @if ($phone->image)
-                                    <img src="{{ $phone->getImageUrl('image') }}"
+                                    <img loading="lazy" src="{{ $phone->getImageUrl('image') }}"
                                         alt="{{ $phone->title }}"
                                         class="w-full h-full object-cover">
                                 @else

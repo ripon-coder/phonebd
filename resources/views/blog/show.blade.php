@@ -102,6 +102,7 @@
                             <img 
                                 src="{{ $post->getImageUrl('featured_image') }}" 
                                 alt="{{ $post->title }}" 
+                                loading="lazy"
                                 class="w-full h-full object-cover"
                             >
                         </div>

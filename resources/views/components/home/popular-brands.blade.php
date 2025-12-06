@@ -20,7 +20,7 @@
                 <div
                     class="w-10 h-10 mb-2 relative grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
                     @if ($brand->image)
-                        <img src="{{ $brand->getImageUrl('image') }}" class="w-full h-full object-contain"
+                        <img loading="lazy" src="{{ $brand->getImageUrl('image') }}" class="w-full h-full object-contain"
                             alt="{{ $brand->name }}">
                     @else
                         {{-- Fallback Text/Icon if no image --}}

@@ -202,7 +202,7 @@
           {{-- Left: Logo --}}
           <div class="flex items-center gap-4">
             <a href="{{ url('/') }}" class="flex items-center gap-2 group">
-              <img src="{{ asset('images/logo.webp') }}" alt="PhoneBD" class="h-10 w-auto object-contain">
+              <img src="{{ asset('images/logo.webp') }}" alt="PhoneBD" class="h-10 w-auto object-contain" loading="lazy">
             </a>
           </div>
 

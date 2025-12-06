@@ -70,7 +70,7 @@
                         class="w-16 h-16 mb-4 relative grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
                         @if ($brand->image)
                             <img src="{{ asset('storage/' . $brand->image) }}" class="w-full h-full object-contain"
-                                alt="{{ $brand->name }}">
+                                loading="lazy" alt="{{ $brand->name }}">
                         @else
                             <span
                                 class="text-3xl font-bold text-slate-300 group-hover:text-slate-500">{{ substr($brand->name, 0, 1) }}</span>

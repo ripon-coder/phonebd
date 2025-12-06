@@ -200,7 +200,7 @@
                                     </div>
                                 </div>
                                 @if ($phone->image)
-                                    <img src="{{ $phone->getImageUrl('image') }}"
+                                    <img loading="lazy" src="{{ $phone->getImageUrl('image') }}"
                                         alt="{{ $phone->title }}"
                                         class="w-full h-full object-cover">
                                 @else

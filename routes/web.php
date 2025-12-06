@@ -9,9 +9,9 @@ Route::middleware(CacheResponse::class)->group(function () {
     Route::get('/brands', [App\Http\Controllers\BrandController::class, 'index'])->name('brands.index');
     Route::get('/brands/{brand:slug}', [App\Http\Controllers\BrandController::class, 'show'])->name('brands.show');
     Route::get('/devices', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
-    Route::get('/blog', [App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
-    Route::get('/blog/{post}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
-    Route::get('/blog/category/{category}', [App\Http\Controllers\BlogController::class, 'category'])->name('blog.category');
+    Route::get('/blogs', [App\Http\Controllers\BlogController::class, 'index'])->name('blogs.index');
+    Route::get('/blogs/{post}', [App\Http\Controllers\BlogController::class, 'show'])->name('blogs.show');
+    Route::get('/blogs/category/{category}', [App\Http\Controllers\BlogController::class, 'category'])->name('blogs.category');
     Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/{category:slug}', [App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
 });

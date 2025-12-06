@@ -3,7 +3,7 @@
 @section('title', $page->meta_title ?? $page->title)
 @section('meta_description', $page->meta_description)
 @section('meta_keywords', $page->meta_keywords)
-@section('og_image', $page->featured_image ? Storage::url($page->featured_image) : asset('images/og-default.jpg'))
+@section('og_image', $page->featured_image ? Storage::url($page->featured_image) : asset('images/fallback-img.png'))
 @section('og_type', 'article')
 
 @push('schema')

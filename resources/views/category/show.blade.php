@@ -3,7 +3,7 @@
     'meta_description' => $category->meta_description ?? 'Latest ' . $category->name . ' smartphones price in Bangladesh.',
 ])
 
-@section('og_image', $category->image ? asset('storage/' . $category->image) : asset('images/og-default.jpg'))
+@section('og_image', $category->image ? asset('storage/' . $category->image) : asset('images/fallback-img.png'))
 @section('og_type', 'website')
 
 @push('schema')

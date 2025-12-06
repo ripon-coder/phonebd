@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Blog - ' . $category->name)
+@section('title', 'Blogs - ' . $category->name)
 @section('meta_description', 'Read the latest articles and reviews in ' . $category->name . ' category on PhoneBD Blog.')
-@section('og_image', asset('images/og-default.jpg'))
+@section('og_image', asset('images/fallback-img.png'))
 @section('og_type', 'website')
 
 @push('schema')
@@ -18,8 +18,8 @@
   },{
     "@type": "ListItem",
     "position": 2,
-    "name": "Blog",
-    "item": "{{ route('blog.index') }}"
+    "name": "Blogs",
+    "item": "{{ route('blogs.index') }}"
   },{
     "@type": "ListItem",
     "position": 3,
@@ -49,7 +49,7 @@
                     <div class="space-y-4">
                         @foreach($posts as $post)
                             <article class="bg-white rounded-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row group h-full md:h-44 transition-colors hover:border-blue-200">
-                                <a href="{{ route('blog.show', $post->slug) }}" class="md:w-56 relative overflow-hidden h-48 md:h-auto shrink-0">
+                                <a href="{{ route('blogs.show', $post->slug) }}" class="md:w-56 relative overflow-hidden h-48 md:h-auto shrink-0">
                                     <img 
                                         src="{{ $post->featured_image ? asset('storage/' . $post->featured_image) : 'https://placehold.co/600x400/e2e8f0/1e293b?text=No+Image' }}" 
                                         alt="{{ $post->title }}" 
@@ -69,7 +69,7 @@
                                     </div>
                                     
                                     <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 leading-tight">
-                                        <a href="{{ route('blog.show', $post->slug) }}">
+                                        <a href="{{ route('blogs.show', $post->slug) }}">
                                             {{ $post->title }}
                                         </a>
                                     </h2>
@@ -95,7 +95,7 @@
                         <h3 class="text-lg font-medium text-gray-900">No posts found in this category</h3>
                         <p class="text-gray-500 mt-1">Check back later for new updates.</p>
                         <div class="mt-6">
-                            <a href="{{ route('blog.index') }}" class="text-blue-600 font-medium hover:underline">View all posts</a>
+                            <a href="{{ route('blogs.index') }}" class="text-blue-600 font-medium hover:underline">View all posts</a>
                         </div>
                     </div>
                 @endif
@@ -109,7 +109,7 @@
                     </div>
                     <div class="p-2">
                         @foreach($categories as $cat)
-                            <a href="{{ route('blog.category', $cat->slug) }}" class="flex items-center justify-between group p-3 rounded-sm hover:bg-gray-50 transition-colors">
+                            <a href="{{ route('blogs.category', $cat->slug) }}" class="flex items-center justify-between group p-3 rounded-sm hover:bg-gray-50 transition-colors">
                                 <span class="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">{{ $cat->name }}</span>
                                 <span class="text-xs font-medium text-gray-400 group-hover:text-blue-600 transition-colors">
                                     {{ $cat->posts_count }}

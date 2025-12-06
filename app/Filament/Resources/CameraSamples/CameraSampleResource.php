@@ -72,4 +72,14 @@ class CameraSampleResource extends Resource
             //'edit' => EditCameraSample::route('/{record}/edit'),
         ];
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('is_approve', false)->count() ?: null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::where('is_approve', false)->exists() ? 'danger' : 'primary';
+    }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $post->title)
-@section('og_image', $post->featured_image ? $post->getImageUrl('featured_image') : asset('images/og-default.jpg'))
+@section('og_image', $post->featured_image ? $post->getImageUrl('featured_image') : asset('images/fallback-img.png'))
 @section('og_type', 'article')
 
 @push('schema')
@@ -17,13 +17,13 @@
   },{
     "@type": "ListItem",
     "position": 2,
-    "name": "Blog",
-    "item": "{{ route('blog.index') }}"
+    "name": "Blogs",
+    "item": "{{ route('blogs.index') }}"
   }@if($post->category),{
     "@type": "ListItem",
     "position": 3,
     "name": "{{ $post->category->name }}",
-    "item": "{{ route('blog.category', $post->category->slug) }}"
+    "item": "{{ route('blogs.category', $post->category->slug) }}"
   },{
     "@type": "ListItem",
     "position": 4,
@@ -40,7 +40,7 @@
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "headline": "{{ $post->title }}",
-  "image": "{{ $post->featured_image ? $post->getImageUrl('featured_image') : asset('images/og-default.jpg') }}",
+  "image": "{{ $post->featured_image ? $post->getImageUrl('featured_image') : asset('images/fallback-img.png') }}",
   "datePublished": "{{ $post->created_at->toIso8601String() }}",
   "dateModified": "{{ $post->updated_at->toIso8601String() }}",
   "author": {
@@ -69,7 +69,7 @@
                         <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                         </svg>
-                        <a href="{{ route('blog.index') }}" class="ml-1 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors md:ml-2">Blog</a>
+                        <a href="{{ route('blogs.index') }}" class="ml-1 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors md:ml-2">Blogs</a>
                     </div>
                 </li>
                 @if($post->category)
@@ -78,7 +78,7 @@
                         <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                         </svg>
-                        <a href="{{ route('blog.category', $post->category->slug) }}" class="ml-1 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors md:ml-2">{{ $post->category->name }}</a>
+                        <a href="{{ route('blogs.category', $post->category->slug) }}" class="ml-1 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors md:ml-2">{{ $post->category->name }}</a>
                     </div>
                 </li>
                 @endif
@@ -111,7 +111,7 @@
                         <header class="mb-8 border-b border-gray-100 pb-8">
                             <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-4">
                                 @if($post->category)
-                                    <a href="{{ route('blog.category', $post->category->slug) }}" class="text-blue-600 font-semibold hover:underline">
+                                    <a href="{{ route('blogs.category', $post->category->slug) }}" class="text-blue-600 font-semibold hover:underline">
                                         {{ $post->category->name }}
                                     </a>
                                 @else
@@ -161,7 +161,7 @@
                     </div>
                     <div class="p-2">
                         @forelse($categories as $category)
-                            <a href="{{ route('blog.category', $category->slug) }}" class="flex items-center justify-between group p-3 rounded-sm hover:bg-gray-50 transition-colors">
+                            <a href="{{ route('blogs.category', $category->slug) }}" class="flex items-center justify-between group p-3 rounded-sm hover:bg-gray-50 transition-colors">
                                 <span class="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">{{ $category->name }}</span>
                                 <span class="text-xs font-medium text-gray-400 group-hover:text-blue-600 transition-colors">
                                     {{ $category->posts_count }}

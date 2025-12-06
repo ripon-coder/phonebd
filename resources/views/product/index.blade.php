@@ -3,7 +3,7 @@
     'meta_description' => 'Browse all mobile phones and accessories available on PhoneBD.',
 ])
 
-@section('og_image', asset('images/og-default.jpg'))
+@section('og_image', asset('images/fallback-img.png'))
 @section('og_type', 'website')
 
 @section('content')

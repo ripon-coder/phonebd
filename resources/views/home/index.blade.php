@@ -1,9 +1,9 @@
 @extends('layouts.app', [
     'title' => 'Mobile Specs & Prices',
-    'meta_description' => 'Dummy mobile specs, dummy brand list for testing layout.',
+    'meta_description' => 'Find the latest mobile prices, full specifications, reviews, and comparisons in Bangladesh. PhoneBD delivers fast, accurate, and user-friendly mobile information to help you choose the right device.',
 ])
 
-@section('og_image', asset('images/og-default.jpg'))
+@section('og_image', asset('images/fallback-img.png'))
 @section('og_type', 'website')
 
 @push('schema')

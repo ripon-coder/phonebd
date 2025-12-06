@@ -2,7 +2,7 @@
 
 @section('title', 'Search Results for ' . $query)
 @section('meta_description', 'Search results for ' . $query . ' on PhoneBD.')
-@section('og_image', asset('images/og-default.jpg'))
+@section('og_image', asset('images/fallback-img.png'))
 @section('og_type', 'website')
 
 @push('schema')

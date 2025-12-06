@@ -8,13 +8,26 @@
     <meta name="description" content="{{ $meta_description ?? trim($__env->yieldContent('meta_description', 'PhoneBD — Mobile & gadget specs, lightning fast.')) }}">
 
     <title>{{ $title ?? trim($__env->yieldContent('title', config('app.name', 'PhoneBD'))) }} | Phonebd.net</title>
+    <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+        }
+    </script>
 
     {{-- Open Graph / Facebook --}}
     <meta property="og:type" content="@yield('og_type', 'website')" />
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:title" content="{{ $title ?? trim($__env->yieldContent('title', config('app.name', 'PhoneBD'))) }} | Phonebd.net" />
     <meta property="og:description" content="{{ $meta_description ?? trim($__env->yieldContent('meta_description', 'PhoneBD — Mobile & gadget specs, lightning fast.')) }}" />
-    <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))" />
+    <meta property="og:image" content="@yield('og_image', asset('images/fallback-img.png'))" />
     <meta property="og:site_name" content="PhoneBD" />
 
     {{-- Twitter --}}
@@ -22,7 +35,7 @@
     <meta name="twitter:url" content="{{ url()->current() }}" />
     <meta name="twitter:title" content="{{ $title ?? trim($__env->yieldContent('title', config('app.name', 'PhoneBD'))) }} | Phonebd.net" />
     <meta name="twitter:description" content="{{ $meta_description ?? trim($__env->yieldContent('meta_description', 'PhoneBD — Mobile & gadget specs, lightning fast.')) }}" />
-    <meta name="twitter:image" content="@yield('og_image', asset('images/og-default.jpg'))" />
+    <meta name="twitter:image" content="@yield('og_image', asset('images/fallback-img.png'))" />
 
     {{-- Canonical --}}
     <link rel="canonical" href="@yield('canonical', url()->current())" />
@@ -189,7 +202,7 @@
           {{-- Left: Logo --}}
           <div class="flex items-center gap-4">
             <a href="{{ url('/') }}" class="flex items-center gap-2 group">
-              <img src="{{ asset('images/logo.png') }}" alt="PhoneBD" class="h-10 w-auto object-contain">
+              <img src="{{ asset('images/logo.webp') }}" alt="PhoneBD" class="h-10 w-auto object-contain">
             </a>
           </div>
 
@@ -268,7 +281,7 @@
                     <span x-show="count > 0" x-text="count" class="absolute -top-2 -right-3 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-slate-900 rounded-full border-2 border-white"></span>
                 </span>
             </a>
-            <a href="{{ route('blog.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('blog.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Blog</a>
+            <a href="{{ route('blogs.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('blogs.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Blogs</a>
           </nav>
 
           {{-- Mobile Menu Button --}}
@@ -360,7 +373,7 @@
                     <span x-show="count > 0" x-text="count" class="absolute -top-1 -right-3 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-slate-900 rounded-full border-2 border-white"></span>
                 </span>
             </a>
-            <a href="{{ route('blog.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('blog.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Blog</a>
+            <a href="{{ route('blogs.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('blogs.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Blogs</a>
         </div>
       </div>
     </header>

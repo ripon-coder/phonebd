@@ -3,7 +3,7 @@
     'meta_description' => 'Latest ' . $brand->name . ' mobile phones price in Bangladesh. Check out ' . $brand->name . ' smartphone specifications, reviews, and features.',
 ])
 
-@section('og_image', $brand->image ? $brand->getImageUrl('image') : asset('images/og-default.jpg'))
+@section('og_image', $brand->image ? $brand->getImageUrl('image') : asset('images/fallback-img.png'))
 @section('og_type', 'website')
 
 @push('schema')

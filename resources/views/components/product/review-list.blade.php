@@ -160,7 +160,7 @@
                             <div class="flex gap-2 mt-3 overflow-x-auto pb-2">
                                 <template x-for="(image, i) in review.images" :key="'img-' + index + '-' + i">
                                     <img :src="image" 
-                                         alt="Review image" 
+                                         :alt="'Review by ' + review.name" 
                                          loading="lazy"
                                          @click="lightboxImage = image; lightboxOpen = true"
                                          class="h-16 flex-shrink-0 object-contain rounded border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity bg-slate-50">

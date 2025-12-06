@@ -6,6 +6,35 @@
 @section('og_image', asset('images/og-default.jpg'))
 @section('og_type', 'website')
 
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "PhoneBD",
+  "url": "{{ url('/') }}",
+  "logo": "{{ asset('images/logo.png') }}",
+  "sameAs": [
+    "https://www.facebook.com/phonebd",
+    "https://twitter.com/phonebd"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "PhoneBD",
+  "url": "{{ url('/') }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ route('search.index') }}?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+@endpush
+
 
 @section('content')
 

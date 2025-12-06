@@ -4,12 +4,7 @@
             {{-- Brand & About --}}
             <div class="col-span-1 md:col-span-1">
                 <a href="{{ url('/') }}" class="flex items-center gap-2 group mb-4">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-md">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span class="font-bold text-lg tracking-tight text-slate-900">PhoneBD</span>
+                    <img src="{{ asset('images/logo.png') }}" alt="PhoneBD" class="h-10 w-auto object-contain">
                 </a>
                 <p class="text-slate-500 text-sm leading-relaxed mb-4">
                     Your ultimate destination for mobile phone specifications, reviews, and latest tech news in Bangladesh.

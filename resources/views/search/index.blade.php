@@ -5,6 +5,44 @@
 @section('og_image', asset('images/og-default.jpg'))
 @section('og_type', 'website')
 
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "{{ route('home') }}"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Search Results"
+  }]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SearchResultsPage",
+  "mainEntity": [{
+    "@type": "ItemList",
+    "itemListElement": [
+      @foreach($products as $index => $phone)
+      {
+        "@type": "ListItem",
+        "position": {{ $index + 1 }},
+        "url": "{{ route('product.show', ['category_slug' => $phone->category->slug, 'product' => $phone->slug]) }}",
+        "name": "{{ $phone->title }}"
+      }@if(!$loop->last),@endif
+      @endforeach
+    ]
+  }]
+}
+</script>
+@endpush
+
 @section('content')
     <div class="py-3">
         {{-- Breadcrumb --}}
@@ -71,6 +109,7 @@
                                 </div>
                                 @if ($phone->image)
                                     <img src="{{ $phone->getImageUrl('image') }}"
+                                        alt="{{ $phone->title }}"
                                         class="w-full h-full object-cover" loading="lazy">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-slate-300">

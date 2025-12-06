@@ -6,6 +6,35 @@
 @section('og_image', $page->featured_image ? Storage::url($page->featured_image) : asset('images/og-default.jpg'))
 @section('og_type', 'article')
 
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "{{ route('home') }}"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "{{ $page->title }}"
+  }]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "{{ $page->title }}",
+  "description": "{{ $page->meta_description ?? '' }}",
+  "datePublished": "{{ $page->created_at->toIso8601String() }}",
+  "dateModified": "{{ $page->updated_at->toIso8601String() }}"
+}
+</script>
+@endpush
+
 @section('content')
     <div class="bg-white">
         {{-- Breadcrumb --}}

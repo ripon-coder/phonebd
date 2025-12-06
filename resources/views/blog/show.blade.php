@@ -4,6 +4,53 @@
 @section('og_image', $post->featured_image ? $post->getImageUrl('featured_image') : asset('images/og-default.jpg'))
 @section('og_type', 'article')
 
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "{{ route('home') }}"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Blog",
+    "item": "{{ route('blog.index') }}"
+  }@if($post->category),{
+    "@type": "ListItem",
+    "position": 3,
+    "name": "{{ $post->category->name }}",
+    "item": "{{ route('blog.category', $post->category->slug) }}"
+  },{
+    "@type": "ListItem",
+    "position": 4,
+    "name": "{{ $post->title }}"
+  }@else,{
+    "@type": "ListItem",
+    "position": 3,
+    "name": "{{ $post->title }}"
+  }@endif]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ $post->title }}",
+  "image": "{{ $post->featured_image ? $post->getImageUrl('featured_image') : asset('images/og-default.jpg') }}",
+  "datePublished": "{{ $post->created_at->toIso8601String() }}",
+  "dateModified": "{{ $post->updated_at->toIso8601String() }}",
+  "author": {
+    "@type": "Person",
+    "name": "PhoneBD Editor"
+  }
+}
+</script>
+@endpush
+
 @section('content')
     <div class="py-4 md:py-6">
         {{-- Breadcrumb --}}

@@ -6,6 +6,30 @@
 @section('og_image', $category->image ? asset('storage/' . $category->image) : asset('images/og-default.jpg'))
 @section('og_type', 'website')
 
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "{{ route('home') }}"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Categories",
+    "item": "{{ route('categories.index') }}"
+  },{
+    "@type": "ListItem",
+    "position": 3,
+    "name": "{{ $category->name }}"
+  }]
+}
+</script>
+@endpush
+
 @section('content')
     {{-- Breadcrumb --}}
     <nav class="flex mb-3 text-sm text-slate-500" aria-label="Breadcrumb">
@@ -101,6 +125,7 @@
                                 </div>
                                 @if ($phone->image)
                                     <img src="{{ $phone->getImageUrl('image') }}"
+                                        alt="{{ $phone->title }}"
                                         class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-slate-300">

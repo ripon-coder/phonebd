@@ -183,18 +183,13 @@
         x-data="{ mobileMenuOpen: false, searchOpen: false }" 
         class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 transition-all duration-300"
     >
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
         <div class="flex items-center justify-between h-14">
           
           {{-- Left: Logo --}}
           <div class="flex items-center gap-4">
             <a href="{{ url('/') }}" class="flex items-center gap-2 group">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-200 group-hover:shadow-blue-300 transition-all duration-300">
-                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <span class="font-bold text-xl tracking-tight text-gray-900 group-hover:text-blue-600 transition-colors">PhoneBD</span>
+              <img src="{{ asset('images/logo.png') }}" alt="PhoneBD" class="h-10 w-auto object-contain">
             </a>
           </div>
 
@@ -237,7 +232,7 @@
                           <a :href="result.url" class="flex items-center gap-3 px-4 py-2 hover:bg-slate-50 transition-colors">
                               <div class="w-10 h-10 rounded-md bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 p-1">
                                   <template x-if="result.image">
-                                      <img :src="result.image" class="w-full h-full object-contain mix-blend-multiply" loading="lazy">
+                                      <img :src="result.image" :alt="result.title" class="w-full h-full object-contain mix-blend-multiply" loading="lazy">
                                   </template>
                                   <template x-if="!result.image">
                                       <svg class="w-5 h-5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -322,7 +317,7 @@
                         <a :href="result.url" class="flex items-center gap-3 px-4 py-2 hover:bg-slate-50 transition-colors">
                             <div class="w-10 h-10 rounded-sm bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 p-1">
                                 <template x-if="result.image">
-                                    <img :src="result.image" class="w-full h-full object-contain mix-blend-multiply" loading="lazy">
+                                    <img :src="result.image" :alt="result.title" class="w-full h-full object-contain mix-blend-multiply" loading="lazy">
                                 </template>
                                 <template x-if="!result.image">
                                     <svg class="w-5 h-5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">

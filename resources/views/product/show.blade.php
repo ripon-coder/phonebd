@@ -5,6 +5,63 @@
 @section('og_image', $product->image ? $product->getImageUrl('image') : asset('images/og-default.jpg'))
 @section('og_type', 'product')
 
+@push('schema')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{{ $product->title }}",
+    "image": [
+        "{{ $product->image ? $product->getImageUrl('image') : asset('images/og-default.jpg') }}"
+    ],
+    "description": "{{ $product->meta_description ?? strip_tags($product->short_description) }}",
+    "brand": {
+        "@type": "Brand",
+        "name": "{{ $product->brand->name }}"
+    },
+    @if($averageRating > 0)
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ $averageRating }}",
+        "reviewCount": "{{ $totalReviews }}"
+    },
+    @endif
+    "offers": {
+        "@type": "Offer",
+        "url": "{{ url()->current() }}",
+        "priceCurrency": "BDT",
+        "price": "{{ $product->base_price }}",
+        "availability": "{{ $product->base_price ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' }}",
+        "itemCondition": "https://schema.org/NewCondition"
+    }
+}
+</script>
+@endpush
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "{{ route('home') }}"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "{{ $product->brand->name }}",
+    "item": "{{ route('brands.show', $product->brand) }}"
+  },{
+    "@type": "ListItem",
+    "position": 3,
+    "name": "{{ $product->title }}"
+  }]
+}
+</script>
+@endpush
+
 @section('content')
     {{-- Breadcrumb --}}
     <nav class="flex mb-3 text-sm text-slate-500" aria-label="Breadcrumb">

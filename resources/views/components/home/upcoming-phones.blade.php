@@ -37,6 +37,7 @@
                 <div class="relative aspect-square bg-slate-50/50 p-4 group-hover:bg-slate-50 transition-colors">
                     @if ($phone->image)
                         <img src="{{ $phone->getImageUrl('image') }}"
+                            alt="{{ $phone->title }}"
                             class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex items-center justify-center text-slate-300">

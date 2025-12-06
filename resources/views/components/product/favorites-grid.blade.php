@@ -17,6 +17,7 @@
             </div>
             @if ($phone->image)
                 <img src="{{ $phone->getImageUrl('image') }}"
+                    alt="{{ $phone->title }}"
                     class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500">
             @else
                 <div class="w-full h-full flex items-center justify-center text-slate-300">

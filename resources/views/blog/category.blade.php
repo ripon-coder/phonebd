@@ -5,6 +5,30 @@
 @section('og_image', asset('images/og-default.jpg'))
 @section('og_type', 'website')
 
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "{{ route('home') }}"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Blog",
+    "item": "{{ route('blog.index') }}"
+  },{
+    "@type": "ListItem",
+    "position": 3,
+    "name": "{{ $category->name }}"
+  }]
+}
+</script>
+@endpush
+
 @section('content')
     <div class="py-4 md:py-6">
         <div class="text-center mb-8">

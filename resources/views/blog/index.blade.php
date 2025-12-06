@@ -5,6 +5,34 @@
 @section('og_image', asset('images/og-default.jpg'))
 @section('og_type', 'website')
 
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "{{ route('home') }}"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Blog"
+  }]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "PhoneBD Blog",
+  "description": "Stay up to date with the latest mobile technology trends.",
+  "url": "{{ route('blog.index') }}"
+}
+</script>
+@endpush
+
 @section('content')
     <div class="py-2 md:py-4">
         <div class="text-center mb-4 md:mb-6">

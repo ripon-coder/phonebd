@@ -83,7 +83,7 @@
                 {{-- Thumbnails --}}
                 <template x-for="(image, index) in images.slice(0, 6)" :key="index">
                     <div @click="openLightbox(index)" class="aspect-square bg-slate-100 rounded-sm overflow-hidden group relative cursor-pointer">
-                        <img :src="image.url" alt="Camera Sample" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <img :src="image.url" :alt="image.name ? image.name + ' Camera Sample' : 'Camera Sample'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         
                         {{-- Overlay for the last visible item if there are more images --}}
                         <div x-show="index === 5 && images.length > 6" 
@@ -139,7 +139,7 @@
 
         {{-- Main Image --}}
         <div class="relative w-full h-full flex items-center justify-center p-4 md:p-12" @click.outside="closeLightbox()">
-            <img :src="images[activeImage]?.url" class="max-w-full max-h-full object-contain shadow-2xl rounded-sm" alt="Full view">
+            <img :src="images[activeImage]?.url" class="max-w-full max-h-full object-contain shadow-2xl rounded-sm" :alt="images[activeImage]?.name || 'Full view'">
             
             {{-- Info Overlay --}}
             <div class="absolute bottom-4 left-4 md:bottom-8 md:left-8 text-white z-50">

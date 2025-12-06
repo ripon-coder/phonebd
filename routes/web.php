@@ -12,6 +12,8 @@ Route::middleware(CacheResponse::class)->group(function () {
     Route::get('/blog', [App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
     Route::get('/blog/{post}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
     Route::get('/blog/category/{category}', [App\Http\Controllers\BlogController::class, 'category'])->name('blog.category');
+    Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/{category:slug}', [App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
 });
 
 Route::get('/search/suggestions', [App\Http\Controllers\SearchController::class, 'suggestions'])->name('search.suggestions');
@@ -35,6 +37,17 @@ Route::get('/favorites', function () {
 
 Route::post('/products/favorites-list', [App\Http\Controllers\ProductController::class, 'favoritesList'])->name('products.favorites_list');
 Route::post('/products/favorites-check', [App\Http\Controllers\ProductController::class, 'checkFavorites'])->name('products.favorites_check');
+
+
+Route::get('/system/maintenance', function () {
+    \Illuminate\Support\Facades\Artisan::call('scout:flush "App\Models\Product"');
+    \Illuminate\Support\Facades\Artisan::call('scout:flush "App\Models\Brand"');
+    \Illuminate\Support\Facades\Artisan::call('scout:import "App\Models\Product"');
+    \Illuminate\Support\Facades\Artisan::call('scout:import "App\Models\Brand"');
+    \Illuminate\Support\Facades\Artisan::call('responsecache:clear');
+
+    return 'Search index refreshed and cache cleared!';
+});
 
 Route::middleware(CacheResponse::class)->group(function () {
     Route::get('/{page}', [App\Http\Controllers\PageController::class, 'show'])

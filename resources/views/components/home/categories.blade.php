@@ -3,7 +3,7 @@
 <div class="mb-6 mt-2">
     <div class="flex items-center justify-between mb-3 px-1">
         <h2 class="text-md lg:text-lg  font-semibold text-slate-900 tracking-tight">Browse Categories</h2>
-        <a href="{{ route('products.index') }}"
+        <a href="{{ route('categories.index') }}"
             class="md:hidden text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider flex items-center gap-1 group">
             View All
             <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24"

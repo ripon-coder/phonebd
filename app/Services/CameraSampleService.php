@@ -21,6 +21,7 @@ class CameraSampleService
     public function getTotalApprovedSamples(Product $product)
     {
         $samples = $product->cameraSamples()
+            ->select('images')
             ->where('is_approve', true)
             ->get();
 

@@ -73,6 +73,7 @@ class ProductService
                   ->where('is_approve', true);
              }, 'avg_rating')
             ->where('is_published', true)
+            ->where('is_featured', true)
             ->latest()
             ->take($limit)
             ->get();
@@ -90,6 +91,7 @@ class ProductService
              }, 'avg_rating')
             ->where('status', 'upcoming')
             ->where('is_published', true)
+            ->where('is_featured', true)
             ->latest()
             ->take($limit)
             ->get();
@@ -107,6 +109,7 @@ class ProductService
              }, 'avg_rating')
             ->where('status', 'official')
             ->where('is_published', true)
+            ->where('is_featured', true)
             ->latest()
             ->take($limit)
             ->get();
@@ -124,6 +127,7 @@ class ProductService
              }, 'avg_rating')
             ->where('status', 'unofficial')
             ->where('is_published', true)
+            ->where('is_featured', true)
             ->latest()
             ->take($limit)
             ->get();

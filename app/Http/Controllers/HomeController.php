@@ -31,7 +31,12 @@ class HomeController extends Controller
         $upcomingPhones = $this->productService->getUpcoming();
         $officialPhones = $this->productService->getOfficial();
         $unofficialPhones = $this->productService->getUnofficial();
-        $dynamicPages = \App\Models\DynamicPage::whereNull('brand_id')->where('is_active', true)->orderBy('sort_order')->get();
+        $dynamicPages = \App\Models\DynamicPage::query()
+            ->select('id', 'title', 'slug', 'sort_order')
+            ->whereNull('brand_id')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
 
         return view('home.index', compact('categories', 'brands', 'latestPhones', 'upcomingPhones', 'officialPhones', 'unofficialPhones', 'dynamicPages'));
     }

@@ -13,6 +13,49 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes, \App\Traits\HasStorageImage, \Laravel\Scout\Searchable, \App\Traits\DeletesOldImages, \App\Traits\ClearsResponseCache;
 
+    protected static function booted()
+    {
+        static::forceDeleted(function ($product) {
+            // Handle Camera Samples Deletion including images
+            if ($product->cameraSamples()->exists()) {
+                foreach ($product->cameraSamples as $sample) {
+                    if (!empty($sample->images) && is_array($sample->images)) {
+                        $diskName = $sample->storage_type ?? 'backblaze';
+                        foreach ($sample->images as $image) {
+                            try {
+                                if (\Illuminate\Support\Facades\Storage::disk($diskName)->exists($image)) {
+                                    \Illuminate\Support\Facades\Storage::disk($diskName)->delete($image);
+                                }
+                            } catch (\Exception $e) {
+                                \Illuminate\Support\Facades\Log::error("Failed to delete sample image: " . $e->getMessage());
+                            }
+                        }
+                    }
+                    $sample->delete();
+                }
+            }
+
+             // Handle Reviews Deletion including images
+            if ($product->reviews()->exists()) {
+                foreach ($product->reviews as $review) {
+                    if (!empty($review->images) && is_array($review->images)) {
+                        $diskName = $review->storage_type ?? 'backblaze';
+                        foreach ($review->images as $image) {
+                            try {
+                                if (\Illuminate\Support\Facades\Storage::disk($diskName)->exists($image)) {
+                                    \Illuminate\Support\Facades\Storage::disk($diskName)->delete($image);
+                                }
+                            } catch (\Exception $e) {
+                                \Illuminate\Support\Facades\Log::error("Failed to delete review image: " . $e->getMessage());
+                            }
+                        }
+                    }
+                    $review->delete();
+                }
+            }
+        });
+    }
+
     public function toSearchableArray()
     {
         return [

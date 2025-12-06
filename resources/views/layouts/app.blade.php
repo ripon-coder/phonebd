@@ -266,13 +266,13 @@
           <nav class="hidden md:flex items-center gap-1">
             <a href="{{ route('products.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('products.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Devices</a>
             <a href="{{ route('brands.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('brands.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Brands</a>
+            <a href="{{ route('categories.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('categories.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Categories</a>
             <a href="{{ route('favorites.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('favorites.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}" x-data="favoritesCount">
                 <span class="relative">
                     Favorites
                     <span x-show="count > 0" x-text="count" class="absolute -top-2 -right-3 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-slate-900 rounded-full border-2 border-white"></span>
                 </span>
             </a>
-            <a href="#" class="px-3 py-1 rounded-sm text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all">Latest</a>
             <a href="{{ route('blog.index') }}" class="px-3 py-1 rounded-sm text-sm font-medium transition-all {{ request()->routeIs('blog.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Blog</a>
           </nav>
 
@@ -358,13 +358,13 @@
             <a href="{{ route('home') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('home') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Home</a>
             <a href="{{ route('products.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('products.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Devices</a>
             <a href="{{ route('brands.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('brands.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Brands</a>
+            <a href="{{ route('categories.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('categories.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Categories</a>
             <a href="{{ route('favorites.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('favorites.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}" x-data="favoritesCount">
                 <span class="relative inline-block">
                     Favorites
                     <span x-show="count > 0" x-text="count" class="absolute -top-1 -right-3 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-slate-900 rounded-full border-2 border-white"></span>
                 </span>
             </a>
-            <a href="#" class="block px-3 py-1.5 rounded-sm text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Latest Phones</a>
             <a href="{{ route('blog.index') }}" class="block px-3 py-1.5 rounded-sm text-sm font-medium {{ request()->routeIs('blog.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">Blog</a>
         </div>
       </div>

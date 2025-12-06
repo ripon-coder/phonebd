@@ -15,9 +15,26 @@ class CategoryController extends Controller
         $this->categoryService = $categoryService;
     }
 
-    public function show(Category $category)
+    public function index()
     {
-        $products = $this->categoryService->getCategoryProducts($category);
-        return view('category.show', compact('category', 'products'));
+        $categories = Category::where('is_active', true)->orderBy('sort_order')->get();
+        return view('category.index', compact('categories'));
+    }
+
+    public function show(\App\Models\Category $category)
+    {
+        $productService = app(\App\Services\ProductService::class);
+
+        // Prepare filters
+        $filters = request()->only(['min_price', 'max_price', 'sort', 'status']);
+        $filters['categories'] = [$category->id]; // Force this category
+
+        $products = $productService->getAllPaginated($filters, 24);
+
+        // Defensive: Pass empty arrays in case the view expects them (e.g. sidebar filters)
+        $brands = []; 
+        $categories = [];
+
+        return view('category.show', compact('category', 'products', 'brands', 'categories'));
     }
 }

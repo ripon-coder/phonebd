@@ -106,31 +106,73 @@ class ScrapingService
         // Check if content is HTML
         $isHtml = strip_tags($content) !== $content;
 
-        if ($isHtml) {
-            // Improve HTML to Text conversion to preserve table structure
-            // 1. Replace table row endings and breaks with newlines
-            $content = preg_replace('/<\/(tr|div|p|h\d)>/i', "\n", $content);
-            $content = preg_replace('/<br\s*\/?>/i', "\n", $content);
-            
-            // 2. Replace cell endings with a separator to distinguish key/value
-            $content = preg_replace('/<\/(td|th)>/i', " ||| ", $content);
-            
-            // 3. Strip tags
-            $text = strip_tags($content);
-            
-            // 4. Clean up excessive whitespace
-            $text = preg_replace('/\n\s*\n/', "\n", $text);
-            $text = preg_replace('/[ \t]+/', ' ', $text);
-        } else {
-            // If CSV or plain text, keep it mostly as is to preserve structure (tabs, newlines)
-            $text = $content;
+        if (!$isHtml) {
+            return substr($content, 0, 30000);
         }
+
+        // --- SPECIFIC EXTRACTION ---
+        $extractedInfo = "";
+
+        // 1. Extract Model Name (specs-phone-name-title)
+        if (preg_match('/<h1[^>]*class=["\'][^"\']*specs-phone-name-title[^"\']*["\'][^>]*>(.*?)<\/h1>/i', $content, $matches)) {
+            $extractedInfo .= "Target Model Name: " . trim(strip_tags($matches[1])) . "\n";
+        }
+
+        // 2. Extract Battery Info (help-battery)
+        if (preg_match('/<li[^>]*class=["\'][^"\']*help-battery[^"\']*["\'][^>]*>(.*?)<\/li>/is', $content, $matches)) {
+            $batteryText = trim(strip_tags($matches[1]));
+            $batteryText = preg_replace('/\s+/', ' ', $batteryText);
+            $extractedInfo .= "Battery Highlight Info: " . $batteryText . "\n";
+        }
+
+        // 3. Isolate main specs list (id="specs-list") to reduce noise
+        $workingContent = $content;
+        $specsStartPos = strpos($content, 'id="specs-list"');
+        
+        if ($specsStartPos !== false) {
+             // Found the specs list start. 
+             // We'll look for the start of the next major section to cut off (comments, sidebar, footer)
+             $cutOffMarkers = ['id="user-comments"', 'class="article-info-line page-specs', '<aside', 'id="footer"'];
+             $specsEndPos = false;
+             
+             foreach ($cutOffMarkers as $marker) {
+                 $pos = strpos($content, $marker, $specsStartPos);
+                 if ($pos !== false) {
+                     if ($specsEndPos === false || $pos < $specsEndPos) {
+                         $specsEndPos = $pos;
+                     }
+                 }
+             }
+
+             if ($specsEndPos !== false) {
+                 $workingContent = substr($content, $specsStartPos, $specsEndPos - $specsStartPos);
+             } else {
+                 $workingContent = substr($content, $specsStartPos);
+             }
+        }
+        
+        // --- STANDARD PREPARATION ---
+        // Improve HTML to Text conversion to preserve table structure
+        // 1. Replace table row endings and breaks with newlines
+        $text = preg_replace('/<\/(tr|div|p|h\d)>/i', "\n", $workingContent);
+        $text = preg_replace('/<br\s*\/?>/i', "\n", $text);
+        
+        // 2. Replace cell endings with a separator to distinguish key/value
+        $text = preg_replace('/<\/(td|th)>/i', " ||| ", $text);
+        
+        // 3. Strip tags
+        $text = strip_tags($text);
+        
+        // 4. Clean up excessive whitespace
+        $text = preg_replace('/\n\s*\n/', "\n", $text);
+        $text = preg_replace('/[ \t]+/', ' ', $text);
+        
+        // Prepend extracted info
+        $finalText = $extractedInfo . "\n--- SPECS CONTENT ---\n" . $text;
 
         // Limit text length to avoid hitting token limits (approx 4 chars per token)
         // Increased to 30000 to ensure we capture all specs even on long pages
-        $text = substr($text, 0, 30000);
-
-        return $text;
+        return substr($finalText, 0, 30000);
     }
 
     protected function structureWithDeepseek($text)

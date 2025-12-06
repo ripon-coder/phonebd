@@ -14,8 +14,20 @@ class SearchController extends Controller
             return redirect()->route('home');
         }
 
-        $products = \App\Models\Product::search($query)->paginate(20);
-        $brands = \App\Models\Brand::search($query)->get();
+        $products = \App\Models\Product::search($query)
+            ->query(fn ($q) => $q->select(['id', 'title', 'slug', 'image', 'base_price', 'category_id', 'storage_type'])
+                                 ->selectSub(function ($sq) {
+                                     $sq->selectRaw('AVG((COALESCE(rating_design,0) + COALESCE(rating_performance,0) + COALESCE(rating_camera,0) + COALESCE(rating_battery,0)) / 4)')
+                                       ->from('reviews')
+                                       ->whereColumn('reviews.product_id', 'products.id')
+                                       ->where('is_approve', true);
+                                  }, 'avg_rating')
+                                 ->with('category:id,slug,name'))
+            ->paginate(20);
+
+        $brands = \App\Models\Brand::search($query)
+            ->query(fn ($q) => $q->select(['id', 'name', 'slug', 'image', 'storage_type']))
+            ->get();
 
         return view('search.index', compact('products', 'brands', 'query'));
     }

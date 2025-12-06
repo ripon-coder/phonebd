@@ -20,11 +20,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Illuminate\Support\Facades\View::composer('layouts.footer', function ($view) {
-            $view->with('footerDynamicPages', \App\Models\DynamicPage::where('is_active', true)
+            $view->with('footerDynamicPages', \App\Models\DynamicPage::select('id', 'title', 'slug', 'sort_order')
+                ->where('is_active', true)
                 ->orderBy('sort_order')
                 ->take(5)
                 ->get());
-            $view->with('footerSupportPages', \App\Models\Page::where('is_active', true)
+            $view->with('footerSupportPages', \App\Models\Page::select('id', 'title', 'slug')
+                ->where('is_active', true)
                 ->take(5)
                 ->get());
         });

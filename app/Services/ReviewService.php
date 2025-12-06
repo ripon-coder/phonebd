@@ -11,22 +11,12 @@ class ReviewService
 {
     public function getAverageRating(Product $product)
     {
-        $reviews = $product->reviews()->where('is_approve', true)->get();
-        
-        if ($reviews->isEmpty()) {
-            return 0;
-        }
+        $result = $product->reviews()
+            ->where('is_approve', true)
+            ->selectRaw('AVG((COALESCE(rating_design,0) + COALESCE(rating_performance,0) + COALESCE(rating_camera,0) + COALESCE(rating_battery,0)) / 4) as avg_rating')
+            ->first();
 
-        $totalAvg = $reviews->map(function ($review) {
-            return collect([
-                $review->rating_design,
-                $review->rating_performance,
-                $review->rating_camera,
-                $review->rating_battery
-            ])->filter()->avg();
-        })->avg();
-
-        return round($totalAvg, 1);
+        return $result ? round($result->avg_rating, 1) : 0;
     }
 
     public function getApprovedReviews(Product $product, $limit = 5)

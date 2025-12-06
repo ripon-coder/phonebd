@@ -35,19 +35,23 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['brands', 'categories', 'min_price', 'max_price', 'sort', 'status']);
-        $products = $this->productService->getAllPaginated($filters, 20);
-        $brands = $this->brandService->getAllBrands();
-        $categories = $this->categoryService->getAllCategories();
+        $products = $this->productService->getAllPaginated($filters, 24); // Increased per page slightly to 24 for better grid filling
+        $brands = $this->brandService->getBrandsForFilter();
+        $categories = $this->categoryService->getCategoriesForFilter();
         
         return view('product.index', compact('products', 'brands', 'categories'));
     }
 
 
-    public function show($category_slug, Product $product)
+    public function show(Request $request, $category_slug, Product $product)
     {
         $product = $this->productService->getDetails($category_slug, $product);
 
         if (!$product) {
+            abort(404);
+        }
+
+        if (! $product->is_published && ! $request->hasValidSignature()) {
             abort(404);
         }
 
@@ -138,7 +142,16 @@ class ProductController extends Controller
             return '<div class="col-span-full text-center py-12 text-slate-500">No favorite items found.</div>';
         }
 
-        $products = Product::whereIn('id', $ids)->with('category')->get();
+        $products = Product::select('id', 'title', 'slug', 'image', 'base_price', 'category_id', 'storage_type')
+            ->with('category:id,name,slug')
+            ->selectSub(function ($q) {
+                $q->selectRaw('AVG((COALESCE(rating_design,0) + COALESCE(rating_performance,0) + COALESCE(rating_camera,0) + COALESCE(rating_battery,0)) / 4)')
+                  ->from('reviews')
+                  ->whereColumn('reviews.product_id', 'products.id')
+                  ->where('is_approve', true);
+             }, 'avg_rating')
+            ->whereIn('id', $ids)
+            ->get();
 
         // Maintain the order of ids if possible, or just return retrieved products
         // To maintain order:

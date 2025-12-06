@@ -19,6 +19,8 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Table;
 use Filament\Tables;
 
+use Illuminate\Support\Facades\URL;
+
 class ProductsTable
 {
     public static function configure(Table $table): Table
@@ -26,7 +28,10 @@ class ProductsTable
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
+                    ->searchable()
+                    ->url(fn (Product $record): string => URL::signedRoute('product.show', ['category_slug' => $record->category->slug, 'product' => $record->slug]))
+                    ->openUrlInNewTab()
+                    ->color('primary'),
                 Tables\Columns\TextColumn::make('brand.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category.name')
@@ -34,8 +39,10 @@ class ProductsTable
                 Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\TextColumn::make('base_price')
                     ->money('bdt'),
-                Tables\Columns\IconColumn::make('is_published')
-                    ->boolean(),
+                Tables\Columns\ToggleColumn::make('is_published')
+                    ->label('Published'),
+                Tables\Columns\ToggleColumn::make('is_featured')
+                    ->label('Featured'),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -69,7 +76,7 @@ class ProductsTable
                 DeleteAction::make(),
                 ForceDeleteAction::make(),
                 RestoreAction::make(),
-                ViewAction::make(),
+                //ViewAction::make(),
                 EditAction::make(),
                 Action::make('performance')
                     ->label('Performance')

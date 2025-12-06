@@ -8,7 +8,7 @@ class CategoryService
 {
     public function getTopCategories($limit = 11)
     {
-        return Category::orderBy('sort_order')->take($limit)->get();
+        return Category::select('id', 'name', 'slug')->orderBy('sort_order')->take($limit)->get();
     }
 
     public function getAllCategories()
@@ -19,5 +19,10 @@ class CategoryService
     public function getCategoryProducts(Category $category, $perPage = 12)
     {
         return $category->products()->where('is_published', true)->paginate($perPage);
+    }
+
+    public function getCategoriesForFilter()
+    {
+        return Category::orderBy('sort_order')->get(['id', 'name']);
     }
 }

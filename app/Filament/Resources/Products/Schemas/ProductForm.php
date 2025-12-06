@@ -123,6 +123,10 @@ class ProductForm
                             ->label('Published')
                             ->default(false)
                             ->columnSpan(2),
+                        Forms\Components\Toggle::make('is_featured')
+                            ->label('Featured')
+                            ->default(true)
+                            ->columnSpan(2),
 
                         Forms\Components\Toggle::make('is_raw_html')
                             ->label('Raw HTML')

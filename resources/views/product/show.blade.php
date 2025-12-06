@@ -183,7 +183,7 @@
                                                 <td class="py-1.5 px-2 md:py-2 md:pr-4 align-top w-[35%] md:w-[30%] text-sm md:text-sm font-medium text-slate-500 bg-slate-100">
                                                     {{ $item->key }}
                                                 </td>
-                                                <td class="py-1.5 px-2 md:py-2 md:pr-4 align-top text-sm text-slate-900 break-words group-hover/row:text-blue-700 transition-colors">
+                                                <td class="py-1.5 px-2 md:py-2 md:pr-4 align-top text-sm text-slate-900 break-words group-hover/row:text-blue-700 transition-colors border-b border-slate-100">
                                                     {{ $item->value }}
                                                 </td>
                                             </tr>

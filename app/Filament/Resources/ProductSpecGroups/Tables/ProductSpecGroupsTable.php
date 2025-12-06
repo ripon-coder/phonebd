@@ -50,6 +50,7 @@ class ProductSpecGroupsTable
                     DeleteBulkAction::make(),
                     ForceDeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('sort_order', 'asc');
     }
 }

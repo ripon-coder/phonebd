@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('short_description')->nullable();
             $table->longText('raw_html')->nullable();
             $table->boolean('is_raw_html')->default(false);
-            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_featured')->default(true);
             $table->boolean('is_published')->default(false);
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();

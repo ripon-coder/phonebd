@@ -15,6 +15,7 @@ class ProductSpecGroup extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'sort_order',
     ];
 
